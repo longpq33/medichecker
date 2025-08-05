@@ -1,0 +1,165 @@
+/* Global CSS Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+  overflow-x: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  height: 100%;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+/* Ant Design Layout Fixes */
+.ant-layout {
+  width: 100% !important;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.ant-layout.ant-layout-has-sider {
+  width: 100% !important;
+  overflow-x: hidden;
+}
+
+.ant-layout.ant-layout-has-sider > .ant-layout {
+  width: 100% !important;
+  min-width: 0;
+  overflow-x: hidden;
+}
+
+.ant-layout.ant-layout-has-sider > .ant-layout-content {
+  width: 100% !important;
+  min-width: 0;
+  overflow-x: hidden;
+}
+
+/* Override Ant Design's problematic CSS - Specific fix for the issue */
+:where(.css-dev-only-do-not-override-1vjf2v5).ant-layout.ant-layout-has-sider > .ant-layout,
+:where(.css-dev-only-do-not-override-1vjf2v5).ant-layout.ant-layout-has-sider > .ant-layout-content {
+  width: 100% !important;
+  min-width: 0;
+  overflow-x: hidden;
+}
+
+/* Additional specific overrides for the exact CSS selector */
+:where(.css-dev-only-do-not-override-1vjf2v5).ant-layout.ant-layout-has-sider > .ant-layout {
+  width: 100% !important;
+  min-width: 0;
+  overflow-x: hidden;
+}
+
+:where(.css-dev-only-do-not-override-1vjf2v5).ant-layout.ant-layout-has-sider > .ant-layout-content {
+  width: 100% !important;
+  min-width: 0;
+  overflow-x: hidden;
+}
+
+/* Additional layout fixes */
+.ant-layout-sider {
+  flex-shrink: 0 !important;
+  overflow-x: hidden;
+}
+
+.ant-layout-content {
+  flex: 1 !important;
+  min-width: 0 !important;
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
+/* Table container fixes */
+.ant-table-wrapper {
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+.ant-table {
+  min-width: 0;
+  max-width: 100%;
+}
+
+/* Responsive fixes */
+@media (max-width: 768px) {
+  .ant-layout-sider {
+    position: fixed !important;
+    z-index: 1000;
+    height: 100vh;
+  }
+  
+  .ant-layout.ant-layout-has-sider > .ant-layout {
+    margin-left: 0 !important;
+  }
+  
+  .ant-table-wrapper {
+    overflow-x: auto;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Utility classes */
+.text-center {
+  text-align: center;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.w-full {
+  width: 100%;
+}
+
+.h-full {
+  height: 100%;
+} 

@@ -1,0 +1,6 @@
+export { HomePage } from './HomePage'
+export { LoginPage } from './LoginPage'
+export { PatientList } from './PatientList'
+export { MedicineList } from './MedicineList'
+export { PatientDetail } from './PatientDetail'
+export { AddTreatment } from './AddTreatment' 
