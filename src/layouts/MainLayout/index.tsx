@@ -7,7 +7,6 @@ import {
   UserOutlined,
   LogoutOutlined,
   DashboardOutlined,
-  SettingOutlined,
   TeamOutlined,
   MedicineBoxOutlined,
 } from '@ant-design/icons'
@@ -51,12 +50,6 @@ export const MainLayout: React.FC = () => {
       label: t('navigation.medicineManagement'),
       onClick: () => navigate('/medicines'),
     },
-    {
-      key: '/settings',
-      icon: <SettingOutlined />,
-      label: t('navigation.settings'),
-      onClick: () => navigate('/settings'),
-    },
   ]
 
   const userMenuItems = [
@@ -75,7 +68,7 @@ export const MainLayout: React.FC = () => {
   ]
 
   return (
-    <StyledLayout>
+    <StyledLayout className={sidebarCollapsed ? 'ant-layout-sider-collapsed' : ''}>
       <StyledSider 
         trigger={null} 
         collapsible 
@@ -102,7 +95,7 @@ export const MainLayout: React.FC = () => {
         />
       </StyledSider>
       
-      <MainContentLayout>
+      <MainContentLayout className={sidebarCollapsed ? 'ant-layout-sider-collapsed' : ''}>
         <StyledHeader>
           <Button
             type="text"

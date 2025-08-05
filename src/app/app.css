@@ -38,12 +38,16 @@ html, body {
   width: 100% !important;
   min-width: 0;
   overflow-x: hidden;
+  flex: 1;
 }
 
 .ant-layout.ant-layout-has-sider > .ant-layout-content {
   width: 100% !important;
   min-width: 0;
   overflow-x: hidden;
+  max-width: 100%;
+  padding: 24px;
+  box-sizing: border-box;
 }
 
 /* Override Ant Design's problematic CSS - Specific fix for the issue */
@@ -52,6 +56,7 @@ html, body {
   width: 100% !important;
   min-width: 0;
   overflow-x: hidden;
+  max-width: 100%;
 }
 
 /* Additional specific overrides for the exact CSS selector */
@@ -59,36 +64,129 @@ html, body {
   width: 100% !important;
   min-width: 0;
   overflow-x: hidden;
+  flex: 1;
 }
 
 :where(.css-dev-only-do-not-override-1vjf2v5).ant-layout.ant-layout-has-sider > .ant-layout-content {
   width: 100% !important;
   min-width: 0;
   overflow-x: hidden;
+  max-width: 100%;
+  padding: 24px;
+  box-sizing: border-box;
 }
 
-/* Additional layout fixes */
+/* Fixed Sidebar */
 .ant-layout-sider {
   flex-shrink: 0 !important;
   overflow-x: hidden;
+  position: fixed !important;
+  height: 100vh;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  transition: width 0.2s ease;
 }
 
+.ant-layout-sider-children {
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* Menu fixes */
+.ant-menu {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+.ant-menu-item {
+  width: calc(100% - 32px) !important;
+  max-width: calc(100% - 32px) !important;
+  margin: 4px 16px !important;
+  overflow: hidden !important;
+}
+
+.ant-menu-title-content {
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+  max-width: 100% !important;
+}
+
+/* Collapsed sidebar state */
+.ant-layout-sider-collapsed .ant-menu-item {
+  width: calc(100% - 16px) !important;
+  max-width: calc(100% - 16px) !important;
+  margin: 4px 8px !important;
+  padding: 0 8px !important;
+}
+
+.ant-layout-sider-collapsed .ant-menu-title-content {
+  display: none !important;
+}
+
+.ant-layout-sider-collapsed .ant-menu-item .anticon {
+  margin-right: 0 !important;
+  font-size: 18px !important;
+}
+
+/* Content area with sidebar offset */
+.ant-layout.ant-layout-has-sider > .ant-layout {
+  margin-left: 280px !important; /* Match sidebar width */
+  width: calc(100% - 280px) !important;
+  min-width: 0;
+  overflow-x: hidden;
+  transition: margin-left 0.2s ease, width 0.2s ease;
+}
+
+/* Collapsed sidebar state */
+.ant-layout.ant-layout-has-sider.ant-layout-sider-collapsed > .ant-layout {
+  margin-left: 80px !important; /* Match collapsed sidebar width */
+  width: calc(100% - 80px) !important;
+}
+
+/* Content fixes */
 .ant-layout-content {
   flex: 1 !important;
   min-width: 0 !important;
   overflow-x: hidden;
   max-width: 100%;
+  padding: 24px;
+  box-sizing: border-box;
 }
 
 /* Table container fixes */
 .ant-table-wrapper {
   overflow-x: auto;
   max-width: 100%;
+  width: 100%;
 }
 
 .ant-table {
   min-width: 0;
   max-width: 100%;
+  width: 100%;
+}
+
+/* Card container fixes */
+.ant-card {
+  max-width: 100%;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.ant-card-body {
+  max-width: 100%;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Form container fixes */
+.ant-form {
+  max-width: 100%;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 /* Responsive fixes */
@@ -97,14 +195,30 @@ html, body {
     position: fixed !important;
     z-index: 1000;
     height: 100vh;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+  }
+  
+  .ant-layout-sider.ant-layout-sider-collapsed {
+    transform: translateX(0);
   }
   
   .ant-layout.ant-layout-has-sider > .ant-layout {
     margin-left: 0 !important;
+    width: 100% !important;
+  }
+  
+  .ant-layout.ant-layout-has-sider.ant-layout-sider-collapsed > .ant-layout {
+    margin-left: 0 !important;
+    width: 100% !important;
   }
   
   .ant-table-wrapper {
     overflow-x: auto;
+  }
+  
+  .ant-layout-content {
+    padding: 16px;
   }
 }
 
