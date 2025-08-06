@@ -15,7 +15,7 @@ export const HomePage: React.FC = () => {
   const { t } = useLanguage()
 
   return (
-    <div style={{ padding: '24px' }}>
+    <div >
       <StyledCard>
         <Title level={2}>{t('dashboard.title')}</Title>
         <Paragraph>{t('dashboard.welcome')}</Paragraph>

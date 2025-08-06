@@ -1,27 +1,27 @@
 // Design System Constants
 export const SPACING = {
   // Padding
-  PADDING_XS: '4px',
-  PADDING_SM: '8px',
-  PADDING_MD: '16px',
-  PADDING_LG: '24px',
-  PADDING_XL: '32px',
+  PADDING_XS: '6px',
+  PADDING_SM: '12px',
+  PADDING_MD: '20px',
+  PADDING_LG: '32px',
+  PADDING_XL: '40px',
   PADDING_XXL: '48px',
   
   // Margin
-  MARGIN_XS: '4px',
-  MARGIN_SM: '8px',
-  MARGIN_MD: '16px',
-  MARGIN_LG: '24px',
-  MARGIN_XL: '32px',
+  MARGIN_XS: '6px',
+  MARGIN_SM: '12px',
+  MARGIN_MD: '20px',
+  MARGIN_LG: '32px',
+  MARGIN_XL: '40px',
   MARGIN_XXL: '48px',
   
   // Gap
-  GAP_XS: '4px',
-  GAP_SM: '8px',
-  GAP_MD: '16px',
-  GAP_LG: '24px',
-  GAP_XL: '32px',
+  GAP_XS: '6px',
+  GAP_SM: '12px',
+  GAP_MD: '20px',
+  GAP_LG: '32px',
+  GAP_XL: '40px',
 } as const
 
 export const FONT_SIZE = {
@@ -49,55 +49,35 @@ export const BORDER_RADIUS = {
   XL: '20px',
 } as const
 
+// Shadows
 export const SHADOWS = {
-  SM: '0 2px 8px rgba(0, 0, 0, 0.1)',
-  MD: '0 4px 12px rgba(0, 0, 0, 0.08)',
-  LG: '0 8px 24px rgba(0, 0, 0, 0.12)',
-  XL: '0 12px 32px rgba(0, 0, 0, 0.15)',
+  NONE: 'none',
+  SM: 'none',
+  MD: 'none',
+  LG: 'none',
+  XL: 'none',
 } as const
 
 export const COLORS = {
-  // Primary colors - WellNest theme
-  PRIMARY: '#6366f1', // Indigo primary
+  PRIMARY: '#6366f1', // Indigo primary (WellNest theme)
   PRIMARY_HOVER: '#4f46e5',
   PRIMARY_ACTIVE: '#4338ca',
-  
-  // Secondary colors
   SECONDARY: '#8b5cf6', // Purple secondary
-  SECONDARY_HOVER: '#7c3aed',
-  
-  // Success colors
   SUCCESS: '#10b981', // Emerald green
-  SUCCESS_HOVER: '#059669',
-  
-  // Warning colors
   WARNING: '#f59e0b', // Amber
-  WARNING_HOVER: '#d97706',
-  
-  // Error colors
   ERROR: '#ef4444', // Red
   ERROR_HOVER: '#dc2626',
-  
-  // Text colors
   TEXT_PRIMARY: '#1f2937', // Gray-800
   TEXT_SECONDARY: '#6b7280', // Gray-500
-  TEXT_DISABLED: '#9ca3af', // Gray-400
-  
-  // Background colors
+  TEXT_TERTIARY: '#9ca3af', // Gray-400
   BG_PRIMARY: '#ffffff', // White
-  BG_SECONDARY: '#f9fafb', // Gray-50
-  BG_TERTIARY: '#f3f4f6', // Gray-100
-  
-  // Border colors
+  BG_SECONDARY: '#ffffff', // White (thay vì gray-50)
+  BG_TERTIARY: '#f8fafc', // Gray-50 (rất nhạt)
   BORDER_PRIMARY: '#e5e7eb', // Gray-200
   BORDER_SECONDARY: '#f3f4f6', // Gray-100
-  
-  // WellNest specific colors
-  WELLNEST_BLUE: '#3b82f6', // Blue-500
-  WELLNEST_GREEN: '#10b981', // Emerald-500
-  WELLNEST_PURPLE: '#8b5cf6', // Purple-500
-  WELLNEST_ORANGE: '#f59e0b', // Amber-500
-  WELLNEST_RED: '#ef4444', // Red-500
+  WELLNEST_BLUE: '#3b82f6',
+  WELLNEST_PURPLE: '#8b5cf6',
+  WELLNEST_INDIGO: '#6366f1',
 } as const
 
 export const GRADIENTS = {
@@ -118,8 +98,8 @@ export const TRANSITIONS = {
 
 // Button styles
 export const BUTTON_STYLES = {
-  HEIGHT: '44px',
-  PADDING: '0 24px',
+  HEIGHT: '48px',
+  PADDING: '0 28px',
   BORDER_RADIUS: BORDER_RADIUS.MD,
   FONT_SIZE: FONT_SIZE.SM,
   FONT_WEIGHT: FONT_WEIGHT.MEDIUM,
@@ -138,8 +118,11 @@ export const CARD_STYLES = {
 export const FORM_STYLES = {
   LABEL_FONT_SIZE: FONT_SIZE.SM,
   LABEL_FONT_WEIGHT: FONT_WEIGHT.SEMIBOLD,
-  INPUT_HEIGHT: '40px',
-  INPUT_BORDER_RADIUS: BORDER_RADIUS.SM,
+  INPUT_HEIGHT: '48px',
+  INPUT_BORDER_RADIUS: BORDER_RADIUS.MD,
+  INPUT_PADDING: '12px 16px',
+  INPUT_FONT_SIZE: FONT_SIZE.SM,
+  FORM_ITEM_MARGIN_BOTTOM: SPACING.MARGIN_LG,
 } as const
 
 // Table styles

@@ -279,7 +279,7 @@ export const PrescriptionList: React.FC = () => {
   )
 
   return (
-    <div style={{ padding: SPACING.PADDING_LG }}>
+    <div>
       <Card>
         <div style={{ 
           display: 'flex', 

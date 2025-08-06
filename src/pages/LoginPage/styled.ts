@@ -10,7 +10,7 @@ import {
 
 export const StyledForm = styled(Form)`
   .ant-form-item {
-    margin-bottom: ${SPACING.MARGIN_MD};
+    margin-bottom: ${SPACING.MARGIN_LG};
   }
   
   .ant-btn {
@@ -21,11 +21,11 @@ export const StyledForm = styled(Form)`
 
 export const StyledButton = styled(Button)`
   width: 100%;
-  margin-top: ${SPACING.MARGIN_SM};
+  margin-top: ${SPACING.MARGIN_MD};
 `
 
 export const StyledDivider = styled(Divider)`
-  margin: ${SPACING.MARGIN_LG} 0;
+  margin: ${SPACING.MARGIN_XL} 0;
 `
 
 export const StyledLink = styled(Link)`

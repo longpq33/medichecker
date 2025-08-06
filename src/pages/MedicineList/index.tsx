@@ -166,7 +166,7 @@ export const MedicineList: React.FC = () => {
   )
 
   return (
-    <div style={{ padding: '24px' }}>
+    <div>
       <MedicineHeader 
         onAdd={handleAdd}
         onSearch={handleSearch}

@@ -1,12 +1,13 @@
+import { Card, Tag, Tabs, Button } from 'antd'
 import styled from 'styled-components'
-import { Card, Tabs, Button, Tag } from 'antd'
 import { 
   SPACING, 
+  BORDER_RADIUS, 
+  COLORS, 
   FONT_SIZE, 
   FONT_WEIGHT, 
-  BORDER_RADIUS, 
-  SHADOWS, 
   GRADIENTS,
+  TRANSITIONS,
   BUTTON_STYLES 
 } from '@/constants'
 
@@ -50,20 +51,20 @@ export const StyledTabs = styled(Tabs)`
 export const PatientHeader = styled.div`
   display: flex;
   align-items: center;
-  margin-bottom: ${SPACING.MARGIN_XL};
-  padding: ${SPACING.PADDING_XL};
+  margin-bottom: ${SPACING.MARGIN_XXL};
+  padding: ${SPACING.PADDING_XXL};
   background: ${GRADIENTS.WELLNEST};
   border-radius: ${BORDER_RADIUS.LG};
   color: white;
-  box-shadow: ${SHADOWS.LG};
+  box-shadow: none;
   
   .patient-avatar {
     position: relative;
-    margin-right: ${SPACING.MARGIN_LG};
+    margin-right: ${SPACING.MARGIN_XL};
     
     .ant-avatar {
       border: 4px solid rgba(255, 255, 255, 0.3);
-      box-shadow: ${SHADOWS.LG};
+      box-shadow: none;
       width: 100px;
       height: 100px;
     }
@@ -87,15 +88,15 @@ export const PatientHeader = styled.div`
     .patient-name {
       font-size: ${FONT_SIZE.XXXL};
       font-weight: ${FONT_WEIGHT.BOLD};
-      margin: 0 0 ${SPACING.MARGIN_SM} 0;
+      margin: 0 0 ${SPACING.MARGIN_MD} 0;
       color: white;
     }
     
     .patient-meta {
       display: flex;
       align-items: center;
-      gap: ${SPACING.MARGIN_SM};
-      margin-bottom: ${SPACING.MARGIN_SM};
+      gap: ${SPACING.MARGIN_MD};
+      margin-bottom: ${SPACING.MARGIN_MD};
       
       .status-tag {
         border: none;
@@ -144,198 +145,164 @@ export const PatientHeader = styled.div`
     
     .patient-avatar {
       margin-right: 0;
-      margin-bottom: ${SPACING.MARGIN_MD};
+      margin-bottom: ${SPACING.MARGIN_LG};
     }
     
     .patient-actions {
-      margin-top: ${SPACING.MARGIN_MD};
+      margin-top: ${SPACING.MARGIN_LG};
     }
   }
 `
 
 export const PatientStats = styled.div`
-  margin-bottom: 32px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: ${SPACING.GAP_LG};
+  margin-bottom: ${SPACING.MARGIN_XL};
   
   .ant-card {
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    transition: all 0.3s ease;
+    border-radius: ${BORDER_RADIUS.LG};
+    box-shadow: none;
+    border: 1px solid ${COLORS.BORDER_PRIMARY};
+    background: ${COLORS.BG_PRIMARY};
+    transition: ${TRANSITIONS.NORMAL};
     
     &:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+      transform: translateY(-2px);
+      box-shadow: none;
     }
     
     .ant-statistic-title {
-      font-size: 14px;
-      color: #666;
-      margin-bottom: 8px;
+      color: ${COLORS.TEXT_SECONDARY};
+      font-size: ${FONT_SIZE.SM};
+      margin-bottom: ${SPACING.MARGIN_SM};
     }
     
     .ant-statistic-content {
-      font-size: 24px;
-      font-weight: 600;
+      color: ${COLORS.TEXT_PRIMARY};
+      font-size: ${FONT_SIZE.XL};
+      font-weight: ${FONT_WEIGHT.BOLD};
     }
   }
 `
 
 export const InfoCard = styled(Card)`
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  margin-bottom: 24px;
+  border-radius: ${BORDER_RADIUS.LG};
+  box-shadow: none;
+  border: 1px solid ${COLORS.BORDER_PRIMARY};
+  background: ${COLORS.BG_PRIMARY};
+  margin-bottom: ${SPACING.MARGIN_LG};
   
   .ant-card-head {
-    border-bottom: 2px solid #f0f0f0;
-    padding: 0 24px;
+    border-bottom: 1px solid ${COLORS.BORDER_SECONDARY};
+    padding: ${SPACING.PADDING_LG};
     
     .ant-card-head-title {
-      display: flex;
-      align-items: center;
-      font-size: 18px;
-      font-weight: 600;
-      color: #262626;
-      
-      .anticon {
-        margin-right: 8px;
-        color: #1890ff;
-      }
+      font-weight: ${FONT_WEIGHT.SEMIBOLD};
+      color: ${COLORS.TEXT_PRIMARY};
+      font-size: ${FONT_SIZE.LG};
     }
   }
   
   .ant-card-body {
-    padding: 24px;
+    padding: ${SPACING.PADDING_LG};
   }
   
   .info-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 16px;
+    gap: ${SPACING.GAP_LG};
     
     .info-item {
-      background: #fafafa;
-      padding: 16px;
-      border-radius: 8px;
-      border-left: 3px solid #1890ff;
-      transition: all 0.3s ease;
-      
-      &:hover {
-        background: #f0f8ff;
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(24, 144, 255, 0.15);
-      }
-      
-      &.full-width {
-        grid-column: 1 / -1;
-      }
+      display: flex;
+      align-items: center;
+      margin-bottom: ${SPACING.MARGIN_MD};
       
       .info-label {
-        font-weight: 600;
-        color: #666;
-        font-size: 13px;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        margin-bottom: 8px;
-        display: flex;
-        align-items: center;
-        
-        .info-icon {
-          color: #1890ff;
-          margin-right: 8px;
-        }
+        font-weight: ${FONT_WEIGHT.MEDIUM};
+        color: ${COLORS.TEXT_SECONDARY};
+        min-width: 120px;
+        margin-right: ${SPACING.MARGIN_MD};
       }
       
       .info-value {
-        color: #262626;
-        font-size: 15px;
-        font-weight: 500;
-        line-height: 1.4;
+        color: ${COLORS.TEXT_PRIMARY};
+        font-weight: ${FONT_WEIGHT.MEDIUM};
       }
     }
   }
   
-  .allergies-container {
+  .allergy-tags {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
+    gap: ${SPACING.GAP_SM};
+    margin-top: ${SPACING.MARGIN_MD};
   }
 `
 
 export const TreatmentCard = styled(Card)`
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  margin-bottom: 16px;
-  transition: all 0.3s ease;
+  border-radius: ${BORDER_RADIUS.LG};
+  box-shadow: none;
+  border: 1px solid ${COLORS.BORDER_PRIMARY};
+  background: ${COLORS.BG_PRIMARY};
+  margin-bottom: ${SPACING.MARGIN_LG};
   
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-  }
-  
-  .treatment-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 16px;
-    padding-bottom: 12px;
-    border-bottom: 1px solid #f0f0f0;
+  .ant-card-head {
+    border-bottom: 1px solid ${COLORS.BORDER_SECONDARY};
+    padding: ${SPACING.PADDING_LG};
     
-    .treatment-date {
-      font-weight: 600;
-      color: #1890ff;
-      font-size: 16px;
-      display: flex;
-      align-items: center;
-      
-      .date-icon {
-        margin-right: 8px;
-        color: #1890ff;
-      }
+    .ant-card-head-title {
+      font-weight: ${FONT_WEIGHT.SEMIBOLD};
+      color: ${COLORS.TEXT_PRIMARY};
+      font-size: ${FONT_SIZE.LG};
     }
   }
   
-  .treatment-content {
-    .treatment-section {
-      margin-bottom: 16px;
+  .ant-card-body {
+    padding: ${SPACING.PADDING_LG};
+  }
+  
+  .treatment-section {
+    margin-bottom: ${SPACING.MARGIN_LG};
+    
+    .section-label {
+      font-weight: ${FONT_WEIGHT.MEDIUM};
+      color: ${COLORS.TEXT_SECONDARY};
+      margin-bottom: ${SPACING.MARGIN_SM};
+      font-size: ${FONT_SIZE.SM};
+    }
+    
+    .medicine-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: ${SPACING.GAP_SM};
       
-      .section-label {
-        font-weight: 600;
-        color: #666;
-        font-size: 13px;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        margin-bottom: 6px;
-        display: flex;
-        align-items: center;
-        
-        .anticon {
-          margin-right: 6px;
-          color: #1890ff;
-        }
-      }
-      
-      .section-value {
-        color: #262626;
-        font-size: 14px;
-        line-height: 1.5;
-      }
-      
-      .medicines-list {
-        margin-top: 8px;
+      .medicine-tag {
+        background: ${COLORS.BG_TERTIARY};
+        border: 1px solid ${COLORS.BORDER_SECONDARY};
+        border-radius: ${BORDER_RADIUS.SM};
+        padding: ${SPACING.PADDING_XS} ${SPACING.PADDING_SM};
+        font-size: ${FONT_SIZE.SM};
+        color: ${COLORS.TEXT_PRIMARY};
       }
     }
   }
 `
 
 export const AllergyTag = styled(Tag)`
-  border-radius: 20px;
-  font-weight: 500;
-  padding: 4px 12px;
-  border: none;
-  background: linear-gradient(135deg, #ff6b6b, #ee5a52);
-  color: white;
+  background: ${COLORS.BG_PRIMARY};
+  border: 1px solid ${COLORS.ERROR};
+  color: ${COLORS.ERROR};
+  border-radius: ${BORDER_RADIUS.SM};
+  font-size: ${FONT_SIZE.SM};
+  font-weight: ${FONT_WEIGHT.MEDIUM};
+  padding: ${SPACING.PADDING_XS} ${SPACING.PADDING_SM};
+  transition: ${TRANSITIONS.NORMAL};
   
   &:hover {
-    transform: scale(1.05);
+    background: ${COLORS.ERROR};
+    color: ${COLORS.BG_PRIMARY};
+    border-color: ${COLORS.ERROR};
   }
 `
 

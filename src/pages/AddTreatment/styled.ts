@@ -9,37 +9,39 @@ import {
   COLORS, 
   GRADIENTS,
   TRANSITIONS,
-  BUTTON_STYLES 
+  BUTTON_STYLES,
+  FORM_STYLES
 } from '@/constants'
 
 const { Title: AntTitle } = Typography
 
 export const StyledTitle = styled(AntTitle)`
-  margin-bottom: ${SPACING.MARGIN_LG};
+  margin-bottom: ${SPACING.MARGIN_XL};
   text-align: center;
 `
 
 export const StyledCard = styled(Card)`
-  border-radius: ${BORDER_RADIUS.MD};
-  box-shadow: ${SHADOWS.MD};
-  padding: ${SPACING.PADDING_LG};
+  border-radius: ${BORDER_RADIUS.LG};
+  box-shadow: none;
+  padding: ${SPACING.PADDING_XL};
+  border: 1px solid ${COLORS.BORDER_PRIMARY};
 `
 
 export const FormContainer = styled.div`
   max-width: 800px;
   margin: 0 auto;
-  padding: ${SPACING.PADDING_LG};
+  padding: ${SPACING.PADDING_XL};
 `
 
 export const FormSection = styled.div`
-  margin-bottom: ${SPACING.MARGIN_XL};
+  margin-bottom: ${SPACING.MARGIN_XXL};
 
   .section-title {
     font-size: ${FONT_SIZE.LG};
     font-weight: ${FONT_WEIGHT.SEMIBOLD};
     color: ${COLORS.PRIMARY};
-    margin-bottom: ${SPACING.MARGIN_MD};
-    padding-bottom: ${SPACING.PADDING_SM};
+    margin-bottom: ${SPACING.MARGIN_LG};
+    padding-bottom: ${SPACING.PADDING_MD};
     border-bottom: 2px solid ${COLORS.BORDER_SECONDARY};
   }
 `
@@ -47,18 +49,18 @@ export const FormSection = styled.div`
 export const MedicineItem = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: ${SPACING.GAP_MD};
+  gap: ${SPACING.GAP_LG};
   align-items: end;
-  padding: ${SPACING.PADDING_MD};
-  background: ${COLORS.BG_SECONDARY};
-  border-radius: ${BORDER_RADIUS.SM};
+  padding: ${SPACING.PADDING_LG};
+  background: ${COLORS.BG_PRIMARY};
+  border-radius: ${BORDER_RADIUS.MD};
   border: 1px solid ${COLORS.BORDER_SECONDARY};
-  margin-bottom: ${SPACING.MARGIN_SM};
+  margin-bottom: ${SPACING.MARGIN_MD};
   position: relative;
   transition: ${TRANSITIONS.NORMAL};
 
   &:hover {
-    background: #f0f8ff;
+    background: ${COLORS.BG_TERTIARY};
     border-color: ${COLORS.PRIMARY};
   }
 
@@ -84,8 +86,8 @@ export const MedicineItem = styled.div`
 
   .remove-button {
     position: absolute;
-    top: ${SPACING.MARGIN_SM};
-    right: ${SPACING.MARGIN_SM};
+    top: ${SPACING.MARGIN_MD};
+    right: ${SPACING.MARGIN_MD};
     color: ${COLORS.ERROR};
 
     &:hover {
@@ -95,7 +97,7 @@ export const MedicineItem = styled.div`
 
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
-    gap: ${SPACING.GAP_SM};
+    gap: ${SPACING.GAP_MD};
 
     .medicine-select,
     .quantity-input,
@@ -107,8 +109,8 @@ export const MedicineItem = styled.div`
 
     .remove-button {
       position: absolute;
-      top: ${SPACING.MARGIN_SM};
-      right: ${SPACING.MARGIN_SM};
+      top: ${SPACING.MARGIN_MD};
+      right: ${SPACING.MARGIN_MD};
     }
   }
 `
@@ -130,9 +132,9 @@ export const AddMedicineButton = styled(Button)`
 export const ActionButtons = styled.div`
   display: flex;
   justify-content: flex-end;
-  gap: ${SPACING.GAP_SM};
-  margin-top: ${SPACING.MARGIN_XL};
-  padding-top: ${SPACING.PADDING_LG};
+  gap: ${SPACING.GAP_MD};
+  margin-top: ${SPACING.MARGIN_XXL};
+  padding-top: ${SPACING.PADDING_XL};
   border-top: 1px solid ${COLORS.BORDER_SECONDARY};
 `
 
@@ -202,9 +204,12 @@ export const StyledForm = styled(Form)`
   .ant-input,
   .ant-select-selector,
   .ant-picker {
-    border-radius: ${BORDER_RADIUS.SM};
+    border-radius: ${BORDER_RADIUS.MD};
     border: 1px solid ${COLORS.BORDER_PRIMARY};
     transition: ${TRANSITIONS.NORMAL};
+    height: ${FORM_STYLES.INPUT_HEIGHT};
+    padding: ${FORM_STYLES.INPUT_PADDING};
+    font-size: ${FORM_STYLES.INPUT_FONT_SIZE};
 
     &:hover {
       border-color: ${COLORS.PRIMARY_HOVER};
@@ -214,15 +219,15 @@ export const StyledForm = styled(Form)`
     &.ant-input-focused,
     &.ant-select-focused .ant-select-selector {
       border-color: ${COLORS.PRIMARY};
-      box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+      box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
     }
   }
 
   .ant-input-lg,
   .ant-select-lg .ant-select-selector,
   .ant-picker {
-    height: ${BUTTON_STYLES.HEIGHT};
-    font-size: ${FONT_SIZE.SM};
+    height: ${FORM_STYLES.INPUT_HEIGHT};
+    font-size: ${FORM_STYLES.INPUT_FONT_SIZE};
   }
 `
 
