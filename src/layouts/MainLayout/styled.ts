@@ -1,5 +1,15 @@
 import styled from 'styled-components'
 import { Layout } from 'antd'
+import { 
+  SPACING, 
+  FONT_SIZE, 
+  FONT_WEIGHT, 
+  BORDER_RADIUS, 
+  SHADOWS, 
+  COLORS, 
+  GRADIENTS,
+  TRANSITIONS 
+} from '@/constants'
 
 const { Sider, Header, Content } = Layout
 
@@ -10,7 +20,7 @@ export const StyledLayout = styled(Layout)`
 `
 
 export const StyledSider = styled(Sider)`
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  background: ${GRADIENTS.PRIMARY} !important;
   position: fixed !important;
   height: 100vh;
   z-index: 1000;
@@ -33,25 +43,25 @@ export const StyledSider = styled(Sider)`
   }
   
   .ant-menu-item {
-    margin: 4px 16px !important;
-    border-radius: 8px !important;
+    margin: ${SPACING.MARGIN_XS} ${SPACING.MARGIN_MD} !important;
+    border-radius: ${BORDER_RADIUS.SM} !important;
     height: 48px !important;
     line-height: 48px !important;
-    width: calc(100% - 32px) !important;
-    max-width: calc(100% - 32px) !important;
+    width: calc(100% - ${SPACING.MARGIN_XL}) !important;
+    max-width: calc(100% - ${SPACING.MARGIN_XL}) !important;
     display: flex;
     justify-content: center;
     align-items: center;
+    transition: ${TRANSITIONS.NORMAL};
     
     &:hover {
       background: rgba(255, 255, 255, 0.1) !important;
-      color: #ffffff !important;
+      color: ${COLORS.BG_PRIMARY} !important;
     }
     
     &.ant-menu-item-selected {
       background: rgba(255, 255, 255, 0.2) !important;
-      color: #ffffff !important;
-      
+      color: ${COLORS.BG_PRIMARY} !important;
       
       &::after {
         display: none !important;
@@ -61,39 +71,33 @@ export const StyledSider = styled(Sider)`
   
   .ant-menu-item .anticon {
     color: rgba(255, 255, 255, 0.8) !important;
-    font-size: 16px !important;
-    margin-right: 12px !important;
+    font-size: ${FONT_SIZE.MD} !important;
+    margin-right: ${SPACING.MARGIN_SM} !important;
   }
   
   .ant-menu-item-selected .anticon {
-    color: #ffffff !important;
+    color: ${COLORS.BG_PRIMARY} !important;
   }
   
   .ant-menu-title-content {
     color: rgba(255, 255, 255, 0.9) !important;
-    font-weight: 500 !important;
+    font-weight: ${FONT_WEIGHT.MEDIUM} !important;
+    font-size: ${FONT_SIZE.SM} !important;
     overflow: hidden !important;
     text-overflow: ellipsis !important;
     white-space: nowrap !important;
   }
   
   .ant-menu-item-selected .ant-menu-title-content {
-    color: #ffffff !important;
-    font-weight: 600 !important;
+    color: ${COLORS.BG_PRIMARY} !important;
+    font-weight: ${FONT_WEIGHT.SEMIBOLD} !important;
   }
   
   /* Collapsed state fixes */
   &.ant-layout-sider-collapsed {
-    .ant-menu-item {
-      /* margin: 4px 8px !important;
-      width: calc(100% - 16px) !important;
-      max-width: calc(100% - 16px) !important;
-      padding: 0 8px !important; */
-    }
-    
     .ant-menu-item .anticon {
       margin-right: 0 !important;
-      font-size: 18px !important;
+      font-size: ${FONT_SIZE.LG} !important;
     }
     
     .ant-menu-title-content {
@@ -106,9 +110,9 @@ export const StyledHeader = styled(Header)`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: #fff;
-  padding: 0 24px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background: ${COLORS.BG_PRIMARY};
+  padding: 0 ${SPACING.PADDING_LG};
+  box-shadow: ${SHADOWS.SM};
   width: 100% !important;
   min-width: 0;
   height: 64px;
@@ -118,7 +122,7 @@ export const StyledHeader = styled(Header)`
 `
 
 export const StyledContent = styled(Content)`
-  padding: 24px;
+  padding: ${SPACING.PADDING_LG};
   background: transparent;
   min-height: calc(100vh - 64px);
   width: 100% !important;
@@ -129,18 +133,18 @@ export const StyledContent = styled(Content)`
 `
 
 export const Logo = styled.div`
-  font-size: 18px;
-  font-weight: bold;
-  color: #ffffff;
-  padding: 24px 16px;
+  font-size: ${FONT_SIZE.LG};
+  font-weight: ${FONT_WEIGHT.BOLD};
+  color: ${COLORS.BG_PRIMARY};
+  padding: ${SPACING.PADDING_LG} ${SPACING.PADDING_MD};
   text-align: center;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   display: flex;
   align-items: center;
   justify-content: center;
   background: rgba(255, 255, 255, 0.05);
-  margin: 8px;
-  border-radius: 8px;
+  margin: ${SPACING.MARGIN_SM};
+  border-radius: ${BORDER_RADIUS.SM};
   flex-shrink: 0;
   
   img {
@@ -148,16 +152,16 @@ export const Logo = styled.div`
   }
   
   span {
-    color: #ffffff !important;
-    font-weight: 700 !important;
-    font-size: 16px !important;
+    color: ${COLORS.BG_PRIMARY} !important;
+    font-weight: ${FONT_WEIGHT.BOLD} !important;
+    font-size: ${FONT_SIZE.MD} !important;
   }
 `
 
 export const UserInfo = styled.div`
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: ${SPACING.GAP_SM};
 `
 
 export const MainContentLayout = styled(Layout)`

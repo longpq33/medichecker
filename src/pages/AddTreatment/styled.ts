@@ -1,53 +1,65 @@
 import styled from 'styled-components'
 import { Card, Form, Button, DatePicker, Typography } from 'antd'
+import { 
+  SPACING, 
+  FONT_SIZE, 
+  FONT_WEIGHT, 
+  BORDER_RADIUS, 
+  SHADOWS, 
+  COLORS, 
+  GRADIENTS,
+  TRANSITIONS,
+  BUTTON_STYLES 
+} from '@/constants'
 
 const { Title: AntTitle } = Typography
 
 export const StyledTitle = styled(AntTitle)`
-  margin-bottom: 24px;
+  margin-bottom: ${SPACING.MARGIN_LG};
   text-align: center;
 `
 
 export const StyledCard = styled(Card)`
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  padding: 24px;
+  border-radius: ${BORDER_RADIUS.MD};
+  box-shadow: ${SHADOWS.MD};
+  padding: ${SPACING.PADDING_LG};
 `
 
 export const FormContainer = styled.div`
   max-width: 800px;
   margin: 0 auto;
-  padding: 24px;
+  padding: ${SPACING.PADDING_LG};
 `
 
 export const FormSection = styled.div`
-  margin-bottom: 32px;
+  margin-bottom: ${SPACING.MARGIN_XL};
 
   .section-title {
-    font-size: 18px;
-    font-weight: 600;
-    color: #1890ff;
-    margin-bottom: 16px;
-    padding-bottom: 8px;
-    border-bottom: 2px solid #f0f0f0;
+    font-size: ${FONT_SIZE.LG};
+    font-weight: ${FONT_WEIGHT.SEMIBOLD};
+    color: ${COLORS.PRIMARY};
+    margin-bottom: ${SPACING.MARGIN_MD};
+    padding-bottom: ${SPACING.PADDING_SM};
+    border-bottom: 2px solid ${COLORS.BORDER_SECONDARY};
   }
 `
 
 export const MedicineItem = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 16px;
+  gap: ${SPACING.GAP_MD};
   align-items: end;
-  padding: 16px;
-  background: #fafafa;
-  border-radius: 8px;
-  border: 1px solid #f0f0f0;
-  margin-bottom: 12px;
+  padding: ${SPACING.PADDING_MD};
+  background: ${COLORS.BG_SECONDARY};
+  border-radius: ${BORDER_RADIUS.SM};
+  border: 1px solid ${COLORS.BORDER_SECONDARY};
+  margin-bottom: ${SPACING.MARGIN_SM};
   position: relative;
+  transition: ${TRANSITIONS.NORMAL};
 
   &:hover {
     background: #f0f8ff;
-    border-color: #1890ff;
+    border-color: ${COLORS.PRIMARY};
   }
 
   .medicine-select {
@@ -72,18 +84,18 @@ export const MedicineItem = styled.div`
 
   .remove-button {
     position: absolute;
-    top: 8px;
-    right: 8px;
-    color: #ff4d4f;
+    top: ${SPACING.MARGIN_SM};
+    right: ${SPACING.MARGIN_SM};
+    color: ${COLORS.ERROR};
 
     &:hover {
-      color: #ff7875;
+      color: ${COLORS.ERROR_HOVER};
     }
   }
 
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
-    gap: 12px;
+    gap: ${SPACING.GAP_SM};
 
     .medicine-select,
     .quantity-input,
@@ -95,8 +107,8 @@ export const MedicineItem = styled.div`
 
     .remove-button {
       position: absolute;
-      top: 8px;
-      right: 8px;
+      top: ${SPACING.MARGIN_SM};
+      right: ${SPACING.MARGIN_SM};
     }
   }
 `
@@ -104,103 +116,104 @@ export const MedicineItem = styled.div`
 export const AddMedicineButton = styled(Button)`
   width: 100%;
   height: 48px;
-  border: 2px dashed #d9d9d9;
-  border-radius: 8px;
-  color: #666;
-  font-weight: 500;
+  border: 2px dashed ${COLORS.BORDER_PRIMARY};
+  border-radius: ${BORDER_RADIUS.SM};
+  color: ${COLORS.TEXT_SECONDARY};
+  font-weight: ${FONT_WEIGHT.MEDIUM};
 
   &:hover {
-    border-color: #1890ff;
-    color: #1890ff;
+    border-color: ${COLORS.PRIMARY};
+    color: ${COLORS.PRIMARY};
   }
 `
 
 export const ActionButtons = styled.div`
   display: flex;
   justify-content: flex-end;
-  gap: 12px;
-  margin-top: 32px;
-  padding-top: 24px;
-  border-top: 1px solid #f0f0f0;
+  gap: ${SPACING.GAP_SM};
+  margin-top: ${SPACING.MARGIN_XL};
+  padding-top: ${SPACING.PADDING_LG};
+  border-top: 1px solid ${COLORS.BORDER_SECONDARY};
 `
 
 export const PrimaryButton = styled(Button)`
-  height: 40px;
-  padding: 0 24px;
-  font-weight: 500;
-  border-radius: 6px;
-  background: linear-gradient(135deg, #1890ff 0%, #096dd9 100%);
+  height: ${BUTTON_STYLES.HEIGHT};
+  padding: ${BUTTON_STYLES.PADDING};
+  font-weight: ${BUTTON_STYLES.FONT_WEIGHT};
+  border-radius: ${BUTTON_STYLES.BORDER_RADIUS};
+  background: ${GRADIENTS.PRIMARY};
   border: none;
-  color: white;
+  color: ${COLORS.BG_PRIMARY};
+  transition: ${BUTTON_STYLES.TRANSITION};
 
   &:hover {
-    background: linear-gradient(135deg, #40a9ff 0%, #1890ff 100%);
+    background: ${GRADIENTS.PRIMARY_HOVER};
     transform: translateY(-1px);
     box-shadow: 0 4px 12px rgba(24, 144, 255, 0.3);
   }
 `
 
 export const SecondaryButton = styled(Button)`
-  height: 40px;
-  padding: 0 24px;
-  font-weight: 500;
-  border-radius: 6px;
-  border: 1px solid #d9d9d9;
-  color: #666;
-  background: white;
+  height: ${BUTTON_STYLES.HEIGHT};
+  padding: ${BUTTON_STYLES.PADDING};
+  font-weight: ${BUTTON_STYLES.FONT_WEIGHT};
+  border-radius: ${BUTTON_STYLES.BORDER_RADIUS};
+  border: 1px solid ${COLORS.BORDER_PRIMARY};
+  color: ${COLORS.TEXT_SECONDARY};
+  background: ${COLORS.BG_PRIMARY};
 
   &:hover {
-    border-color: #1890ff;
-    color: #1890ff;
+    border-color: ${COLORS.PRIMARY};
+    color: ${COLORS.PRIMARY};
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: ${SHADOWS.SM};
   }
 `
 
 export const BackButton = styled(Button)`
-  margin-bottom: 16px;
-  height: 40px;
-  padding: 0 16px;
-  font-weight: 500;
-  border-radius: 6px;
-  border: 1px solid #d9d9d9;
-  color: #666;
-  background: white;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: ${SPACING.MARGIN_MD};
+  height: ${BUTTON_STYLES.HEIGHT};
+  padding: 0 ${SPACING.PADDING_MD};
+  font-weight: ${BUTTON_STYLES.FONT_WEIGHT};
+  border-radius: ${BUTTON_STYLES.BORDER_RADIUS};
+  border: 1px solid ${COLORS.BORDER_PRIMARY};
+  color: ${COLORS.TEXT_SECONDARY};
+  background: ${COLORS.BG_PRIMARY};
+  box-shadow: ${SHADOWS.SM};
 
   &:hover {
-    border-color: #1890ff;
-    color: #1890ff;
+    border-color: ${COLORS.PRIMARY};
+    color: ${COLORS.PRIMARY};
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    box-shadow: ${SHADOWS.MD};
   }
 `
 
 export const StyledForm = styled(Form)`
   .ant-form-item {
-    margin-bottom: 24px;
+    margin-bottom: ${SPACING.MARGIN_LG};
   }
 
   .ant-form-item-label > label {
-    font-weight: 500;
-    color: #333;
+    font-weight: ${FONT_WEIGHT.MEDIUM};
+    color: ${COLORS.TEXT_PRIMARY};
   }
 
   .ant-input,
   .ant-select-selector,
   .ant-picker {
-    border-radius: 6px;
-    border: 1px solid #d9d9d9;
-    transition: all 0.3s;
+    border-radius: ${BORDER_RADIUS.SM};
+    border: 1px solid ${COLORS.BORDER_PRIMARY};
+    transition: ${TRANSITIONS.NORMAL};
 
     &:hover {
-      border-color: #40a9ff;
+      border-color: ${COLORS.PRIMARY_HOVER};
     }
 
     &:focus,
     &.ant-input-focused,
     &.ant-select-focused .ant-select-selector {
-      border-color: #1890ff;
+      border-color: ${COLORS.PRIMARY};
       box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
     }
   }
@@ -208,8 +221,8 @@ export const StyledForm = styled(Form)`
   .ant-input-lg,
   .ant-select-lg .ant-select-selector,
   .ant-picker {
-    height: 40px;
-    font-size: 14px;
+    height: ${BUTTON_STYLES.HEIGHT};
+    font-size: ${FONT_SIZE.SM};
   }
 `
 
@@ -219,29 +232,29 @@ export const DatePickerStyled = styled(DatePicker)`
 `
 
 export const PrescriptionSummary = styled.div`
-  margin-top: 16px;
-  padding: 16px;
+  margin-top: ${SPACING.MARGIN_MD};
+  padding: ${SPACING.PADDING_MD};
   background: #f6ffed;
   border: 1px solid #b7eb8f;
-  border-radius: 8px;
-  font-size: 14px;
+  border-radius: ${BORDER_RADIUS.SM};
+  font-size: ${FONT_SIZE.SM};
 `
 
 export const SummaryTitle = styled.div`
-  font-weight: 600;
-  margin-bottom: 8px;
-  color: #52c41a;
+  font-weight: ${FONT_WEIGHT.SEMIBOLD};
+  margin-bottom: ${SPACING.MARGIN_SM};
+  color: ${COLORS.SUCCESS};
 `
 
 export const SummaryItem = styled.div`
-  margin-bottom: 4px;
+  margin-bottom: ${SPACING.MARGIN_XS};
 `
 
 export const SummaryMedicineName = styled.span`
-  font-weight: 500;
+  font-weight: ${FONT_WEIGHT.MEDIUM};
 `
 
 export const SummaryDosageText = styled.span`
-  margin-left: 8px;
-  color: #666;
+  margin-left: ${SPACING.MARGIN_SM};
+  color: ${COLORS.TEXT_SECONDARY};
 ` 

@@ -1,29 +1,35 @@
 import styled from 'styled-components'
 import { Form, Button, Divider } from 'antd'
 import { Link } from 'react-router-dom'
+import { 
+  SPACING, 
+  FONT_SIZE, 
+  COLORS, 
+  BUTTON_STYLES 
+} from '@/constants'
 
 export const StyledForm = styled(Form)`
   .ant-form-item {
-    margin-bottom: 16px;
+    margin-bottom: ${SPACING.MARGIN_MD};
   }
   
   .ant-btn {
-    height: 40px;
-    font-size: 16px;
+    height: ${BUTTON_STYLES.HEIGHT};
+    font-size: ${FONT_SIZE.MD};
   }
 `
 
 export const StyledButton = styled(Button)`
   width: 100%;
-  margin-top: 8px;
+  margin-top: ${SPACING.MARGIN_SM};
 `
 
 export const StyledDivider = styled(Divider)`
-  margin: 24px 0;
+  margin: ${SPACING.MARGIN_LG} 0;
 `
 
 export const StyledLink = styled(Link)`
-  color: #1890ff;
+  color: ${COLORS.PRIMARY};
   text-decoration: none;
   
   &:hover {

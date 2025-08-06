@@ -1,44 +1,53 @@
 import styled from 'styled-components'
 import { Card } from 'antd'
+import { 
+  SPACING, 
+  FONT_SIZE, 
+  FONT_WEIGHT, 
+  BORDER_RADIUS, 
+  SHADOWS, 
+  COLORS, 
+  TRANSITIONS 
+} from '@/constants'
 
 export const StyledCard = styled(Card)`
-  margin-bottom: 24px;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: ${SPACING.MARGIN_LG};
+  border-radius: ${BORDER_RADIUS.SM};
+  box-shadow: ${SHADOWS.SM};
   
   .ant-card-head {
-    border-bottom: 1px solid #f0f0f0;
+    border-bottom: 1px solid ${COLORS.BORDER_SECONDARY};
   }
   
   .ant-card-head-title {
-    font-weight: 600;
-    color: #262626;
+    font-weight: ${FONT_WEIGHT.SEMIBOLD};
+    color: ${COLORS.TEXT_PRIMARY};
   }
 `
 
 export const StatCard = styled(Card)`
   text-align: center;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
+  border-radius: ${BORDER_RADIUS.SM};
+  box-shadow: ${SHADOWS.SM};
+  transition: ${TRANSITIONS.NORMAL};
   
   &:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    box-shadow: ${SHADOWS.MD};
   }
   
   .ant-statistic-title {
-    color: #666;
-    font-size: 14px;
-    margin-bottom: 8px;
+    color: ${COLORS.TEXT_SECONDARY};
+    font-size: ${FONT_SIZE.SM};
+    margin-bottom: ${SPACING.MARGIN_SM};
   }
   
   .ant-statistic-content {
-    font-size: 24px;
-    font-weight: bold;
+    font-size: ${FONT_SIZE.XXL};
+    font-weight: ${FONT_WEIGHT.BOLD};
   }
   
   .ant-statistic-content-prefix {
-    margin-right: 8px;
+    margin-right: ${SPACING.MARGIN_SM};
   }
 ` 

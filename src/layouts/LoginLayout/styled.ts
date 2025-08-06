@@ -1,42 +1,51 @@
 import styled from 'styled-components'
 import { Layout } from 'antd'
+import { 
+  SPACING, 
+  FONT_SIZE, 
+  FONT_WEIGHT, 
+  BORDER_RADIUS, 
+  SHADOWS, 
+  COLORS, 
+  GRADIENTS 
+} from '@/constants'
 
 const { Content } = Layout
 
 export const StyledLayout = styled(Layout)`
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: ${GRADIENTS.PRIMARY};
 `
 
 export const StyledContent = styled(Content)`
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 24px;
+  padding: ${SPACING.PADDING_LG};
 `
 
 export const AuthContainer = styled.div`
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-  padding: 48px;
+  background: ${COLORS.BG_PRIMARY};
+  border-radius: ${BORDER_RADIUS.MD};
+  box-shadow: ${SHADOWS.LG};
+  padding: ${SPACING.PADDING_XXL};
   width: 100%;
   max-width: 400px;
 `
 
 export const Logo = styled.div`
   text-align: center;
-  margin-bottom: 32px;
+  margin-bottom: ${SPACING.MARGIN_XL};
   
   h1 {
-    color: #1890ff;
-    font-size: 28px;
-    font-weight: bold;
+    color: ${COLORS.PRIMARY};
+    font-size: ${FONT_SIZE.XXXL};
+    font-weight: ${FONT_WEIGHT.BOLD};
     margin: 0;
   }
   
   p {
-    color: #666;
-    margin: 8px 0 0 0;
+    color: ${COLORS.TEXT_SECONDARY};
+    margin: ${SPACING.MARGIN_SM} 0 0 0;
   }
 ` 

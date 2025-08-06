@@ -1,20 +1,25 @@
 import styled from 'styled-components'
 import { Card, Table } from 'antd'
+import { 
+  SPACING, 
+  FONT_WEIGHT, 
+  COLORS 
+} from '@/constants'
 
 export const StyledCard = styled(Card)`
-  margin-bottom: 24px;
+  margin-bottom: ${SPACING.MARGIN_LG};
   width: 100%;
   overflow-x: hidden;
 `
 
 export const StyledTable = styled(Table)`
   .ant-table-thead > tr > th {
-    background: #fafafa;
-    font-weight: 600;
+    background: ${COLORS.BG_SECONDARY};
+    font-weight: ${FONT_WEIGHT.SEMIBOLD};
   }
   
   .ant-table-tbody > tr:hover > td {
-    background: #f5f5f5;
+    background: ${COLORS.BG_TERTIARY};
   }
   
   .ant-table-wrapper {
@@ -25,6 +30,6 @@ export const StyledTable = styled(Table)`
 
 export const ActionButtons = styled.div`
   display: flex;
-  gap: 8px;
+  gap: ${SPACING.GAP_SM};
   align-items: center;
 ` 

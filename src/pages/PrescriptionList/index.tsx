@@ -21,6 +21,7 @@ import {
 import { useLanguage } from '@/hooks/useLanguage'
 import dayjs from 'dayjs'
 import { useNavigate } from 'react-router-dom'
+import { SPACING } from '@/constants'
 
 const { Option } = Select
 
@@ -278,9 +279,14 @@ export const PrescriptionList: React.FC = () => {
   )
 
   return (
-    <div style={{ padding: '24px' }}>
+    <div style={{ padding: SPACING.PADDING_LG }}>
       <Card>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+        <div style={{ 
+          display: 'flex', 
+          justifyContent: 'space-between', 
+          alignItems: 'center', 
+          marginBottom: SPACING.MARGIN_MD 
+        }}>
           <h2>{t('prescription.title')}</h2>
           <Button
             type="primary"
@@ -291,7 +297,7 @@ export const PrescriptionList: React.FC = () => {
           </Button>
         </div>
 
-        <div style={{ marginBottom: '16px' }}>
+        <div style={{ marginBottom: SPACING.MARGIN_MD }}>
           <Input.Search
             placeholder={t('prescription.searchPrescription')}
             allowClear
