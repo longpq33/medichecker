@@ -50,14 +50,6 @@ export interface UpdateProfileRequest {
   gender?: 'male' | 'female' | 'other'
 }
 
-// API Response Types
-export interface ApiResponse<T = unknown> {
-  success: boolean
-  data: T
-  message?: string
-  errors?: Record<string, string[]>
-}
-
 export interface PaginatedResponse<T> {
   data: T[]
   pagination: {
@@ -66,11 +58,4 @@ export interface PaginatedResponse<T> {
     total: number
     totalPages: number
   }
-}
-
-// Error Types
-export interface ApiError {
-  message: string
-  status: number
-  errors?: Record<string, string[]>
 } 

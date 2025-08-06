@@ -1,3 +1,6 @@
+// Export all constants
+export * from './medicine'
+
 // App constants
 export const APP_NAME = 'MediChecker'
 export const APP_VERSION = '1.0.0'

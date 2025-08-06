@@ -1,6 +1,7 @@
 import React from 'react'
-import { Form, Input, Select, Modal } from 'antd'
+import { Modal, Form, Input, Select } from 'antd'
 import { useLanguage } from '@/hooks/useLanguage'
+import type { FormInstance } from 'antd/es/form'
 
 const { Option } = Select
 
@@ -21,7 +22,7 @@ interface PatientFormProps {
   editingPatient: Patient | null
   onCancel: () => void
   onOk: () => void
-  form: any
+  form: FormInstance
 }
 
 export const PatientForm: React.FC<PatientFormProps> = ({

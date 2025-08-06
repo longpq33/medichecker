@@ -14,7 +14,6 @@ import { useUIStore } from '@/store'
 import { useAuth } from '@/hooks/useAuth'
 import { useLanguage } from '@/hooks/useLanguage'
 import { LanguageSwitcher } from '@/components'
-import logo from '/logo.svg'
 import {
   StyledLayout,
   StyledSider,
@@ -89,12 +88,12 @@ export const MainLayout: React.FC = () => {
         <Logo>
           {!sidebarCollapsed && (
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <img src={logo} alt="MediChecker" style={{ width: '24px', height: '24px' }} />
+              <img src="/logo.svg" alt="MediChecker" style={{ width: '24px', height: '24px' }} />
               <span>MediChecker</span>
             </div>
           )}
           {sidebarCollapsed && (
-            <img src={logo} alt="MediChecker" style={{ width: '24px', height: '24px' }} />
+            <img src="/logo.svg" alt="MediChecker" style={{ width: '24px', height: '24px' }} />
           )}
         </Logo>
         <Menu

@@ -31,7 +31,7 @@ export const isValidPhone = (phone: string): boolean => {
 }
 
 // Storage utilities
-export const setLocalStorage = (key: string, value: any): void => {
+export const setLocalStorage = (key: string, value: unknown): void => {
   try {
     localStorage.setItem(key, JSON.stringify(value))
   } catch (error) {
@@ -39,7 +39,7 @@ export const setLocalStorage = (key: string, value: any): void => {
   }
 }
 
-export const getLocalStorage = (key: string): any => {
+export const getLocalStorage = (key: string): unknown => {
   try {
     const item = localStorage.getItem(key)
     return item ? JSON.parse(item) : null
