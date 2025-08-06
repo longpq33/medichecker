@@ -1,24 +1,10 @@
 {
   "common": {
     "dashboard": "Dashboard",
-    "patients": "Danh sách bệnh nhân",
-    "medicines": "Quản lý thuốc",
-    "settings": "Cài đặt",
     "profile": "Hồ sơ",
     "logout": "Đăng xuất",
-    "search": "Tìm kiếm",
-    "add": "Thêm",
-    "edit": "Chỉnh sửa",
-    "delete": "Xóa",
-    "view": "Xem",
-    "save": "Lưu",
-    "cancel": "Hủy",
-    "confirm": "Xác nhận",
-    "loading": "Đang tải...",
-    "noData": "Không có dữ liệu",
     "actions": "Thao tác",
     "status": "Trạng thái",
-    "name": "Tên",
     "phone": "Số điện thoại",
     "email": "Email",
     "age": "Tuổi",
@@ -30,29 +16,17 @@
     "active": "Hoạt động",
     "inactive": "Không hoạt động",
     "pending": "Chờ xử lý",
-    "available": "Có sẵn",
-    "outOfStock": "Hết hàng",
-    "discontinued": "Ngừng sản xuất",
-    "price": "Giá",
-    "stock": "Tồn kho",
-    "unit": "Đơn vị",
-    "category": "Danh mục",
-    "manufacturer": "Nhà sản xuất",
-    "code": "Mã",
-    "expiryDate": "Hạn sử dụng",
-    "total": "Tổng cộng",
     "of": "của",
-    "items": "mục",
-    "language": "Ngôn ngữ",
-    "theme": "Giao diện",
-    "dark": "Tối",
-    "light": "Sáng"
+    "save": "Lưu",
+    "cancel": "Hủy",
+    "view": "Xem",
+    "edit": "Chỉnh sửa",
+    "delete": "Xóa"
   },
   "navigation": {
     "dashboard": "Dashboard",
     "patientList": "Danh sách bệnh nhân",
-    "medicineManagement": "Quản lý thuốc",
-    "settings": "Cài đặt"
+    "medicineManagement": "Quản lý thuốc"
   },
   "patient": {
     "title": "Danh sách bệnh nhân",
@@ -68,8 +42,25 @@
     "patientAddress": "Địa chỉ",
     "patientStatus": "Trạng thái",
     "deleteConfirm": "Bạn có chắc chắn muốn xóa bệnh nhân này?",
+    "deleteWarning": "Hành động này không thể hoàn tác.",
     "patients": "bệnh nhân",
-    "patient": "bệnh nhân"
+    "patient": "bệnh nhân",
+    "insurance": "Bảo hiểm",
+    "createSuccess": "Tạo bệnh nhân thành công!",
+    "createError": "Có lỗi xảy ra khi tạo bệnh nhân",
+    "updateSuccess": "Cập nhật bệnh nhân thành công!",
+    "updateError": "Có lỗi xảy ra khi cập nhật bệnh nhân",
+    "deleteSuccess": "Xóa bệnh nhân thành công!",
+    "deleteError": "Có lỗi xảy ra khi xóa bệnh nhân",
+    "confirmDelete": "Xác nhận xóa bệnh nhân",
+    "fullName": "Họ và tên",
+    "dateOfBirth": "Ngày sinh",
+    "phoneNumber": "Số điện thoại",
+    "emailAddress": "Địa chỉ email",
+    "homeAddress": "Địa chỉ nhà",
+    "insuranceNumber": "Số bảo hiểm y tế",
+    "addTreatment": "Thêm điều trị",
+    "viewDetails": "Xem chi tiết"
   },
   "medicine": {
     "title": "Quản lý thuốc",
@@ -86,8 +77,36 @@
     "medicineUnit": "Đơn vị",
     "medicineStatus": "Trạng thái",
     "deleteConfirm": "Bạn có chắc chắn muốn xóa thuốc này?",
+    "deleteWarning": "Hành động này không thể hoàn tác.",
     "medicines": "thuốc",
     "medicine": "thuốc",
+    "createSuccess": "Tạo thuốc thành công!",
+    "createError": "Có lỗi xảy ra khi tạo thuốc",
+    "updateSuccess": "Cập nhật thuốc thành công!",
+    "updateError": "Có lỗi xảy ra khi cập nhật thuốc",
+    "deleteSuccess": "Xóa thuốc thành công!",
+    "deleteError": "Có lỗi xảy ra khi xóa thuốc",
+    "confirmDelete": "Xác nhận xóa thuốc",
+    "activeIngredient": "Hoạt chất",
+    "concentration": "Nồng độ",
+    "dosageForm": "Dạng bào chế",
+    "country": "Nước sản xuất",
+    "sellingPrice": "Giá bán",
+    "indications": "Chỉ định",
+    "contraindications": "Chống chỉ định",
+    "sideEffects": "Tác dụng phụ",
+    "adultDosage": "Liều dùng người lớn",
+    "pediatricDosage": "Liều dùng trẻ em",
+    "drugGroup": "Nhóm thuốc",
+    "groups": {
+      "antibiotic": "Kháng sinh",
+      "painkiller": "Giảm đau",
+      "antiInflammatory": "Chống viêm",
+      "cardiovascular": "Tim mạch",
+      "digestive": "Tiêu hóa",
+      "respiratory": "Hô hấp",
+      "other": "Khác"
+    },
     "categories": {
       "painRelief": "Thuốc giảm đau",
       "antibiotic": "Thuốc kháng sinh",
@@ -100,7 +119,16 @@
       "bottle": "Chai",
       "box": "Hộp",
       "pack": "Gói"
-    }
+    },
+    "available": "Có sẵn",
+    "outOfStock": "Hết hàng",
+    "discontinued": "Ngừng sản xuất",
+    "category": "Danh mục",
+    "manufacturer": "Nhà sản xuất",
+    "price": "Giá",
+    "stock": "Tồn kho",
+    "unit": "Đơn vị",
+    "expiryDate": "Hạn sử dụng"
   },
   "treatment": {
     "title": "Thêm Điều Trị Mới",
@@ -135,6 +163,7 @@
     "errorMessage": "Có lỗi xảy ra, vui lòng thử lại",
     "validation": {
       "noMedicines": "Vui lòng thêm ít nhất một loại thuốc",
+      "noValidMedicines": "Vui lòng điền đầy đủ thông tin cho ít nhất một loại thuốc",
       "incompleteMedicine": "Vui lòng điền đầy đủ thông tin thuốc",
       "duplicateMedicine": "Có thuốc bị trùng lặp, vui lòng kiểm tra lại",
       "selectMedicine": "Vui lòng chọn tên thuốc",
@@ -176,32 +205,23 @@
       "oneYear": "1 năm"
     }
   },
-  "auth": {
-    "login": "Đăng nhập",
-    "register": "Đăng ký",
-    "email": "Email",
-    "password": "Mật khẩu",
-    "rememberMe": "Ghi nhớ đăng nhập",
-    "forgotPassword": "Quên mật khẩu?",
-    "loginFailed": "Đăng nhập thất bại",
-    "registerFailed": "Đăng ký thất bại",
-    "logoutSuccess": "Đăng xuất thành công"
+  "dashboard": {
+    "title": "Dashboard",
+    "welcome": "Chào mừng bạn đến với hệ thống MediChecker",
+    "totalPatients": "Tổng số bệnh nhân",
+    "medicinesInStock": "Thuốc trong kho",
+    "todayAppointments": "Lịch hẹn hôm nay",
+    "medicalRecords": "Hồ sơ bệnh án",
+    "recentActivities": "Hoạt động gần đây",
+    "statistics": "Thống kê",
+    "recentActivitiesPlaceholder": "Danh sách các hoạt động gần đây sẽ được hiển thị ở đây...",
+    "statisticsPlaceholder": "Biểu đồ thống kê sẽ được hiển thị ở đây..."
   },
   "validation": {
     "required": "Vui lòng nhập {{field}}!",
-    "email": "Email không hợp lệ!",
-    "minLength": "{{field}} phải có ít nhất {{min}} ký tự",
-    "maxLength": "{{field}} không được vượt quá {{max}} ký tự",
-    "invalidFormat": "Định dạng {{field}} không hợp lệ"
+    "email": "Email không hợp lệ!"
   },
   "messages": {
-    "success": "Thành công",
-    "error": "Lỗi",
-    "warning": "Cảnh báo",
-    "info": "Thông tin",
-    "confirmDelete": "Bạn có chắc chắn muốn xóa?",
-    "dataSaved": "Dữ liệu đã được lưu",
-    "dataDeleted": "Dữ liệu đã được xóa",
-    "operationFailed": "Thao tác thất bại"
+    "confirmDelete": "Bạn có chắc chắn muốn xóa?"
   }
 } 

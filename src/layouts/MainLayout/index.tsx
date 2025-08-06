@@ -1,6 +1,6 @@
 import React from 'react'
 import { Menu, Button, Avatar, Dropdown } from 'antd'
-import { Outlet, useNavigate } from 'react-router-dom'
+import { Outlet, useNavigate, useLocation } from 'react-router-dom'
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
@@ -27,6 +27,7 @@ import {
 
 export const MainLayout: React.FC = () => {
   const navigate = useNavigate()
+  const location = useLocation()
   const { user, handleLogout } = useAuth()
   const { sidebarCollapsed, toggleSidebar } = useUIStore()
   const { t } = useLanguage()
@@ -67,6 +68,15 @@ export const MainLayout: React.FC = () => {
     },
   ]
 
+  // Get current selected key based on location
+  const getSelectedKey = () => {
+    const pathname = location.pathname
+    if (pathname === '/') return ['/']
+    if (pathname.startsWith('/patients')) return ['/patients']
+    if (pathname.startsWith('/medicines')) return ['/medicines']
+    return ['/']
+  }
+
   return (
     <StyledLayout className={sidebarCollapsed ? 'ant-layout-sider-collapsed' : ''}>
       <StyledSider 
@@ -89,7 +99,7 @@ export const MainLayout: React.FC = () => {
         </Logo>
         <Menu
           mode="inline"
-          defaultSelectedKeys={['/']}
+          selectedKeys={getSelectedKey()}
           items={menuItems}
           style={{ flex: 1, background: 'transparent' }}
         />

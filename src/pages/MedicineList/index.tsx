@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
 import { 
   Modal,
-  Form
+  Form,
+  Card,
+  message
 } from 'antd'
 import { useLanguage } from '@/hooks/useLanguage'
 import { MedicineForm, MedicineTable, MedicineHeader } from './components'
@@ -126,6 +128,7 @@ export const MedicineList: React.FC = () => {
           <p><strong>{t('medicine.expiryDate')}:</strong> {new Date(medicine.expiryDate).toLocaleDateString('vi-VN')}</p>
         </div>
       ),
+      okText: t('common.save'),
     })
   }
 
@@ -133,8 +136,11 @@ export const MedicineList: React.FC = () => {
     Modal.confirm({
       title: t('messages.confirmDelete'),
       content: t('medicine.deleteConfirm'),
+      okText: t('common.save'),
+      cancelText: t('common.cancel'),
       onOk: () => {
         setMedicines(medicines.filter(m => m.id !== id))
+        message.success(t('medicine.deleteSuccess'))
       },
     })
   }
@@ -146,6 +152,7 @@ export const MedicineList: React.FC = () => {
         setMedicines(medicines.map(m => 
           m.id === editingMedicine.id ? { ...m, ...values } : m
         ))
+        message.success(t('medicine.updateSuccess'))
       } else {
         // Add new medicine
         const newMedicine: Medicine = {
@@ -154,9 +161,12 @@ export const MedicineList: React.FC = () => {
           expiryDate: values.expiryDate ? values.expiryDate.toISOString().split('T')[0] : '',
         }
         setMedicines([...medicines, newMedicine])
+        message.success(t('medicine.createSuccess'))
       }
       setIsModalVisible(false)
       form.resetFields()
+    }).catch(() => {
+      message.error(t('medicine.createError'))
     })
   }
 
@@ -168,20 +178,22 @@ export const MedicineList: React.FC = () => {
   )
 
   return (
-    <div>
+    <div style={{ padding: '24px' }}>
       <MedicineHeader 
         onAdd={handleAdd}
         onSearch={handleSearch}
       />
       
-      <MedicineTable
-        medicines={filteredMedicines}
-        onEdit={handleEdit}
-        onDelete={handleDelete}
-        onView={handleView}
-        getStatusColor={getStatusColor}
-        getStatusText={getStatusText}
-      />
+      <Card style={{ marginTop: '16px' }}>
+        <MedicineTable
+          medicines={filteredMedicines}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
+          onView={handleView}
+          getStatusColor={getStatusColor}
+          getStatusText={getStatusText}
+        />
+      </Card>
 
       <MedicineForm
         visible={isModalVisible}

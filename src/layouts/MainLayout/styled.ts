@@ -39,6 +39,9 @@ export const StyledSider = styled(Sider)`
     line-height: 48px !important;
     width: calc(100% - 32px) !important;
     max-width: calc(100% - 32px) !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     
     &:hover {
       background: rgba(255, 255, 255, 0.1) !important;
@@ -48,6 +51,7 @@ export const StyledSider = styled(Sider)`
     &.ant-menu-item-selected {
       background: rgba(255, 255, 255, 0.2) !important;
       color: #ffffff !important;
+      
       
       &::after {
         display: none !important;
@@ -81,10 +85,10 @@ export const StyledSider = styled(Sider)`
   /* Collapsed state fixes */
   &.ant-layout-sider-collapsed {
     .ant-menu-item {
-      margin: 4px 8px !important;
+      /* margin: 4px 8px !important;
       width: calc(100% - 16px) !important;
       max-width: calc(100% - 16px) !important;
-      padding: 0 8px !important;
+      padding: 0 8px !important; */
     }
     
     .ant-menu-item .anticon {
@@ -165,4 +169,4 @@ export const MainContentLayout = styled(Layout)`
   @media (max-width: 768px) {
     margin-left: 0;
   }
-` 
+` ;

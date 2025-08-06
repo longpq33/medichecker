@@ -26,6 +26,7 @@ export const MedicineHeader: React.FC<MedicineHeaderProps> = ({
           type="primary" 
           icon={<PlusOutlined />}
           onClick={onAdd}
+          size="large"
         >
           {t('medicine.addMedicine')}
         </Button>

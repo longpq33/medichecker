@@ -41,6 +41,8 @@ export const MedicineForm: React.FC<MedicineFormProps> = ({
       onOk={onOk}
       onCancel={onCancel}
       width={600}
+      okText={t('common.save')}
+      cancelText={t('common.cancel')}
     >
       <Form
         form={form}
@@ -51,7 +53,7 @@ export const MedicineForm: React.FC<MedicineFormProps> = ({
           label={t('medicine.medicineName')}
           rules={[{ required: true, message: t('validation.required', { field: t('medicine.medicineName') }) }]}
         >
-          <Input />
+          <Input placeholder={t('medicine.medicineName')} />
         </Form.Item>
         
         <Form.Item
@@ -59,7 +61,7 @@ export const MedicineForm: React.FC<MedicineFormProps> = ({
           label={t('medicine.medicineCode')}
           rules={[{ required: true, message: t('validation.required', { field: t('medicine.medicineCode') }) }]}
         >
-          <Input />
+          <Input placeholder={t('medicine.medicineCode')} />
         </Form.Item>
         
         <Form.Item
@@ -67,12 +69,12 @@ export const MedicineForm: React.FC<MedicineFormProps> = ({
           label={t('medicine.category')}
           rules={[{ required: true, message: t('validation.required', { field: t('medicine.category') }) }]}
         >
-          <Select>
-            <Option value="Thuốc giảm đau">Thuốc giảm đau</Option>
-            <Option value="Thuốc kháng sinh">Thuốc kháng sinh</Option>
-            <Option value="Vitamin">Vitamin</Option>
-            <Option value="Thuốc tim mạch">Thuốc tim mạch</Option>
-            <Option value="Thuốc tiêu hóa">Thuốc tiêu hóa</Option>
+          <Select placeholder={t('medicine.category')}>
+            <Option value="Thuốc giảm đau">{t('medicine.categories.painRelief')}</Option>
+            <Option value="Thuốc kháng sinh">{t('medicine.categories.antibiotic')}</Option>
+            <Option value="Vitamin">{t('medicine.categories.vitamin')}</Option>
+            <Option value="Thuốc tim mạch">{t('medicine.categories.cardiovascular')}</Option>
+            <Option value="Thuốc tiêu hóa">{t('medicine.categories.digestive')}</Option>
           </Select>
         </Form.Item>
         
@@ -81,7 +83,7 @@ export const MedicineForm: React.FC<MedicineFormProps> = ({
           label={t('medicine.manufacturer')}
           rules={[{ required: true, message: t('validation.required', { field: t('medicine.manufacturer') }) }]}
         >
-          <Input />
+          <Input placeholder={t('medicine.manufacturer')} />
         </Form.Item>
         
         <Form.Item
@@ -93,6 +95,7 @@ export const MedicineForm: React.FC<MedicineFormProps> = ({
             style={{ width: '100%' }}
             formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
             min={0}
+            placeholder={t('medicine.price')}
           />
         </Form.Item>
         
@@ -104,6 +107,7 @@ export const MedicineForm: React.FC<MedicineFormProps> = ({
           <InputNumber
             style={{ width: '100%' }}
             min={0}
+            placeholder={t('medicine.stock')}
           />
         </Form.Item>
         
@@ -112,11 +116,11 @@ export const MedicineForm: React.FC<MedicineFormProps> = ({
           label={t('medicine.unit')}
           rules={[{ required: true, message: t('validation.required', { field: t('medicine.unit') }) }]}
         >
-          <Select>
-            <Option value="Viên">Viên</Option>
-            <Option value="Chai">Chai</Option>
-            <Option value="Hộp">Hộp</Option>
-            <Option value="Gói">Gói</Option>
+          <Select placeholder={t('medicine.unit')}>
+            <Option value="Viên">{t('medicine.units.pill')}</Option>
+            <Option value="Chai">{t('medicine.units.bottle')}</Option>
+            <Option value="Hộp">{t('medicine.units.box')}</Option>
+            <Option value="Gói">{t('medicine.units.pack')}</Option>
           </Select>
         </Form.Item>
         
@@ -125,7 +129,7 @@ export const MedicineForm: React.FC<MedicineFormProps> = ({
           label={t('common.status')}
           rules={[{ required: true, message: t('validation.required', { field: t('common.status') }) }]}
         >
-          <Select>
+          <Select placeholder={t('common.status')}>
             <Option value="available">{t('medicine.available')}</Option>
             <Option value="out_of_stock">{t('medicine.outOfStock')}</Option>
             <Option value="discontinued">{t('medicine.discontinued')}</Option>
@@ -140,6 +144,7 @@ export const MedicineForm: React.FC<MedicineFormProps> = ({
           <DatePicker 
             style={{ width: '100%' }}
             format="DD/MM/YYYY"
+            placeholder={t('medicine.expiryDate')}
           />
         </Form.Item>
       </Form>

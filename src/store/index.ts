@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+import { persist } from 'zustand/middleware'
 import type { User } from '@/types/auth'
 
 // Auth store
@@ -44,13 +45,25 @@ interface UIState {
   setSidebarCollapsed: (collapsed: boolean) => void
 }
 
-export const useUIStore = create<UIState>((set) => ({
-  theme: 'light',
-  language: 'vi',
-  sidebarCollapsed: false,
-  setTheme: (theme) => set({ theme }),
-  setLanguage: (language) => set({ language }),
-  toggleSidebar: () =>
-    set((state) => ({ sidebarCollapsed: !state.sidebarCollapsed })),
-  setSidebarCollapsed: (collapsed) => set({ sidebarCollapsed: collapsed }),
-})) 
+export const useUIStore = create<UIState>()(
+  persist(
+    (set) => ({
+      theme: 'light',
+      language: 'vi',
+      sidebarCollapsed: false,
+      setTheme: (theme) => set({ theme }),
+      setLanguage: (language) => set({ language }),
+      toggleSidebar: () =>
+        set((state) => ({ sidebarCollapsed: !state.sidebarCollapsed })),
+      setSidebarCollapsed: (collapsed) => set({ sidebarCollapsed: collapsed }),
+    }),
+    {
+      name: 'ui-storage',
+      partialize: (state) => ({
+        theme: state.theme,
+        language: state.language,
+        sidebarCollapsed: state.sidebarCollapsed,
+      }),
+    }
+  )
+) 

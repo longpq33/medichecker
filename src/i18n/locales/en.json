@@ -1,24 +1,10 @@
 {
   "common": {
     "dashboard": "Dashboard",
-    "patients": "Patient List",
-    "medicines": "Medicine Management",
-    "settings": "Settings",
     "profile": "Profile",
     "logout": "Logout",
-    "search": "Search",
-    "add": "Add",
-    "edit": "Edit",
-    "delete": "Delete",
-    "view": "View",
-    "save": "Save",
-    "cancel": "Cancel",
-    "confirm": "Confirm",
-    "loading": "Loading...",
-    "noData": "No data",
     "actions": "Actions",
     "status": "Status",
-    "name": "Name",
     "phone": "Phone",
     "email": "Email",
     "age": "Age",
@@ -30,29 +16,17 @@
     "active": "Active",
     "inactive": "Inactive",
     "pending": "Pending",
-    "available": "Available",
-    "outOfStock": "Out of Stock",
-    "discontinued": "Discontinued",
-    "price": "Price",
-    "stock": "Stock",
-    "unit": "Unit",
-    "category": "Category",
-    "manufacturer": "Manufacturer",
-    "code": "Code",
-    "expiryDate": "Expiry Date",
-    "total": "Total",
     "of": "of",
-    "items": "items",
-    "language": "Language",
-    "theme": "Theme",
-    "dark": "Dark",
-    "light": "Light"
+    "save": "Save",
+    "cancel": "Cancel",
+    "view": "View",
+    "edit": "Edit",
+    "delete": "Delete"
   },
   "navigation": {
     "dashboard": "Dashboard",
     "patientList": "Patient List",
-    "medicineManagement": "Medicine Management",
-    "settings": "Settings"
+    "medicineManagement": "Medicine Management"
   },
   "patient": {
     "title": "Patient List",
@@ -68,8 +42,25 @@
     "patientAddress": "Address",
     "patientStatus": "Status",
     "deleteConfirm": "Are you sure you want to delete this patient?",
+    "deleteWarning": "This action cannot be undone.",
     "patients": "patients",
-    "patient": "patient"
+    "patient": "patient",
+    "insurance": "Insurance",
+    "createSuccess": "Patient created successfully!",
+    "createError": "An error occurred while creating patient",
+    "updateSuccess": "Patient updated successfully!",
+    "updateError": "An error occurred while updating patient",
+    "deleteSuccess": "Patient deleted successfully!",
+    "deleteError": "An error occurred while deleting patient",
+    "confirmDelete": "Confirm Delete Patient",
+    "fullName": "Full Name",
+    "dateOfBirth": "Date of Birth",
+    "phoneNumber": "Phone Number",
+    "emailAddress": "Email Address",
+    "homeAddress": "Home Address",
+    "insuranceNumber": "Insurance Number",
+    "addTreatment": "Add Treatment",
+    "viewDetails": "View Details"
   },
   "medicine": {
     "title": "Medicine Management",
@@ -86,8 +77,36 @@
     "medicineUnit": "Unit",
     "medicineStatus": "Status",
     "deleteConfirm": "Are you sure you want to delete this medicine?",
+    "deleteWarning": "This action cannot be undone.",
     "medicines": "medicines",
     "medicine": "medicine",
+    "createSuccess": "Medicine created successfully!",
+    "createError": "An error occurred while creating medicine",
+    "updateSuccess": "Medicine updated successfully!",
+    "updateError": "An error occurred while updating medicine",
+    "deleteSuccess": "Medicine deleted successfully!",
+    "deleteError": "An error occurred while deleting medicine",
+    "confirmDelete": "Confirm Delete Medicine",
+    "activeIngredient": "Active Ingredient",
+    "concentration": "Concentration",
+    "dosageForm": "Dosage Form",
+    "country": "Country",
+    "sellingPrice": "Selling Price",
+    "indications": "Indications",
+    "contraindications": "Contraindications",
+    "sideEffects": "Side Effects",
+    "adultDosage": "Adult Dosage",
+    "pediatricDosage": "Pediatric Dosage",
+    "drugGroup": "Drug Group",
+    "groups": {
+      "antibiotic": "Antibiotic",
+      "painkiller": "Painkiller",
+      "antiInflammatory": "Anti-inflammatory",
+      "cardiovascular": "Cardiovascular",
+      "digestive": "Digestive",
+      "respiratory": "Respiratory",
+      "other": "Other"
+    },
     "categories": {
       "painRelief": "Pain Relief",
       "antibiotic": "Antibiotic",
@@ -100,7 +119,16 @@
       "bottle": "Bottle",
       "box": "Box",
       "pack": "Pack"
-    }
+    },
+    "available": "Available",
+    "outOfStock": "Out of Stock",
+    "discontinued": "Discontinued",
+    "category": "Category",
+    "manufacturer": "Manufacturer",
+    "price": "Price",
+    "stock": "Stock",
+    "unit": "Unit",
+    "expiryDate": "Expiry Date"
   },
   "treatment": {
     "title": "Add New Treatment",
@@ -135,6 +163,7 @@
     "errorMessage": "An error occurred, please try again",
     "validation": {
       "noMedicines": "Please add at least one medicine",
+      "noValidMedicines": "Please fill in complete information for at least one medicine",
       "incompleteMedicine": "Please fill in complete medicine information",
       "duplicateMedicine": "There are duplicate medicines, please check again",
       "selectMedicine": "Please select medicine name",
@@ -176,32 +205,23 @@
       "oneYear": "1 year"
     }
   },
-  "auth": {
-    "login": "Login",
-    "register": "Register",
-    "email": "Email",
-    "password": "Password",
-    "rememberMe": "Remember me",
-    "forgotPassword": "Forgot password?",
-    "loginFailed": "Login failed",
-    "registerFailed": "Registration failed",
-    "logoutSuccess": "Logout successful"
+  "dashboard": {
+    "title": "Dashboard",
+    "welcome": "Welcome to the MediChecker system",
+    "totalPatients": "Total Patients",
+    "medicinesInStock": "Medicines in Stock",
+    "todayAppointments": "Today's Appointments",
+    "medicalRecords": "Medical Records",
+    "recentActivities": "Recent Activities",
+    "statistics": "Statistics",
+    "recentActivitiesPlaceholder": "List of recent activities will be displayed here...",
+    "statisticsPlaceholder": "Statistical charts will be displayed here..."
   },
   "validation": {
     "required": "Please enter {{field}}!",
-    "email": "Invalid email!",
-    "minLength": "{{field}} must be at least {{min}} characters",
-    "maxLength": "{{field}} cannot exceed {{max}} characters",
-    "invalidFormat": "Invalid {{field}} format"
+    "email": "Invalid email!"
   },
   "messages": {
-    "success": "Success",
-    "error": "Error",
-    "warning": "Warning",
-    "info": "Information",
-    "confirmDelete": "Are you sure you want to delete?",
-    "dataSaved": "Data saved successfully",
-    "dataDeleted": "Data deleted successfully",
-    "operationFailed": "Operation failed"
+    "confirmDelete": "Are you sure you want to delete?"
   }
 } 

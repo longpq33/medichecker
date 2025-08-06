@@ -6,23 +6,26 @@ import {
   CalendarOutlined,
   FileTextOutlined,
 } from '@ant-design/icons'
+import { useLanguage } from '@/hooks/useLanguage'
 import { StyledCard, StatCard } from './styled'
 
-const { Title } = Typography
+const { Title, Paragraph } = Typography
 
 export const HomePage: React.FC = () => {
+  const { t } = useLanguage()
+
   return (
-    <div>
+    <div style={{ padding: '24px' }}>
       <StyledCard>
-        <Title level={2}>Dashboard</Title>
-        <p>Chào mừng bạn đến với hệ thống MediChecker</p>
+        <Title level={2}>{t('dashboard.title')}</Title>
+        <Paragraph>{t('dashboard.welcome')}</Paragraph>
       </StyledCard>
 
       <Row gutter={[16, 16]}>
         <Col xs={24} sm={12} lg={6}>
           <StatCard>
             <Statistic
-              title="Tổng số bệnh nhân"
+              title={t('dashboard.totalPatients')}
               value={1234}
               prefix={<UserOutlined />}
               valueStyle={{ color: '#1890ff' }}
@@ -33,7 +36,7 @@ export const HomePage: React.FC = () => {
         <Col xs={24} sm={12} lg={6}>
           <StatCard>
             <Statistic
-              title="Thuốc trong kho"
+              title={t('dashboard.medicinesInStock')}
               value={567}
               prefix={<MedicineBoxOutlined />}
               valueStyle={{ color: '#52c41a' }}
@@ -44,7 +47,7 @@ export const HomePage: React.FC = () => {
         <Col xs={24} sm={12} lg={6}>
           <StatCard>
             <Statistic
-              title="Lịch hẹn hôm nay"
+              title={t('dashboard.todayAppointments')}
               value={89}
               prefix={<CalendarOutlined />}
               valueStyle={{ color: '#faad14' }}
@@ -55,7 +58,7 @@ export const HomePage: React.FC = () => {
         <Col xs={24} sm={12} lg={6}>
           <StatCard>
             <Statistic
-              title="Hồ sơ bệnh án"
+              title={t('dashboard.medicalRecords')}
               value={2341}
               prefix={<FileTextOutlined />}
               valueStyle={{ color: '#f5222d' }}
@@ -66,14 +69,14 @@ export const HomePage: React.FC = () => {
 
       <Row gutter={[16, 16]} style={{ marginTop: '24px' }}>
         <Col xs={24} lg={12}>
-          <StyledCard title="Hoạt động gần đây">
-            <p>Danh sách các hoạt động gần đây sẽ được hiển thị ở đây...</p>
+          <StyledCard title={t('dashboard.recentActivities')}>
+            <Paragraph>{t('dashboard.recentActivitiesPlaceholder')}</Paragraph>
           </StyledCard>
         </Col>
         
         <Col xs={24} lg={12}>
-          <StyledCard title="Thống kê">
-            <p>Biểu đồ thống kê sẽ được hiển thị ở đây...</p>
+          <StyledCard title={t('dashboard.statistics')}>
+            <Paragraph>{t('dashboard.statisticsPlaceholder')}</Paragraph>
           </StyledCard>
         </Col>
       </Row>
