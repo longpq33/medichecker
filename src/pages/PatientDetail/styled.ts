@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { Card, Tabs, Button } from 'antd'
+import { Card, Tabs, Button, Tag } from 'antd'
 
 export const StyledCard = styled(Card)`
   margin-bottom: 24px;
@@ -42,17 +42,31 @@ export const PatientHeader = styled.div`
   display: flex;
   align-items: center;
   margin-bottom: 32px;
-  padding: 24px;
+  padding: 32px;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border-radius: 12px;
+  border-radius: 16px;
   color: white;
+  box-shadow: 0 8px 32px rgba(102, 126, 234, 0.3);
   
   .patient-avatar {
-    margin-right: 20px;
+    position: relative;
+    margin-right: 24px;
     
     .ant-avatar {
-      border: 3px solid rgba(255, 255, 255, 0.3);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      border: 4px solid rgba(255, 255, 255, 0.3);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    }
+    
+    .status-indicator {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      
+      .ant-badge-status-dot {
+        width: 16px;
+        height: 16px;
+        border: 3px solid white;
+      }
     }
   }
   
@@ -60,26 +74,257 @@ export const PatientHeader = styled.div`
     flex: 1;
     
     .patient-name {
-      font-size: 28px;
+      font-size: 32px;
       font-weight: 700;
       margin: 0 0 8px 0;
       color: white;
     }
     
-    .patient-id {
-      font-size: 14px;
-      opacity: 0.8;
+    .patient-meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
       margin-bottom: 12px;
-    }
-    
-    .patient-status {
-      .ant-tag {
+      
+      .status-tag {
         border: none;
         font-weight: 600;
         padding: 4px 12px;
         border-radius: 20px;
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
       }
     }
+    
+    .patient-contact {
+      .ant-typography {
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 14px;
+        
+        .anticon {
+          margin-right: 6px;
+        }
+      }
+    }
+  }
+  
+  .patient-actions {
+    .ant-btn {
+      border-radius: 8px;
+      font-weight: 500;
+      height: 40px;
+      padding: 0 20px;
+      
+      &.ant-btn-primary {
+        background: rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        
+        &:hover {
+          background: rgba(255, 255, 255, 0.3);
+          border-color: rgba(255, 255, 255, 0.4);
+        }
+      }
+    }
+  }
+  
+  @media (max-width: 768px) {
+    flex-direction: column;
+    text-align: center;
+    
+    .patient-avatar {
+      margin-right: 0;
+      margin-bottom: 16px;
+    }
+    
+    .patient-actions {
+      margin-top: 16px;
+    }
+  }
+`
+
+export const PatientStats = styled.div`
+  margin-bottom: 32px;
+  
+  .ant-card {
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    }
+    
+    .ant-statistic-title {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 8px;
+    }
+    
+    .ant-statistic-content {
+      font-size: 24px;
+      font-weight: 600;
+    }
+  }
+`
+
+export const InfoCard = styled(Card)`
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  margin-bottom: 24px;
+  
+  .ant-card-head {
+    border-bottom: 2px solid #f0f0f0;
+    padding: 0 24px;
+    
+    .ant-card-head-title {
+      display: flex;
+      align-items: center;
+      font-size: 18px;
+      font-weight: 600;
+      color: #262626;
+      
+      .anticon {
+        margin-right: 8px;
+        color: #1890ff;
+      }
+    }
+  }
+  
+  .ant-card-body {
+    padding: 24px;
+  }
+  
+  .info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 16px;
+    
+    .info-item {
+      background: #fafafa;
+      padding: 16px;
+      border-radius: 8px;
+      border-left: 3px solid #1890ff;
+      transition: all 0.3s ease;
+      
+      &:hover {
+        background: #f0f8ff;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(24, 144, 255, 0.15);
+      }
+      
+      &.full-width {
+        grid-column: 1 / -1;
+      }
+      
+      .info-label {
+        font-weight: 600;
+        color: #666;
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        
+        .info-icon {
+          color: #1890ff;
+          margin-right: 8px;
+        }
+      }
+      
+      .info-value {
+        color: #262626;
+        font-size: 15px;
+        font-weight: 500;
+        line-height: 1.4;
+      }
+    }
+  }
+  
+  .allergies-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+`
+
+export const TreatmentCard = styled(Card)`
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  margin-bottom: 16px;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  }
+  
+  .treatment-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #f0f0f0;
+    
+    .treatment-date {
+      font-weight: 600;
+      color: #1890ff;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      
+      .date-icon {
+        margin-right: 8px;
+        color: #1890ff;
+      }
+    }
+  }
+  
+  .treatment-content {
+    .treatment-section {
+      margin-bottom: 16px;
+      
+      .section-label {
+        font-weight: 600;
+        color: #666;
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 6px;
+        display: flex;
+        align-items: center;
+        
+        .anticon {
+          margin-right: 6px;
+          color: #1890ff;
+        }
+      }
+      
+      .section-value {
+        color: #262626;
+        font-size: 14px;
+        line-height: 1.5;
+      }
+      
+      .medicines-list {
+        margin-top: 8px;
+      }
+    }
+  }
+`
+
+export const AllergyTag = styled(Tag)`
+  border-radius: 20px;
+  font-weight: 500;
+  padding: 4px 12px;
+  border: none;
+  background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+  color: white;
+  
+  &:hover {
+    transform: scale(1.05);
   }
 `
 
@@ -164,107 +409,10 @@ export const InfoSection = styled.div`
 `
 
 export const TreatmentHistory = styled.div`
-  .treatment-item {
-    border: 1px solid #f0f0f0;
-    border-radius: 12px;
-    padding: 20px;
-    margin-bottom: 20px;
-    background: white;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-    transition: all 0.3s ease;
-    
-    &:hover {
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-      transform: translateY(-2px);
-    }
-    
-    .treatment-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 16px;
-      padding-bottom: 12px;
-      border-bottom: 1px solid #f0f0f0;
-      
-      .treatment-date {
-        font-weight: 600;
-        color: #1890ff;
-        font-size: 16px;
-        display: flex;
-        align-items: center;
-        
-        .date-icon {
-          margin-right: 8px;
-          color: #1890ff;
-        }
-      }
-      
-      .treatment-status {
-        .ant-badge-status-dot {
-          width: 10px;
-          height: 10px;
-        }
-        
-        .ant-badge-status-text {
-          font-weight: 600;
-          font-size: 13px;
-        }
-      }
-    }
-    
-    .treatment-content {
-      .treatment-section {
-        margin-bottom: 12px;
-        
-        .section-label {
-          font-weight: 600;
-          color: #666;
-          font-size: 13px;
-          text-transform: uppercase;
-          letter-spacing: 0.5px;
-          margin-bottom: 4px;
-        }
-        
-        .section-value {
-          color: #262626;
-          font-size: 14px;
-          line-height: 1.5;
-        }
-      }
-      
-      .treatment-diagnosis {
-        margin-bottom: 12px;
-        
-        .section-label {
-          color: #d63384;
-        }
-      }
-      
-      .treatment-prescription {
-        margin-bottom: 12px;
-        
-        .section-label {
-          color: #198754;
-        }
-      }
-      
-      .treatment-doctor {
-        margin-bottom: 8px;
-        
-        .section-label {
-          color: #6f42c1;
-        }
-      }
-      
-      .treatment-notes {
-        background: #f8f9fa;
-        padding: 12px;
-        border-radius: 6px;
-        border-left: 3px solid #ffc107;
-        
-        .section-label {
-          color: #fd7e14;
-        }
+  .ant-timeline {
+    .ant-timeline-item {
+      .ant-timeline-item-content {
+        margin-left: 16px;
       }
     }
   }

@@ -3,7 +3,15 @@ import {
   Typography, 
   Tag, 
   Avatar,
-  Badge
+  Badge,
+  Card,
+  Row,
+  Col,
+  Statistic,
+  Space,
+  Button,
+  Timeline,
+  Alert
 } from 'antd'
 import { 
   ArrowLeftOutlined,
@@ -17,21 +25,28 @@ import {
   HeartOutlined,
   AlertOutlined,
   IdcardOutlined,
-  TeamOutlined
+  TeamOutlined,
+  EditOutlined,
+  PrinterOutlined,
+  PlusOutlined,
+  ClockCircleOutlined,
+  ExclamationCircleOutlined
 } from '@ant-design/icons'
 import { useParams, useNavigate } from 'react-router-dom'
-import { useLanguage } from '@/hooks/useLanguage'
+import dayjs from 'dayjs'
 import { 
-  StyledCard, 
   StyledTabs, 
-  InfoSection, 
   TreatmentHistory,
   PatientHeader,
   ActionButton,
-  BackButton
+  BackButton,
+  PatientStats,
+  InfoCard,
+  TreatmentCard,
+  AllergyTag
 } from './styled'
 
-const { Title } = Typography
+const { Title, Text } = Typography
 
 interface Patient {
   id: string
@@ -47,6 +62,9 @@ interface Patient {
   medicalHistory: string
   allergies: string[]
   createdAt: string
+  lastVisit?: string
+  totalVisits?: number
+  nextAppointment?: string
 }
 
 interface TreatmentRecord {
@@ -57,6 +75,7 @@ interface TreatmentRecord {
   doctor: string
   status: 'completed' | 'ongoing' | 'scheduled'
   notes: string
+  medicines?: string[]
 }
 
 const mockPatient: Patient = {
@@ -71,8 +90,11 @@ const mockPatient: Patient = {
   bloodType: 'A+',
   emergencyContact: '0987654321 (Vợ)',
   medicalHistory: 'Tiền sử bệnh tim mạch, huyết áp cao',
-  allergies: ['Penicillin', 'Aspirin'],
+  allergies: ['Penicillin', 'Aspirin', 'Sulfa drugs'],
   createdAt: '2024-01-15',
+  lastVisit: '2024-01-20',
+  totalVisits: 12,
+  nextAppointment: '2024-02-15'
 }
 
 const mockTreatmentHistory: TreatmentRecord[] = [
@@ -83,7 +105,8 @@ const mockTreatmentHistory: TreatmentRecord[] = [
     prescription: 'Paracetamol 500mg x 3 lần/ngày, Vitamin C',
     doctor: 'BS. Trần Thị B',
     status: 'completed',
-    notes: 'Bệnh nhân đáp ứng tốt với điều trị',
+    notes: 'Bệnh nhân đáp ứng tốt với điều trị, triệu chứng giảm sau 3 ngày',
+    medicines: ['Paracetamol 500mg', 'Vitamin C 1000mg']
   },
   {
     id: '2',
@@ -92,7 +115,8 @@ const mockTreatmentHistory: TreatmentRecord[] = [
     prescription: 'Amlodipine 5mg x 1 lần/ngày',
     doctor: 'BS. Lê Văn C',
     status: 'ongoing',
-    notes: 'Theo dõi huyết áp hàng tuần',
+    notes: 'Theo dõi huyết áp hàng tuần, huyết áp ổn định ở mức 130/85 mmHg',
+    medicines: ['Amlodipine 5mg']
   },
   {
     id: '3',
@@ -101,14 +125,14 @@ const mockTreatmentHistory: TreatmentRecord[] = [
     prescription: 'Melatonin 3mg trước khi ngủ',
     doctor: 'BS. Nguyễn Thị D',
     status: 'completed',
-    notes: 'Triệu chứng cải thiện sau 1 tuần',
+    notes: 'Triệu chứng cải thiện sau 1 tuần, giấc ngủ ổn định',
+    medicines: ['Melatonin 3mg']
   },
 ]
 
 export const PatientDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
-  const { t } = useLanguage()
   const [patient, setPatient] = useState<Patient | null>(null)
   const [treatmentHistory, setTreatmentHistory] = useState<TreatmentRecord[]>([])
 
@@ -134,11 +158,11 @@ export const PatientDetail: React.FC = () => {
   const getStatusText = (status: string) => {
     switch (status) {
       case 'active':
-        return t('common.active')
+        return 'Hoạt động'
       case 'inactive':
-        return t('common.inactive')
+        return 'Không hoạt động'
       case 'pending':
-        return t('common.pending')
+        return 'Chờ xử lý'
       default:
         return status
     }
@@ -147,11 +171,11 @@ export const PatientDetail: React.FC = () => {
   const getGenderText = (gender: string) => {
     switch (gender) {
       case 'male':
-        return t('common.male')
+        return 'Nam'
       case 'female':
-        return t('common.female')
+        return 'Nữ'
       case 'other':
-        return t('common.other')
+        return 'Khác'
       default:
         return gender
     }
@@ -189,133 +213,206 @@ export const PatientDetail: React.FC = () => {
 
   const tabItems = [
     {
-      key: 'info',
+      key: 'overview',
       label: (
         <span>
           <UserOutlined />
-          Thông tin bệnh nhân
+          Tổng quan
         </span>
       ),
       children: (
         <div>
-          <StyledCard>
-            <PatientHeader>
-              <div className="patient-avatar">
-                <Avatar size={80} icon={<UserOutlined />} />
+          {/* Patient Header */}
+          <PatientHeader>
+            <div className="patient-avatar">
+              <Avatar size={100} icon={<UserOutlined />} />
+              <div className="status-indicator">
+                <Badge status={patient.status === 'active' ? 'success' : 'error'} />
               </div>
-              <div className="patient-info">
-                <Title level={2} className="patient-name">{patient.name}</Title>
-                <div className="patient-id">ID: {patient.id}</div>
-                <div className="patient-status">
-                  <Tag color={getStatusColor(patient.status)}>
-                    {getStatusText(patient.status)}
-                  </Tag>
-                </div>
+            </div>
+            <div className="patient-info">
+              <Title level={2} className="patient-name">{patient.name}</Title>
+              <div className="patient-meta">
+                <Text type="secondary">ID: {patient.id}</Text>
+                <Tag color={getStatusColor(patient.status)} className="status-tag">
+                  {getStatusText(patient.status)}
+                </Tag>
               </div>
-            </PatientHeader>
+              <div className="patient-contact">
+                <Space>
+                  <Text><PhoneOutlined /> {patient.phone}</Text>
+                  <Text><MailOutlined /> {patient.email}</Text>
+                </Space>
+              </div>
+            </div>
+            <div className="patient-actions">
+              <Space>
+                <Button icon={<EditOutlined />} type="primary">
+                  Chỉnh sửa
+                </Button>
+                <Button icon={<PrinterOutlined />}>
+                  In hồ sơ
+                </Button>
+              </Space>
+            </div>
+          </PatientHeader>
 
-            <InfoSection>
-              <div className="section-title">Thông tin cá nhân</div>
-              <div className="info-grid">
-                <div className="info-item">
-                  <div className="info-label">
-                    <UserOutlined className="info-icon" />
-                    Họ tên
-                  </div>
-                  <div className="info-value">{patient.name}</div>
-                </div>
-                
-                <div className="info-item">
-                  <div className="info-label">
-                    <PhoneOutlined className="info-icon" />
-                    Số điện thoại
-                  </div>
-                  <div className="info-value">{patient.phone}</div>
-                </div>
-                
-                <div className="info-item">
-                  <div className="info-label">
-                    <MailOutlined className="info-icon" />
-                    Email
-                  </div>
-                  <div className="info-value">{patient.email}</div>
-                </div>
-                
-                <div className="info-item">
-                  <div className="info-label">
-                    <CalendarOutlined className="info-icon" />
-                    Tuổi
-                  </div>
-                  <div className="info-value">{patient.age} tuổi</div>
-                </div>
-                
-                <div className="info-item">
-                  <div className="info-label">
-                    <UserOutlined className="info-icon" />
-                    Giới tính
-                  </div>
-                  <div className="info-value">{getGenderText(patient.gender)}</div>
-                </div>
-                
-                <div className="info-item">
-                  <div className="info-label">
-                    <HomeOutlined className="info-icon" />
-                    Địa chỉ
-                  </div>
-                  <div className="info-value">{patient.address}</div>
-                </div>
-              </div>
-            </InfoSection>
+          {/* Patient Statistics */}
+          <PatientStats>
+            <Row gutter={[16, 16]}>
+              <Col xs={24} sm={8}>
+                <Card>
+                  <Statistic
+                    title="Tổng số lần khám"
+                    value={patient.totalVisits || 0}
+                    prefix={<UserOutlined />}
+                    valueStyle={{ color: '#3f8600' }}
+                  />
+                </Card>
+              </Col>
+              <Col xs={24} sm={8}>
+                <Card>
+                  <Statistic
+                    title="Lần khám gần nhất"
+                    value={patient.lastVisit ? dayjs(patient.lastVisit).format('DD/MM/YYYY') : 'N/A'}
+                    prefix={<CalendarOutlined />}
+                    valueStyle={{ color: '#1890ff' }}
+                  />
+                </Card>
+              </Col>
+              <Col xs={24} sm={8}>
+                <Card>
+                  <Statistic
+                    title="Lịch hẹn tiếp theo"
+                    value={patient.nextAppointment ? dayjs(patient.nextAppointment).format('DD/MM/YYYY') : 'N/A'}
+                    prefix={<ClockCircleOutlined />}
+                    valueStyle={{ color: '#722ed1' }}
+                  />
+                </Card>
+              </Col>
+            </Row>
+          </PatientStats>
 
-            <InfoSection>
-              <div className="section-title">Thông tin y tế</div>
-              <div className="info-grid">
-                <div className="info-item">
-                  <div className="info-label">
-                    <HeartOutlined className="info-icon" />
-                    Nhóm máu
+          {/* Patient Information */}
+          <Row gutter={[16, 16]}>
+            <Col xs={24} lg={12}>
+              <InfoCard 
+                title={
+                  <span>
+                    <UserOutlined /> Thông tin cá nhân
+                  </span>
+                }
+              >
+                <div className="info-grid">
+                  <div className="info-item">
+                    <div className="info-label">
+                      <UserOutlined className="info-icon" />
+                      Họ tên
+                    </div>
+                    <div className="info-value">{patient.name}</div>
                   </div>
-                  <div className="info-value">{patient.bloodType}</div>
+                  
+                  <div className="info-item">
+                    <div className="info-label">
+                      <CalendarOutlined className="info-icon" />
+                      Tuổi
+                    </div>
+                    <div className="info-value">{patient.age} tuổi</div>
+                  </div>
+                  
+                  <div className="info-item">
+                    <div className="info-label">
+                      <UserOutlined className="info-icon" />
+                      Giới tính
+                    </div>
+                    <div className="info-value">{getGenderText(patient.gender)}</div>
+                  </div>
+                  
+                  <div className="info-item">
+                    <div className="info-label">
+                      <PhoneOutlined className="info-icon" />
+                      Số điện thoại
+                    </div>
+                    <div className="info-value">{patient.phone}</div>
+                  </div>
+                  
+                  <div className="info-item">
+                    <div className="info-label">
+                      <MailOutlined className="info-icon" />
+                      Email
+                    </div>
+                    <div className="info-value">{patient.email}</div>
+                  </div>
+                  
+                  <div className="info-item">
+                    <div className="info-label">
+                      <HomeOutlined className="info-icon" />
+                      Địa chỉ
+                    </div>
+                    <div className="info-value">{patient.address}</div>
+                  </div>
                 </div>
-                
-                <div className="info-item">
-                  <div className="info-label">
-                    <TeamOutlined className="info-icon" />
-                    Liên hệ khẩn cấp
+              </InfoCard>
+            </Col>
+
+            <Col xs={24} lg={12}>
+              <InfoCard 
+                title={
+                  <span>
+                    <HeartOutlined /> Thông tin y tế
+                  </span>
+                }
+              >
+                <div className="info-grid">
+                  <div className="info-item">
+                    <div className="info-label">
+                      <HeartOutlined className="info-icon" />
+                      Nhóm máu
+                    </div>
+                    <div className="info-value">
+                      <Tag color="red">{patient.bloodType}</Tag>
+                    </div>
                   </div>
-                  <div className="info-value">{patient.emergencyContact}</div>
+                  
+                  <div className="info-item">
+                    <div className="info-label">
+                      <TeamOutlined className="info-icon" />
+                      Liên hệ khẩn cấp
+                    </div>
+                    <div className="info-value">{patient.emergencyContact}</div>
+                  </div>
+                  
+                  <div className="info-item full-width">
+                    <div className="info-label">
+                      <IdcardOutlined className="info-icon" />
+                      Tiền sử bệnh
+                    </div>
+                    <div className="info-value">{patient.medicalHistory}</div>
+                  </div>
+                  
+                  <div className="info-item full-width">
+                    <div className="info-label">
+                      <AlertOutlined className="info-icon" />
+                      Dị ứng
+                    </div>
+                    <div className="info-value">
+                      {patient.allergies.length > 0 ? (
+                        <div className="allergies-container">
+                          {patient.allergies.map((allergy, index) => (
+                            <AllergyTag key={index} color="error">
+                              {allergy}
+                            </AllergyTag>
+                          ))}
+                        </div>
+                      ) : (
+                        <Text type="secondary">Không có</Text>
+                      )}
+                    </div>
+                  </div>
                 </div>
-                
-                <div className="info-item">
-                  <div className="info-label">
-                    <IdcardOutlined className="info-icon" />
-                    Tiền sử bệnh
-                  </div>
-                  <div className="info-value">{patient.medicalHistory}</div>
-                </div>
-                
-                <div className="info-item">
-                  <div className="info-label">
-                    <AlertOutlined className="info-icon" />
-                    Dị ứng
-                  </div>
-                  <div className="info-value">
-                    {patient.allergies.length > 0 ? (
-                      <div className="allergies-container">
-                        {patient.allergies.map((allergy, index) => (
-                          <Tag key={index} className="allergy-tag">
-                            {allergy}
-                          </Tag>
-                        ))}
-                      </div>
-                    ) : (
-                      'Không có'
-                    )}
-                  </div>
-                </div>
-              </div>
-            </InfoSection>
-          </StyledCard>
+              </InfoCard>
+            </Col>
+          </Row>
         </div>
       ),
     },
@@ -329,65 +426,104 @@ export const PatientDetail: React.FC = () => {
       ),
       children: (
         <div>
-          <StyledCard>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
-              <Title level={3} style={{ margin: 0 }}>Lịch sử điều trị</Title>
-              <ActionButton 
-                type="primary" 
-                icon={<FileTextOutlined />}
-                onClick={() => navigate(`/patients/${patient.id}/add-treatment`)}
-              >
-                Thêm điều trị mới
-              </ActionButton>
-            </div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
+            <Title level={3} style={{ margin: 0 }}>Lịch sử điều trị</Title>
+            <ActionButton 
+              type="primary" 
+              icon={<PlusOutlined />}
+              onClick={() => navigate(`/patients/${patient.id}/add-treatment`)}
+            >
+              Thêm điều trị mới
+            </ActionButton>
+          </div>
 
-            <TreatmentHistory>
-              {treatmentHistory.map((treatment) => (
-                <div key={treatment.id} className="treatment-item">
-                  <div className="treatment-header">
-                    <span className="treatment-date">
-                      <CalendarOutlined className="date-icon" />
-                      {new Date(treatment.date).toLocaleDateString('vi-VN')}
-                    </span>
-                    <Badge 
-                      status={getTreatmentStatusColor(treatment.status)}
-                      text={getTreatmentStatusText(treatment.status)}
-                    />
-                  </div>
-                  <div className="treatment-content">
-                    <div className="treatment-section treatment-diagnosis">
-                      <div className="section-label">Chẩn đoán</div>
-                      <div className="section-value">{treatment.diagnosis}</div>
-                    </div>
-                    
-                    <div className="treatment-section treatment-prescription">
-                      <div className="section-label">Đơn thuốc</div>
-                      <div className="section-value">{treatment.prescription}</div>
-                    </div>
-                    
-                    <div className="treatment-section treatment-doctor">
-                      <div className="section-label">Bác sĩ</div>
-                      <div className="section-value">{treatment.doctor}</div>
-                    </div>
-                    
-                    {treatment.notes && (
-                      <div className="treatment-section treatment-notes">
-                        <div className="section-label">Ghi chú</div>
-                        <div className="section-value">{treatment.notes}</div>
+          <TreatmentHistory>
+            <Timeline
+              items={treatmentHistory.map((treatment) => ({
+                color: treatment.status === 'completed' ? 'green' : 
+                       treatment.status === 'ongoing' ? 'blue' : 'orange',
+                children: (
+                  <TreatmentCard>
+                    <div className="treatment-header">
+                      <div className="treatment-date">
+                        <CalendarOutlined className="date-icon" />
+                        {dayjs(treatment.date).format('DD/MM/YYYY')}
                       </div>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </TreatmentHistory>
-          </StyledCard>
+                      <Badge 
+                        status={getTreatmentStatusColor(treatment.status)}
+                        text={getTreatmentStatusText(treatment.status)}
+                      />
+                    </div>
+                    
+                    <div className="treatment-content">
+                      <Row gutter={[16, 16]}>
+                        <Col xs={24} md={12}>
+                          <div className="treatment-section">
+                            <div className="section-label">
+                              <ExclamationCircleOutlined /> Chẩn đoán
+                            </div>
+                            <div className="section-value">{treatment.diagnosis}</div>
+                          </div>
+                        </Col>
+                        
+                        <Col xs={24} md={12}>
+                          <div className="treatment-section">
+                            <div className="section-label">
+                              <UserOutlined /> Bác sĩ
+                            </div>
+                            <div className="section-value">{treatment.doctor}</div>
+                          </div>
+                        </Col>
+                        
+                        <Col xs={24}>
+                          <div className="treatment-section">
+                            <div className="section-label">
+                              <MedicineBoxOutlined /> Đơn thuốc
+                            </div>
+                            <div className="section-value">{treatment.prescription}</div>
+                            {treatment.medicines && (
+                              <div className="medicines-list">
+                                {treatment.medicines.map((medicine, index) => (
+                                  <Tag key={index} color="blue" style={{ margin: '4px' }}>
+                                    {medicine}
+                                  </Tag>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        </Col>
+                        
+                        {treatment.notes && (
+                          <Col xs={24}>
+                            <div className="treatment-section">
+                              <div className="section-label">
+                                <FileTextOutlined /> Ghi chú
+                              </div>
+                              <div className="section-value">
+                                <Alert
+                                  message={treatment.notes}
+                                  type="info"
+                                  showIcon
+                                  style={{ marginTop: 8 }}
+                                />
+                              </div>
+                            </div>
+                          </Col>
+                        )}
+                      </Row>
+                    </div>
+                  </TreatmentCard>
+                )
+              }))}
+            />
+          </TreatmentHistory>
         </div>
       ),
     },
   ]
 
   return (
-    <div>
+    <div style={{ padding: '24px' }}>
       <BackButton 
         icon={<ArrowLeftOutlined />} 
         onClick={() => navigate('/patients')}
@@ -396,7 +532,7 @@ export const PatientDetail: React.FC = () => {
       </BackButton>
 
       <StyledTabs
-        defaultActiveKey="info"
+        defaultActiveKey="overview"
         items={tabItems}
         size="large"
       />
