@@ -9,6 +9,7 @@ import {
   DashboardOutlined,
   TeamOutlined,
   MedicineBoxOutlined,
+  FileTextOutlined,
 } from '@ant-design/icons'
 import { useUIStore } from '@/store'
 import { useAuth } from '@/hooks/useAuth'
@@ -41,7 +42,7 @@ export const MainLayout: React.FC = () => {
     {
       key: '/patients',
       icon: <TeamOutlined />,
-      label: t('navigation.patientList'),
+      label: t('navigation.patientManagement'),
       onClick: () => navigate('/patients'),
     },
     {
@@ -49,6 +50,12 @@ export const MainLayout: React.FC = () => {
       icon: <MedicineBoxOutlined />,
       label: t('navigation.medicineManagement'),
       onClick: () => navigate('/medicines'),
+    },
+    {
+      key: '/prescriptions',
+      icon: <FileTextOutlined />,
+      label: t('navigation.prescriptionManagement'),
+      onClick: () => navigate('/prescriptions'),
     },
   ]
 
@@ -73,6 +80,7 @@ export const MainLayout: React.FC = () => {
     if (pathname === '/') return ['/']
     if (pathname.startsWith('/patients')) return ['/patients']
     if (pathname.startsWith('/medicines')) return ['/medicines']
+    if (pathname.startsWith('/prescriptions')) return ['/prescriptions']
     return ['/']
   }
 

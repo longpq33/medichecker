@@ -25,8 +25,9 @@
   },
   "navigation": {
     "dashboard": "Dashboard",
-    "patientList": "Danh sách bệnh nhân",
-    "medicineManagement": "Quản lý thuốc"
+    "patientManagement": "Quản lý bệnh nhân",
+    "medicineManagement": "Quản lý thuốc",
+    "prescriptionManagement": "Quản lý đơn thuốc"
   },
   "patient": {
     "title": "Danh sách bệnh nhân",
@@ -203,6 +204,42 @@
       "threeMonths": "3 tháng",
       "sixMonths": "6 tháng",
       "oneYear": "1 năm"
+    }
+  },
+  "prescription": {
+    "title": "Quản lý đơn thuốc",
+    "addPrescription": "Thêm đơn thuốc mới",
+    "editPrescription": "Chỉnh sửa đơn thuốc",
+    "prescriptionInfo": "Thông tin đơn thuốc",
+    "searchPrescription": "Tìm kiếm đơn thuốc...",
+    "prescriptionCode": "Mã đơn thuốc",
+    "patientName": "Tên bệnh nhân",
+    "doctorName": "Bác sĩ kê đơn",
+    "prescriptionDate": "Ngày kê đơn",
+    "prescriptionStatus": "Trạng thái đơn thuốc",
+    "prescriptionNotes": "Ghi chú",
+    "deleteConfirm": "Bạn có chắc chắn muốn xóa đơn thuốc này?",
+    "deleteWarning": "Hành động này không thể hoàn tác.",
+    "prescriptions": "đơn thuốc",
+    "prescription": "đơn thuốc",
+    "createSuccess": "Tạo đơn thuốc thành công!",
+    "createError": "Có lỗi xảy ra khi tạo đơn thuốc",
+    "updateSuccess": "Cập nhật đơn thuốc thành công!",
+    "updateError": "Có lỗi xảy ra khi cập nhật đơn thuốc",
+    "deleteSuccess": "Xóa đơn thuốc thành công!",
+    "deleteError": "Có lỗi xảy ra khi xóa đơn thuốc",
+    "confirmDelete": "Xác nhận xóa đơn thuốc",
+    "viewDetails": "Xem chi tiết",
+    "addMedicine": "Thêm thuốc",
+    "removeMedicine": "Xóa thuốc",
+    "medicineList": "Danh sách thuốc",
+    "totalAmount": "Tổng tiền",
+    "status": {
+      "new": "Mới tạo",
+      "approved": "Đã duyệt",
+      "inProgress": "Đang thực hiện",
+      "completed": "Hoàn thành",
+      "cancelled": "Hủy bỏ"
     }
   },
   "dashboard": {
