@@ -57,48 +57,57 @@ export const SHADOWS = {
 } as const
 
 export const COLORS = {
-  // Primary colors
-  PRIMARY: '#1890ff',
-  PRIMARY_HOVER: '#40a9ff',
-  PRIMARY_ACTIVE: '#096dd9',
+  // Primary colors - WellNest theme
+  PRIMARY: '#6366f1', // Indigo primary
+  PRIMARY_HOVER: '#4f46e5',
+  PRIMARY_ACTIVE: '#4338ca',
   
   // Secondary colors
-  SECONDARY: '#722ed1',
-  SECONDARY_HOVER: '#9254de',
+  SECONDARY: '#8b5cf6', // Purple secondary
+  SECONDARY_HOVER: '#7c3aed',
   
   // Success colors
-  SUCCESS: '#52c41a',
-  SUCCESS_HOVER: '#73d13d',
+  SUCCESS: '#10b981', // Emerald green
+  SUCCESS_HOVER: '#059669',
   
   // Warning colors
-  WARNING: '#faad14',
-  WARNING_HOVER: '#ffc53d',
+  WARNING: '#f59e0b', // Amber
+  WARNING_HOVER: '#d97706',
   
   // Error colors
-  ERROR: '#ff4d4f',
-  ERROR_HOVER: '#ff7875',
+  ERROR: '#ef4444', // Red
+  ERROR_HOVER: '#dc2626',
   
   // Text colors
-  TEXT_PRIMARY: '#262626',
-  TEXT_SECONDARY: '#666',
-  TEXT_DISABLED: '#bfbfbf',
+  TEXT_PRIMARY: '#1f2937', // Gray-800
+  TEXT_SECONDARY: '#6b7280', // Gray-500
+  TEXT_DISABLED: '#9ca3af', // Gray-400
   
   // Background colors
-  BG_PRIMARY: '#ffffff',
-  BG_SECONDARY: '#fafafa',
-  BG_TERTIARY: '#f0f0f0',
+  BG_PRIMARY: '#ffffff', // White
+  BG_SECONDARY: '#f9fafb', // Gray-50
+  BG_TERTIARY: '#f3f4f6', // Gray-100
   
   // Border colors
-  BORDER_PRIMARY: '#d9d9d9',
-  BORDER_SECONDARY: '#f0f0f0',
+  BORDER_PRIMARY: '#e5e7eb', // Gray-200
+  BORDER_SECONDARY: '#f3f4f6', // Gray-100
+  
+  // WellNest specific colors
+  WELLNEST_BLUE: '#3b82f6', // Blue-500
+  WELLNEST_GREEN: '#10b981', // Emerald-500
+  WELLNEST_PURPLE: '#8b5cf6', // Purple-500
+  WELLNEST_ORANGE: '#f59e0b', // Amber-500
+  WELLNEST_RED: '#ef4444', // Red-500
 } as const
 
 export const GRADIENTS = {
-  PRIMARY: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-  PRIMARY_HOVER: 'linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%)',
-  SUCCESS: 'linear-gradient(135deg, #52c41a 0%, #73d13d 100%)',
-  WARNING: 'linear-gradient(135deg, #faad14 0%, #ffc53d 100%)',
-  ERROR: 'linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%)',
+  PRIMARY: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)',
+  PRIMARY_HOVER: 'linear-gradient(135deg, #4f46e5 0%, #4338ca 100%)',
+  SUCCESS: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+  WARNING: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
+  ERROR: 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)',
+  WELLNEST: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+  WELLNEST_HOVER: 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)',
 } as const
 
 export const TRANSITIONS = {
@@ -109,9 +118,9 @@ export const TRANSITIONS = {
 
 // Button styles
 export const BUTTON_STYLES = {
-  HEIGHT: '40px',
-  PADDING: '0 20px',
-  BORDER_RADIUS: BORDER_RADIUS.SM,
+  HEIGHT: '44px',
+  PADDING: '0 24px',
+  BORDER_RADIUS: BORDER_RADIUS.MD,
   FONT_SIZE: FONT_SIZE.SM,
   FONT_WEIGHT: FONT_WEIGHT.MEDIUM,
   TRANSITION: TRANSITIONS.NORMAL,
@@ -119,9 +128,9 @@ export const BUTTON_STYLES = {
 
 // Card styles
 export const CARD_STYLES = {
-  BORDER_RADIUS: BORDER_RADIUS.MD,
+  BORDER_RADIUS: BORDER_RADIUS.LG,
   PADDING: SPACING.PADDING_LG,
-  SHADOW: SHADOWS.MD,
+  SHADOW: SHADOWS.SM,
   TRANSITION: TRANSITIONS.NORMAL,
 } as const
 

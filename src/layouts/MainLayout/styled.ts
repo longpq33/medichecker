@@ -20,12 +20,13 @@ export const StyledLayout = styled(Layout)`
 `
 
 export const StyledSider = styled(Sider)`
-  background: ${GRADIENTS.PRIMARY} !important;
+  background: ${GRADIENTS.WELLNEST} !important;
   position: fixed !important;
   height: 100vh;
   z-index: 1000;
   left: 0;
   top: 0;
+  box-shadow: ${SHADOWS.LG};
   
   .ant-layout-sider-children {
     display: flex;
@@ -40,11 +41,12 @@ export const StyledSider = styled(Sider)`
     border-right: none !important;
     flex: 1;
     width: 100% !important;
+    padding: ${SPACING.PADDING_MD} 0;
   }
   
   .ant-menu-item {
     margin: ${SPACING.MARGIN_XS} ${SPACING.MARGIN_MD} !important;
-    border-radius: ${BORDER_RADIUS.SM} !important;
+    border-radius: ${BORDER_RADIUS.MD} !important;
     height: 48px !important;
     line-height: 48px !important;
     width: calc(100% - ${SPACING.MARGIN_XL}) !important;
@@ -55,13 +57,15 @@ export const StyledSider = styled(Sider)`
     transition: ${TRANSITIONS.NORMAL};
     
     &:hover {
-      background: rgba(255, 255, 255, 0.1) !important;
+      background: rgba(255, 255, 255, 0.15) !important;
       color: ${COLORS.BG_PRIMARY} !important;
+      transform: translateX(4px);
     }
     
     &.ant-menu-item-selected {
-      background: rgba(255, 255, 255, 0.2) !important;
+      background: rgba(255, 255, 255, 0.25) !important;
       color: ${COLORS.BG_PRIMARY} !important;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
       
       &::after {
         display: none !important;
@@ -70,7 +74,7 @@ export const StyledSider = styled(Sider)`
   }
   
   .ant-menu-item .anticon {
-    color: rgba(255, 255, 255, 0.8) !important;
+    color: rgba(255, 255, 255, 0.9) !important;
     font-size: ${FONT_SIZE.MD} !important;
     margin-right: ${SPACING.MARGIN_SM} !important;
   }
@@ -115,10 +119,11 @@ export const StyledHeader = styled(Header)`
   box-shadow: ${SHADOWS.SM};
   width: 100% !important;
   min-width: 0;
-  height: 64px;
+  height: 72px;
   position: sticky;
   top: 0;
   z-index: 999;
+  border-bottom: 1px solid ${COLORS.BORDER_PRIMARY};
 `
 
 export const StyledContent = styled(Content)`
@@ -142,19 +147,23 @@ export const Logo = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.1);
   margin: ${SPACING.MARGIN_SM};
-  border-radius: ${BORDER_RADIUS.SM};
+  border-radius: ${BORDER_RADIUS.MD};
   flex-shrink: 0;
+  backdrop-filter: blur(10px);
   
   img {
     display: block;
+    height: 32px;
+    width: auto;
   }
   
   span {
     color: ${COLORS.BG_PRIMARY} !important;
     font-weight: ${FONT_WEIGHT.BOLD} !important;
     font-size: ${FONT_SIZE.MD} !important;
+    letter-spacing: 0.5px;
   }
 `
 

@@ -1,5 +1,14 @@
 import styled from 'styled-components'
 import { Card, Tabs, Button, Tag } from 'antd'
+import { 
+  SPACING, 
+  FONT_SIZE, 
+  FONT_WEIGHT, 
+  BORDER_RADIUS, 
+  SHADOWS, 
+  GRADIENTS,
+  BUTTON_STYLES 
+} from '@/constants'
 
 export const StyledCard = styled(Card)`
   margin-bottom: 24px;
@@ -41,20 +50,22 @@ export const StyledTabs = styled(Tabs)`
 export const PatientHeader = styled.div`
   display: flex;
   align-items: center;
-  margin-bottom: 32px;
-  padding: 32px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border-radius: 16px;
+  margin-bottom: ${SPACING.MARGIN_XL};
+  padding: ${SPACING.PADDING_XL};
+  background: ${GRADIENTS.WELLNEST};
+  border-radius: ${BORDER_RADIUS.LG};
   color: white;
-  box-shadow: 0 8px 32px rgba(102, 126, 234, 0.3);
+  box-shadow: ${SHADOWS.LG};
   
   .patient-avatar {
     position: relative;
-    margin-right: 24px;
+    margin-right: ${SPACING.MARGIN_LG};
     
     .ant-avatar {
       border: 4px solid rgba(255, 255, 255, 0.3);
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+      box-shadow: ${SHADOWS.LG};
+      width: 100px;
+      height: 100px;
     }
     
     .status-indicator {
@@ -63,9 +74,9 @@ export const PatientHeader = styled.div`
       right: 0;
       
       .ant-badge-status-dot {
-        width: 16px;
-        height: 16px;
-        border: 3px solid white;
+        width: 20px;
+        height: 20px;
+        border: 4px solid white;
       }
     }
   }
@@ -74,21 +85,21 @@ export const PatientHeader = styled.div`
     flex: 1;
     
     .patient-name {
-      font-size: 32px;
-      font-weight: 700;
-      margin: 0 0 8px 0;
+      font-size: ${FONT_SIZE.XXXL};
+      font-weight: ${FONT_WEIGHT.BOLD};
+      margin: 0 0 ${SPACING.MARGIN_SM} 0;
       color: white;
     }
     
     .patient-meta {
       display: flex;
       align-items: center;
-      gap: 12px;
-      margin-bottom: 12px;
+      gap: ${SPACING.MARGIN_SM};
+      margin-bottom: ${SPACING.MARGIN_SM};
       
       .status-tag {
         border: none;
-        font-weight: 600;
+        font-weight: ${FONT_WEIGHT.SEMIBOLD};
         padding: 4px 12px;
         border-radius: 20px;
         background: rgba(255, 255, 255, 0.2);
@@ -99,7 +110,7 @@ export const PatientHeader = styled.div`
     .patient-contact {
       .ant-typography {
         color: rgba(255, 255, 255, 0.9);
-        font-size: 14px;
+        font-size: ${FONT_SIZE.SM};
         
         .anticon {
           margin-right: 6px;
@@ -110,10 +121,10 @@ export const PatientHeader = styled.div`
   
   .patient-actions {
     .ant-btn {
-      border-radius: 8px;
-      font-weight: 500;
-      height: 40px;
-      padding: 0 20px;
+      border-radius: ${BORDER_RADIUS.MD};
+      font-weight: ${FONT_WEIGHT.MEDIUM};
+      height: ${BUTTON_STYLES.HEIGHT};
+      padding: ${BUTTON_STYLES.PADDING};
       
       &.ant-btn-primary {
         background: rgba(255, 255, 255, 0.2);
@@ -133,11 +144,11 @@ export const PatientHeader = styled.div`
     
     .patient-avatar {
       margin-right: 0;
-      margin-bottom: 16px;
+      margin-bottom: ${SPACING.MARGIN_MD};
     }
     
     .patient-actions {
-      margin-top: 16px;
+      margin-top: ${SPACING.MARGIN_MD};
     }
   }
 `
