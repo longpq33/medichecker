@@ -6,6 +6,7 @@ import {
   message
 } from 'antd'
 import { useLanguage } from '@/hooks/useLanguage'
+import { useNavigate } from 'react-router-dom'
 import { MedicineForm, MedicineTable, MedicineHeader } from './components'
 
 interface Medicine {
@@ -67,6 +68,7 @@ export const MedicineList: React.FC = () => {
   const [editingMedicine, setEditingMedicine] = useState<Medicine | null>(null)
   const [form] = Form.useForm()
   const { t } = useLanguage()
+  const navigate = useNavigate()
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -114,22 +116,8 @@ export const MedicineList: React.FC = () => {
   }
 
   const handleView = (medicine: Medicine) => {
-    Modal.info({
-      title: t('medicine.medicineInfo'),
-      content: (
-        <div>
-          <p><strong>{t('medicine.medicineName')}:</strong> {medicine.name}</p>
-          <p><strong>{t('medicine.medicineCode')}:</strong> {medicine.code}</p>
-          <p><strong>{t('medicine.category')}:</strong> {medicine.category}</p>
-          <p><strong>{t('medicine.manufacturer')}:</strong> {medicine.manufacturer}</p>
-          <p><strong>{t('medicine.price')}:</strong> {medicine.price.toLocaleString()} VNĐ</p>
-          <p><strong>{t('medicine.stock')}:</strong> {medicine.stock} {medicine.unit}</p>
-          <p><strong>{t('common.status')}:</strong> {getStatusText(medicine.status)}</p>
-          <p><strong>{t('medicine.expiryDate')}:</strong> {new Date(medicine.expiryDate).toLocaleDateString('vi-VN')}</p>
-        </div>
-      ),
-      okText: t('common.save'),
-    })
+    // Navigate to medicine detail page
+    navigate(`/medicines/${medicine.id}`)
   }
 
   const handleDelete = (id: string) => {

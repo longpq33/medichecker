@@ -20,6 +20,7 @@ import {
 } from '@ant-design/icons'
 import { useLanguage } from '@/hooks/useLanguage'
 import dayjs from 'dayjs'
+import { useNavigate } from 'react-router-dom'
 
 const { Option } = Select
 
@@ -104,6 +105,7 @@ export const PrescriptionList: React.FC = () => {
   const [editingPrescription, setEditingPrescription] = useState<Prescription | null>(null)
   const [form] = Form.useForm()
   const { t } = useLanguage()
+  const navigate = useNavigate()
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -161,7 +163,7 @@ export const PrescriptionList: React.FC = () => {
 
   const handleView = (prescription: Prescription) => {
     // Navigate to prescription detail page
-    console.log('View prescription:', prescription.id)
+    navigate(`/prescriptions/${prescription.id}`)
   }
 
   const handleDelete = (id: number) => {
