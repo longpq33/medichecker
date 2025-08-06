@@ -1,25 +1,13 @@
 import React from 'react'
-import { Modal, Form, Input, Select } from 'antd'
-import { useLanguage } from '@/hooks/useLanguage'
+import { Modal, Form, Input, Select, DatePicker } from 'antd'
 import type { FormInstance } from 'antd/es/form'
+import type { BenhNhanResponse } from '@/types'
 
 const { Option } = Select
 
-interface Patient {
-  id: string
-  name: string
-  phone: string
-  email: string
-  age: number
-  gender: 'male' | 'female' | 'other'
-  address: string
-  status: 'active' | 'inactive' | 'pending'
-  createdAt: string
-}
-
 interface PatientFormProps {
   visible: boolean
-  editingPatient: Patient | null
+  editingPatient: BenhNhanResponse | null
   onCancel: () => void
   onOk: () => void
   form: FormInstance
@@ -32,11 +20,9 @@ export const PatientForm: React.FC<PatientFormProps> = ({
   onOk,
   form
 }) => {
-  const { t } = useLanguage()
-
   return (
     <Modal
-      title={editingPatient ? t('patient.editPatient') : t('patient.addPatient')}
+      title={editingPatient ? 'Chỉnh sửa bệnh nhân' : 'Thêm bệnh nhân mới'}
       open={visible}
       onOk={onOk}
       onCancel={onCancel}
@@ -47,70 +33,68 @@ export const PatientForm: React.FC<PatientFormProps> = ({
         layout="vertical"
       >
         <Form.Item
-          name="name"
-          label={t('patient.patientName')}
-          rules={[{ required: true, message: t('validation.required', { field: t('patient.patientName') }) }]}
+          name="hoTen"
+          label="Họ tên"
+          rules={[{ required: true, message: 'Vui lòng nhập họ tên' }]}
         >
           <Input />
         </Form.Item>
         
         <Form.Item
-          name="phone"
-          label={t('common.phone')}
-          rules={[{ required: true, message: t('validation.required', { field: t('common.phone') }) }]}
+          name="ngaySinh"
+          label="Ngày sinh"
         >
-          <Input />
+          <DatePicker 
+            style={{ width: '100%' }}
+            format="DD/MM/YYYY"
+            placeholder="Chọn ngày sinh"
+          />
         </Form.Item>
         
         <Form.Item
-          name="email"
-          label={t('common.email')}
+          name="gioiTinh"
+          label="Giới tính"
+        >
+          <Select placeholder="Chọn giới tính">
+            <Option value="NAM">Nam</Option>
+            <Option value="NU">Nữ</Option>
+            <Option value="KHAC">Khác</Option>
+          </Select>
+        </Form.Item>
+        
+        <Form.Item
+          name="soDienThoai"
+          label="Số điện thoại"
           rules={[
-            { required: true, message: t('validation.required', { field: t('common.email') }) },
-            { type: 'email', message: t('validation.email') }
+            { required: true, message: 'Vui lòng nhập số điện thoại' },
+            { pattern: /^[0-9]{10,11}$/, message: 'Số điện thoại không hợp lệ' }
           ]}
         >
           <Input />
         </Form.Item>
         
         <Form.Item
-          name="age"
-          label={t('common.age')}
-          rules={[{ required: true, message: t('validation.required', { field: t('common.age') }) }]}
+          name="email"
+          label="Email"
+          rules={[
+            { type: 'email', message: 'Email không hợp lệ' }
+          ]}
         >
-          <Input type="number" />
+          <Input />
         </Form.Item>
         
         <Form.Item
-          name="gender"
-          label={t('common.gender')}
-          rules={[{ required: true, message: t('validation.required', { field: t('common.gender') }) }]}
-        >
-          <Select>
-            <Option value="male">{t('common.male')}</Option>
-            <Option value="female">{t('common.female')}</Option>
-            <Option value="other">{t('common.other')}</Option>
-          </Select>
-        </Form.Item>
-        
-        <Form.Item
-          name="address"
-          label={t('common.address')}
-          rules={[{ required: true, message: t('validation.required', { field: t('common.address') }) }]}
+          name="diaChi"
+          label="Địa chỉ"
         >
           <Input.TextArea rows={3} />
         </Form.Item>
         
         <Form.Item
-          name="status"
-          label={t('common.status')}
-          rules={[{ required: true, message: t('validation.required', { field: t('common.status') }) }]}
+          name="soBaoHiem"
+          label="Số bảo hiểm"
         >
-          <Select>
-            <Option value="active">{t('common.active')}</Option>
-            <Option value="inactive">{t('common.inactive')}</Option>
-            <Option value="pending">{t('common.pending')}</Option>
-          </Select>
+          <Input />
         </Form.Item>
       </Form>
     </Modal>

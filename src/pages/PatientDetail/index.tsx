@@ -9,186 +9,142 @@ import {
   Col,
   Statistic,
   Space,
-  Button,
-  Timeline,
-  Alert
+  Alert,
+  message
 } from 'antd'
 import { 
   ArrowLeftOutlined,
   UserOutlined,
   MedicineBoxOutlined,
-  FileTextOutlined,
   PhoneOutlined,
   MailOutlined,
   HomeOutlined,
   CalendarOutlined,
-  HeartOutlined,
-  AlertOutlined,
   IdcardOutlined,
-  TeamOutlined,
   EditOutlined,
   PrinterOutlined,
-  PlusOutlined,
   ClockCircleOutlined,
-  ExclamationCircleOutlined
+  PlusOutlined,
+  FileTextOutlined,
+  TeamOutlined,
+  AlertOutlined
 } from '@ant-design/icons'
 import { useParams, useNavigate } from 'react-router-dom'
 import dayjs from 'dayjs'
 import { 
-  StyledTabs, 
-  TreatmentHistory,
   PatientHeader,
   ActionButton,
   BackButton,
   PatientStats,
   InfoCard,
-  TreatmentCard,
-  AllergyTag
+  StyledTabs,
+  AddTreatmentButton
 } from './styled'
+import type { BenhNhanResponse } from '@/types'
 
-const { Title, Text } = Typography
+const { Text, Title } = Typography
 
-interface Patient {
-  id: string
-  name: string
-  phone: string
-  email: string
-  age: number
-  gender: 'male' | 'female' | 'other'
-  address: string
-  status: 'active' | 'inactive' | 'pending'
-  bloodType: string
-  emergencyContact: string
-  medicalHistory: string
-  allergies: string[]
-  createdAt: string
-  lastVisit?: string
-  totalVisits?: number
-  nextAppointment?: string
-}
-
-interface TreatmentRecord {
-  id: string
-  date: string
-  diagnosis: string
-  prescription: string
-  doctor: string
-  status: 'completed' | 'ongoing' | 'scheduled'
-  notes: string
-  medicines?: string[]
-}
-
-const mockPatient: Patient = {
-  id: '1',
-  name: 'Nguyễn Văn A',
-  phone: '0123456789',
-  email: 'nguyenvana@email.com',
-  age: 35,
-  gender: 'male',
-  address: '123 Đường ABC, Quận 1, TP.HCM',
-  status: 'active',
-  bloodType: 'A+',
-  emergencyContact: '0987654321 (Vợ)',
-  medicalHistory: 'Tiền sử bệnh tim mạch, huyết áp cao',
-  allergies: ['Penicillin', 'Aspirin', 'Sulfa drugs'],
-  createdAt: '2024-01-15',
-  lastVisit: '2024-01-20',
-  totalVisits: 12,
-  nextAppointment: '2024-02-15'
-}
-
-const mockTreatmentHistory: TreatmentRecord[] = [
+// Mock data cho lịch sử điều trị
+const mockTreatmentHistory = [
   {
-    id: '1',
-    date: '2024-01-20',
-    diagnosis: 'Cảm cúm, sốt nhẹ',
-    prescription: 'Paracetamol 500mg x 3 lần/ngày, Vitamin C',
-    doctor: 'BS. Trần Thị B',
-    status: 'completed',
-    notes: 'Bệnh nhân đáp ứng tốt với điều trị, triệu chứng giảm sau 3 ngày',
-    medicines: ['Paracetamol 500mg', 'Vitamin C 1000mg']
+    id: 1,
+    ngayKham: '2024-01-20T10:30:00',
+    bacSi: 'BS. Trần Thị B',
+    chuanDoan: 'Cảm cúm, sốt nhẹ',
+    donThuoc: 'DT001',
+    trangThai: 'HOAN_THANH',
+    ghiChu: 'Bệnh nhân đáp ứng tốt với điều trị, triệu chứng giảm sau 3 ngày',
+    danhSachThuoc: [
+      { tenThuoc: 'Paracetamol 500mg', lieuDung: '3 lần/ngày' },
+      { tenThuoc: 'Vitamin C 1000mg', lieuDung: '1 lần/ngày' }
+    ]
   },
   {
-    id: '2',
-    date: '2024-01-15',
-    diagnosis: 'Tăng huyết áp',
-    prescription: 'Amlodipine 5mg x 1 lần/ngày',
-    doctor: 'BS. Lê Văn C',
-    status: 'ongoing',
-    notes: 'Theo dõi huyết áp hàng tuần, huyết áp ổn định ở mức 130/85 mmHg',
-    medicines: ['Amlodipine 5mg']
+    id: 2,
+    ngayKham: '2024-01-15T14:20:00',
+    bacSi: 'BS. Lê Văn Cường',
+    chuanDoan: 'Viêm họng',
+    donThuoc: 'DT002',
+    trangThai: 'DANG_THUC_HIEN',
+    ghiChu: 'Uống thuốc kháng sinh theo đơn',
+    danhSachThuoc: [
+      { tenThuoc: 'Amoxicillin 250mg', lieuDung: '2 lần/ngày' }
+    ]
   },
   {
-    id: '3',
-    date: '2024-01-10',
-    diagnosis: 'Đau đầu, mất ngủ',
-    prescription: 'Melatonin 3mg trước khi ngủ',
-    doctor: 'BS. Nguyễn Thị D',
-    status: 'completed',
-    notes: 'Triệu chứng cải thiện sau 1 tuần, giấc ngủ ổn định',
-    medicines: ['Melatonin 3mg']
-  },
+    id: 3,
+    ngayKham: '2024-01-10T09:15:00',
+    bacSi: 'BS. Phạm Thị Dung',
+    chuanDoan: 'Tăng huyết áp',
+    donThuoc: 'DT003',
+    trangThai: 'DA_DUYET',
+    ghiChu: 'Theo dõi huyết áp hàng ngày',
+    danhSachThuoc: [
+      { tenThuoc: 'Amlodipine 5mg', lieuDung: '1 lần/ngày' }
+    ]
+  }
 ]
 
 export const PatientDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
-  const [patient, setPatient] = useState<Patient | null>(null)
-  const [treatmentHistory, setTreatmentHistory] = useState<TreatmentRecord[]>([])
+  const [patient, setPatient] = useState<BenhNhanResponse | null>(null)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    // Simulate API call
-    setPatient(mockPatient)
-    setTreatmentHistory(mockTreatmentHistory)
+    const fetchPatient = async () => {
+      if (!id) return
+      
+      try {
+        setLoading(true)
+        // Simulate API call with mock data
+        await new Promise(resolve => setTimeout(resolve, 500))
+        const mockPatient: BenhNhanResponse = {
+          id: parseInt(id),
+          maBenhNhan: 'BN001',
+          hoTen: 'Nguyễn Văn An',
+          ngaySinh: '1990-05-15',
+          gioiTinh: 'NAM',
+          soDienThoai: '0123456789',
+          email: 'nguyenvanan@email.com',
+          diaChi: '123 Đường ABC, Quận 1, TP.HCM',
+          soBaoHiem: 'BH001234567',
+          ngayTao: '2024-01-15T10:00:00',
+          ngayCapNhat: '2024-01-15T10:00:00'
+        }
+        setPatient(mockPatient)
+      } catch (error) {
+        message.error('Lỗi khi tải thông tin bệnh nhân')
+        console.error('Error fetching patient:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchPatient()
   }, [id])
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'active':
-        return 'green'
-      case 'inactive':
-        return 'red'
-      case 'pending':
-        return 'orange'
-      default:
-        return 'default'
-    }
-  }
-
-  const getStatusText = (status: string) => {
-    switch (status) {
-      case 'active':
-        return 'Hoạt động'
-      case 'inactive':
-        return 'Không hoạt động'
-      case 'pending':
-        return 'Chờ xử lý'
-      default:
-        return status
-    }
-  }
-
-  const getGenderText = (gender: string) => {
+  const getGenderText = (gender?: string) => {
     switch (gender) {
-      case 'male':
+      case 'NAM':
         return 'Nam'
-      case 'female':
+      case 'NU':
         return 'Nữ'
-      case 'other':
+      case 'KHAC':
         return 'Khác'
       default:
-        return gender
+        return 'Chưa xác định'
     }
   }
 
-  const getTreatmentStatusColor = (status: string) => {
-    switch (status) {
-      case 'completed':
-        return 'success'
-      case 'ongoing':
-        return 'processing'
-      case 'scheduled':
-        return 'warning'
+  const getGenderColor = (gender?: string) => {
+    switch (gender) {
+      case 'NAM':
+        return 'blue'
+      case 'NU':
+        return 'pink'
+      case 'KHAC':
+        return 'orange'
       default:
         return 'default'
     }
@@ -196,340 +152,426 @@ export const PatientDetail: React.FC = () => {
 
   const getTreatmentStatusText = (status: string) => {
     switch (status) {
-      case 'completed':
+      case 'MOI_TAO':
+        return 'Mới tạo'
+      case 'DA_DUYET':
+        return 'Đã duyệt'
+      case 'DANG_THUC_HIEN':
+        return 'Đang thực hiện'
+      case 'HOAN_THANH':
         return 'Hoàn thành'
-      case 'ongoing':
-        return 'Đang điều trị'
-      case 'scheduled':
-        return 'Đã lên lịch'
+      case 'HUY_BO':
+        return 'Hủy bỏ'
       default:
         return status
     }
   }
 
+  const handleAddTreatment = () => {
+    navigate(`/patients/${id}/add-treatment`)
+  }
+
+  if (loading) {
+    return <div>Đang tải...</div>
+  }
+
   if (!patient) {
-    return <div>Loading...</div>
+    return <div>Không tìm thấy bệnh nhân</div>
   }
 
   const tabItems = [
     {
       key: 'overview',
       label: (
-        <span>
+        <Space>
           <UserOutlined />
           Tổng quan
-        </span>
+        </Space>
       ),
       children: (
         <div>
-          {/* Patient Header */}
-          <PatientHeader>
-            <div className="patient-avatar">
-              <Avatar size={100} icon={<UserOutlined />} />
-              <div className="status-indicator">
-                <Badge status={patient.status === 'active' ? 'success' : 'error'} />
-              </div>
-            </div>
-            <div className="patient-info">
-              <Title level={2} className="patient-name">{patient.name}</Title>
-              <div className="patient-meta">
-                <Text type="secondary">ID: {patient.id}</Text>
-                <Tag color={getStatusColor(patient.status)} className="status-tag">
-                  {getStatusText(patient.status)}
-                </Tag>
-              </div>
-              <div className="patient-contact">
-                <Space>
-                  <Text><PhoneOutlined /> {patient.phone}</Text>
-                  <Text><MailOutlined /> {patient.email}</Text>
-                </Space>
-              </div>
-            </div>
-            <div className="patient-actions">
-              <Space>
-                <Button icon={<EditOutlined />} type="primary">
-                  Chỉnh sửa
-                </Button>
-                <Button icon={<PrinterOutlined />}>
-                  In hồ sơ
-                </Button>
-              </Space>
-            </div>
-          </PatientHeader>
+          {/* Top Section - Summary Cards */}
+          <Row gutter={[24, 24]} style={{ marginBottom: '24px' }}>
+            <Col xs={24} sm={8}>
+              <Card>
+                <Statistic
+                  title="Tổng số lần khám"
+                  value={mockTreatmentHistory.length}
+                  prefix={<TeamOutlined />}
+                  valueStyle={{ color: '#1f2937' }}
+                />
+              </Card>
+            </Col>
+            <Col xs={24} sm={8}>
+              <Card>
+                <Statistic
+                  title="Lần khám gần nhất"
+                  value={mockTreatmentHistory.length > 0 ? dayjs(mockTreatmentHistory[0]?.ngayKham).format('DD/MM/YYYY') : 'Chưa có'}
+                  prefix={<CalendarOutlined />}
+                  valueStyle={{ color: '#1f2937' }}
+                />
+              </Card>
+            </Col>
+            <Col xs={24} sm={8}>
+              <Card>
+                <Statistic
+                  title="Lịch hẹn tiếp theo"
+                  value="15/02/2024"
+                  prefix={<ClockCircleOutlined />}
+                  valueStyle={{ color: '#8b5cf6' }}
+                />
+              </Card>
+            </Col>
+          </Row>
 
-          {/* Patient Statistics */}
-          <PatientStats>
-            <Row gutter={[16, 16]}>
-              <Col xs={24} sm={8}>
-                <Card>
-                  <Statistic
-                    title="Tổng số lần khám"
-                    value={patient.totalVisits || 0}
-                    prefix={<UserOutlined />}
-                    valueStyle={{ color: '#3f8600' }}
-                  />
-                </Card>
-              </Col>
-              <Col xs={24} sm={8}>
-                <Card>
-                  <Statistic
-                    title="Lần khám gần nhất"
-                    value={patient.lastVisit ? dayjs(patient.lastVisit).format('DD/MM/YYYY') : 'N/A'}
-                    prefix={<CalendarOutlined />}
-                    valueStyle={{ color: '#1890ff' }}
-                  />
-                </Card>
-              </Col>
-              <Col xs={24} sm={8}>
-                <Card>
-                  <Statistic
-                    title="Lịch hẹn tiếp theo"
-                    value={patient.nextAppointment ? dayjs(patient.nextAppointment).format('DD/MM/YYYY') : 'N/A'}
-                    prefix={<ClockCircleOutlined />}
-                    valueStyle={{ color: '#722ed1' }}
-                  />
-                </Card>
-              </Col>
-            </Row>
-          </PatientStats>
-
-          {/* Patient Information */}
-          <Row gutter={[16, 16]}>
+          {/* Bottom Section - Main Information Cards */}
+          <Row gutter={[24, 24]}>
             <Col xs={24} lg={12}>
-              <InfoCard 
+              <InfoCard
                 title={
-                  <span>
-                    <UserOutlined /> Thông tin cá nhân
-                  </span>
+                  <Space>
+                    <UserOutlined />
+                    Thông tin cá nhân
+                  </Space>
                 }
               >
                 <div className="info-grid">
                   <div className="info-item">
-                    <div className="info-label">
-                      <UserOutlined className="info-icon" />
-                      Họ tên
-                    </div>
-                    <div className="info-value">{patient.name}</div>
+                    <span className="info-label">
+                      <UserOutlined style={{ marginRight: '8px' }} />
+                      Họ tên:
+                    </span>
+                    <span className="info-value">{patient.hoTen}</span>
                   </div>
-                  
                   <div className="info-item">
-                    <div className="info-label">
-                      <CalendarOutlined className="info-icon" />
-                      Tuổi
-                    </div>
-                    <div className="info-value">{patient.age} tuổi</div>
+                    <span className="info-label">
+                      <CalendarOutlined style={{ marginRight: '8px' }} />
+                      Tuổi:
+                    </span>
+                    <span className="info-value">
+                      {patient.ngaySinh ? `${dayjs().diff(dayjs(patient.ngaySinh), 'year')} tuổi` : 'Chưa có'}
+                    </span>
                   </div>
-                  
                   <div className="info-item">
-                    <div className="info-label">
-                      <UserOutlined className="info-icon" />
-                      Giới tính
-                    </div>
-                    <div className="info-value">{getGenderText(patient.gender)}</div>
+                    <span className="info-label">
+                      <UserOutlined style={{ marginRight: '8px' }} />
+                      Giới tính:
+                    </span>
+                    <span className="info-value">
+                      <Tag color={getGenderColor(patient.gioiTinh)}>
+                        {getGenderText(patient.gioiTinh)}
+                      </Tag>
+                    </span>
                   </div>
-                  
-                  <div className="info-item">
-                    <div className="info-label">
-                      <PhoneOutlined className="info-icon" />
-                      Số điện thoại
+                  {patient.soDienThoai && (
+                    <div className="info-item">
+                      <span className="info-label">
+                        <PhoneOutlined style={{ marginRight: '8px' }} />
+                        Số điện thoại:
+                      </span>
+                      <span className="info-value">{patient.soDienThoai}</span>
                     </div>
-                    <div className="info-value">{patient.phone}</div>
-                  </div>
-                  
-                  <div className="info-item">
-                    <div className="info-label">
-                      <MailOutlined className="info-icon" />
-                      Email
+                  )}
+                  {patient.email && (
+                    <div className="info-item">
+                      <span className="info-label">
+                        <MailOutlined style={{ marginRight: '8px' }} />
+                        Email:
+                      </span>
+                      <span className="info-value">{patient.email}</span>
                     </div>
-                    <div className="info-value">{patient.email}</div>
-                  </div>
-                  
-                  <div className="info-item">
-                    <div className="info-label">
-                      <HomeOutlined className="info-icon" />
-                      Địa chỉ
+                  )}
+                  {patient.diaChi && (
+                    <div className="info-item">
+                      <span className="info-label">
+                        <HomeOutlined style={{ marginRight: '8px' }} />
+                        Địa chỉ:
+                      </span>
+                      <span className="info-value">{patient.diaChi}</span>
                     </div>
-                    <div className="info-value">{patient.address}</div>
-                  </div>
+                  )}
                 </div>
               </InfoCard>
             </Col>
 
             <Col xs={24} lg={12}>
-              <InfoCard 
+              <InfoCard
                 title={
-                  <span>
-                    <HeartOutlined /> Thông tin y tế
-                  </span>
+                  <Space>
+                    <MedicineBoxOutlined />
+                    Thông tin y tế
+                  </Space>
                 }
               >
                 <div className="info-grid">
                   <div className="info-item">
-                    <div className="info-label">
-                      <HeartOutlined className="info-icon" />
-                      Nhóm máu
-                    </div>
-                    <div className="info-value">
-                      <Tag color="red">{patient.bloodType}</Tag>
-                    </div>
+                    <span className="info-label">
+                      <MedicineBoxOutlined style={{ marginRight: '8px' }} />
+                      Nhóm máu:
+                    </span>
+                    <span className="info-value">
+                      <Tag color="red" style={{ backgroundColor: '#fef2f2', color: '#dc2626', border: '1px solid #fecaca' }}>
+                        A+
+                      </Tag>
+                    </span>
                   </div>
-                  
                   <div className="info-item">
-                    <div className="info-label">
-                      <TeamOutlined className="info-icon" />
-                      Liên hệ khẩn cấp
-                    </div>
-                    <div className="info-value">{patient.emergencyContact}</div>
+                    <span className="info-label">
+                      <PhoneOutlined style={{ marginRight: '8px' }} />
+                      Liên hệ khẩn cấp:
+                    </span>
+                    <span className="info-value">0987654321 (Vợ)</span>
                   </div>
-                  
-                  <div className="info-item full-width">
-                    <div className="info-label">
-                      <IdcardOutlined className="info-icon" />
-                      Tiền sử bệnh
-                    </div>
-                    <div className="info-value">{patient.medicalHistory}</div>
+                  <div className="info-item">
+                    <span className="info-label">
+                      <FileTextOutlined style={{ marginRight: '8px' }} />
+                      Tiền sử bệnh:
+                    </span>
+                    <span className="info-value">Tiền sử bệnh tim mạch, huyết áp cao</span>
                   </div>
-                  
-                  <div className="info-item full-width">
-                    <div className="info-label">
-                      <AlertOutlined className="info-icon" />
-                      Dị ứng
-                    </div>
-                    <div className="info-value">
-                      {patient.allergies.length > 0 ? (
-                        <div className="allergies-container">
-                          {patient.allergies.map((allergy, index) => (
-                            <AllergyTag key={index} color="error">
-                              {allergy}
-                            </AllergyTag>
-                          ))}
-                        </div>
-                      ) : (
-                        <Text type="secondary">Không có</Text>
-                      )}
-                    </div>
+                  <div className="info-item">
+                    <span className="info-label">
+                      <AlertOutlined style={{ marginRight: '8px' }} />
+                      Dị ứng:
+                    </span>
+                    <span className="info-value">
+                      <Space wrap>
+                        <Tag color="red" style={{ backgroundColor: '#fef2f2', color: '#dc2626', border: '1px solid #fecaca' }}>
+                          Penicillin
+                        </Tag>
+                        <Tag color="red" style={{ backgroundColor: '#fef2f2', color: '#dc2626', border: '1px solid #fecaca' }}>
+                          Aspirin
+                        </Tag>
+                        <Tag color="red" style={{ backgroundColor: '#fef2f2', color: '#dc2626', border: '1px solid #fecaca' }}>
+                          Sulfa drugs
+                        </Tag>
+                      </Space>
+                    </span>
                   </div>
                 </div>
               </InfoCard>
             </Col>
           </Row>
         </div>
-      ),
+      )
     },
     {
-      key: 'treatment',
+      key: 'treatment-history',
       label: (
-        <span>
+        <Space>
           <MedicineBoxOutlined />
           Lịch sử điều trị
-        </span>
+        </Space>
       ),
       children: (
         <div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
-            <Title level={3} style={{ margin: 0 }}>Lịch sử điều trị</Title>
-            <ActionButton 
-              type="primary" 
+          <div style={{ 
+            display: 'flex', 
+            justifyContent: 'space-between', 
+            alignItems: 'center', 
+            marginBottom: '24px' 
+          }}>
+            <Title level={4}>Lịch sử điều trị</Title>
+            <AddTreatmentButton
               icon={<PlusOutlined />}
-              onClick={() => navigate(`/patients/${patient.id}/add-treatment`)}
+              onClick={handleAddTreatment}
             >
               Thêm điều trị mới
-            </ActionButton>
+            </AddTreatmentButton>
           </div>
 
-          <TreatmentHistory>
-            <Timeline
-              items={treatmentHistory.map((treatment) => ({
-                color: treatment.status === 'completed' ? 'green' : 
-                       treatment.status === 'ongoing' ? 'blue' : 'orange',
-                children: (
-                  <TreatmentCard>
-                    <div className="treatment-header">
-                      <div className="treatment-date">
-                        <CalendarOutlined className="date-icon" />
-                        {dayjs(treatment.date).format('DD/MM/YYYY')}
+          {mockTreatmentHistory.length > 0 ? (
+            <div>
+              {mockTreatmentHistory.map((treatment) => (
+                <Card 
+                  key={treatment.id} 
+                  style={{ 
+                    marginBottom: '16px',
+                    borderRadius: '12px',
+                    border: '1px solid #e5e7eb'
+                  }}
+                >
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                    <div style={{ flex: 1 }}>
+                      {/* Date and Status */}
+                      <div style={{ display: 'flex', alignItems: 'center', marginBottom: '16px' }}>
+                        <div style={{ fontWeight: 'bold', fontSize: '16px', marginRight: '12px' }}>
+                          {dayjs(treatment.ngayKham).format('DD/MM/YYYY')}
+                        </div>
+                        <Badge
+                          status={treatment.trangThai === 'HOAN_THANH' ? 'success' : 
+                                 treatment.trangThai === 'DANG_THUC_HIEN' ? 'processing' : 
+                                 treatment.trangThai === 'DA_DUYET' ? 'default' : 'warning'}
+                          text={getTreatmentStatusText(treatment.trangThai)}
+                        />
                       </div>
-                      <Badge 
-                        status={getTreatmentStatusColor(treatment.status)}
-                        text={getTreatmentStatusText(treatment.status)}
-                      />
+
+                      {/* Diagnosis */}
+                      <div style={{ marginBottom: '16px' }}>
+                        <div style={{ fontWeight: 'bold', marginBottom: '8px', color: '#374151' }}>
+                          Chẩn đoán
+                        </div>
+                        <div style={{ color: '#6b7280' }}>
+                          {treatment.chuanDoan}
+                        </div>
+                      </div>
+
+                      {/* Doctor and Prescription in a row */}
+                      <div style={{ display: 'flex', gap: '24px', marginBottom: '16px' }}>
+                        {/* Doctor */}
+                        <div style={{ flex: 1 }}>
+                          <div style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
+                            <UserOutlined style={{ marginRight: '8px', color: '#6b7280' }} />
+                            <span style={{ fontWeight: 'bold', color: '#374151' }}>Bác sĩ</span>
+                          </div>
+                          <div style={{ color: '#6b7280' }}>
+                            {treatment.bacSi}
+                          </div>
+                        </div>
+
+                        {/* Prescription */}
+                        <div style={{ flex: 1 }}>
+                          <div style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
+                            <FileTextOutlined style={{ marginRight: '8px', color: '#6b7280' }} />
+                            <span style={{ fontWeight: 'bold', color: '#374151' }}>Đơn thuốc</span>
+                          </div>
+                          <div style={{ color: '#6b7280', marginBottom: '8px' }}>
+                            {treatment.danhSachThuoc.map(med => `${med.tenThuoc} x ${med.lieuDung}`).join(', ')}
+                          </div>
+                          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                            {treatment.danhSachThuoc.map((med, index) => (
+                              <Tag 
+                                key={index}
+                                style={{ 
+                                  backgroundColor: '#eff6ff', 
+                                  color: '#1d4ed8', 
+                                  border: '1px solid #dbeafe',
+                                  borderRadius: '16px',
+                                  padding: '4px 12px'
+                                }}
+                              >
+                                {med.tenThuoc}
+                              </Tag>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Notes */}
+                      {treatment.ghiChu && (
+                        <div>
+                          <div style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
+                            <FileTextOutlined style={{ marginRight: '8px', color: '#6b7280' }} />
+                            <span style={{ fontWeight: 'bold', color: '#374151' }}>Ghi chú</span>
+                          </div>
+                          <div style={{ 
+                            backgroundColor: '#eff6ff', 
+                            border: '1px solid #dbeafe',
+                            borderRadius: '8px',
+                            padding: '12px',
+                            color: '#1d4ed8'
+                          }}>
+                            <div style={{ display: 'flex', alignItems: 'flex-start' }}>
+                              <AlertOutlined style={{ marginRight: '8px', marginTop: '2px' }} />
+                              <span>{treatment.ghiChu}</span>
+                            </div>
+                          </div>
+                        </div>
+                      )}
                     </div>
-                    
-                    <div className="treatment-content">
-                      <Row gutter={[16, 16]}>
-                        <Col xs={24} md={12}>
-                          <div className="treatment-section">
-                            <div className="section-label">
-                              <ExclamationCircleOutlined /> Chẩn đoán
-                            </div>
-                            <div className="section-value">{treatment.diagnosis}</div>
-                          </div>
-                        </Col>
-                        
-                        <Col xs={24} md={12}>
-                          <div className="treatment-section">
-                            <div className="section-label">
-                              <UserOutlined /> Bác sĩ
-                            </div>
-                            <div className="section-value">{treatment.doctor}</div>
-                          </div>
-                        </Col>
-                        
-                        <Col xs={24}>
-                          <div className="treatment-section">
-                            <div className="section-label">
-                              <MedicineBoxOutlined /> Đơn thuốc
-                            </div>
-                            <div className="section-value">{treatment.prescription}</div>
-                            {treatment.medicines && (
-                              <div className="medicines-list">
-                                {treatment.medicines.map((medicine, index) => (
-                                  <Tag key={index} color="blue" style={{ margin: '4px' }}>
-                                    {medicine}
-                                  </Tag>
-                                ))}
-                              </div>
-                            )}
-                          </div>
-                        </Col>
-                        
-                        {treatment.notes && (
-                          <Col xs={24}>
-                            <div className="treatment-section">
-                              <div className="section-label">
-                                <FileTextOutlined /> Ghi chú
-                              </div>
-                              <div className="section-value">
-                                <Alert
-                                  message={treatment.notes}
-                                  type="info"
-                                  showIcon
-                                  style={{ marginTop: 8 }}
-                                />
-                              </div>
-                            </div>
-                          </Col>
-                        )}
-                      </Row>
-                    </div>
-                  </TreatmentCard>
-                )
-              }))}
+                  </div>
+                </Card>
+              ))}
+            </div>
+          ) : (
+            <Alert
+              message="Chưa có lịch sử điều trị"
+              description="Bệnh nhân chưa có lịch sử điều trị nào được ghi nhận."
+              type="info"
+              showIcon
             />
-          </TreatmentHistory>
+          )}
         </div>
-      ),
-    },
+      )
+    }
   ]
 
   return (
     <div style={{ padding: '24px' }}>
-      <BackButton 
-        icon={<ArrowLeftOutlined />} 
-        onClick={() => navigate('/patients')}
-      >
-        Quay lại danh sách
+      <BackButton onClick={() => navigate('/patients')}>
+        <ArrowLeftOutlined /> Quay lại
       </BackButton>
+
+      <PatientHeader>
+        <div className="patient-avatar">
+          <Avatar size={100} icon={<UserOutlined />} />
+          <div className="status-indicator">
+            <Badge status="success" />
+          </div>
+        </div>
+        
+        <div className="patient-info">
+          <h1 className="patient-name">{patient.hoTen}</h1>
+          <div className="patient-meta">
+            <Tag className="status-tag">Mã BN: {patient.maBenhNhan}</Tag>
+            <Tag color={getGenderColor(patient.gioiTinh)}>
+              {getGenderText(patient.gioiTinh)}
+            </Tag>
+          </div>
+          <div className="patient-contact">
+            {patient.soDienThoai && (
+              <Text>
+                <PhoneOutlined /> {patient.soDienThoai}
+              </Text>
+            )}
+            {patient.email && (
+              <Text>
+                <MailOutlined /> {patient.email}
+              </Text>
+            )}
+            {patient.diaChi && (
+              <Text>
+                <HomeOutlined /> {patient.diaChi}
+              </Text>
+            )}
+          </div>
+        </div>
+        
+        <div className="patient-actions">
+          <ActionButton type="primary" icon={<EditOutlined />}>
+            Chỉnh sửa
+          </ActionButton>
+          <ActionButton icon={<PrinterOutlined />}>
+            In thông tin
+          </ActionButton>
+        </div>
+      </PatientHeader>
+
+      <PatientStats>
+        <Card>
+          <Statistic
+            title="Ngày tạo"
+            value={dayjs(patient.ngayTao).format('DD/MM/YYYY')}
+            prefix={<CalendarOutlined />}
+          />
+        </Card>
+        <Card>
+          <Statistic
+            title="Ngày cập nhật"
+            value={dayjs(patient.ngayCapNhat).format('DD/MM/YYYY')}
+            prefix={<ClockCircleOutlined />}
+          />
+        </Card>
+        {patient.soBaoHiem && (
+          <Card>
+            <Statistic
+              title="Số bảo hiểm"
+              value={patient.soBaoHiem}
+              prefix={<IdcardOutlined />}
+            />
+          </Card>
+        )}
+      </PatientStats>
 
       <StyledTabs
         defaultActiveKey="overview"

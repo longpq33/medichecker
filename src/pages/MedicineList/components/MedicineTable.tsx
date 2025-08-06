@@ -1,139 +1,145 @@
 import React from 'react'
-import { Table, Tag, Button, Space, Tooltip } from 'antd'
+import { Table, Tag, Button, Space } from 'antd'
 import { EditOutlined, DeleteOutlined, EyeOutlined } from '@ant-design/icons'
-import { useLanguage } from '@/hooks/useLanguage'
-
-interface Medicine {
-  id: string
-  name: string
-  code: string
-  category: string
-  manufacturer: string
-  price: number
-  stock: number
-  unit: string
-  status: 'available' | 'out_of_stock' | 'discontinued'
-  expiryDate: string
-}
+import type { ThuocResponse } from '@/types'
 
 interface MedicineTableProps {
-  medicines: Medicine[]
-  onEdit: (medicine: Medicine) => void
-  onDelete: (id: string) => void
-  onView: (medicine: Medicine) => void
-  getStatusColor: (status: string) => string
-  getStatusText: (status: string) => string
+  medicines: ThuocResponse[]
+  loading?: boolean
+  onEdit: (medicine: ThuocResponse) => void
+  onDelete: (id: number) => void
+  onView: (medicine: ThuocResponse) => void
+  getNhomThuocText: (nhomThuoc?: string) => string
+  getNhomThuocColor: (nhomThuoc?: string) => string
 }
 
 export const MedicineTable: React.FC<MedicineTableProps> = ({
   medicines,
+  loading = false,
   onEdit,
   onDelete,
   onView,
-  getStatusColor,
-  getStatusText
+  getNhomThuocText,
+  getNhomThuocColor
 }) => {
-  const { t } = useLanguage()
-
   const columns = [
     {
-      title: t('medicine.medicineName'),
-      dataIndex: 'name',
-      key: 'name',
-      sorter: (a: Medicine, b: Medicine) => a.name.localeCompare(b.name),
+      title: 'Mã thuốc',
+      dataIndex: 'maThuoc',
+      key: 'maThuoc',
+      width: 100,
+      fixed: 'left' as const,
     },
     {
-      title: t('medicine.medicineCode'),
-      dataIndex: 'code',
-      key: 'code',
-      width: 120,
-    },
-    {
-      title: t('medicine.category'),
-      dataIndex: 'category',
-      key: 'category',
-      width: 150,
-    },
-    {
-      title: t('medicine.manufacturer'),
-      dataIndex: 'manufacturer',
-      key: 'manufacturer',
+      title: 'Tên thuốc',
+      dataIndex: 'tenThuoc',
+      key: 'tenThuoc',
       width: 200,
+      sorter: (a: ThuocResponse, b: ThuocResponse) => a.tenThuoc.localeCompare(b.tenThuoc),
+    },
+    {
+      title: 'Hoạt chất',
+      dataIndex: 'tenHoatChat',
+      key: 'tenHoatChat',
+      width: 150,
       ellipsis: true,
     },
     {
-      title: t('medicine.price'),
-      dataIndex: 'price',
-      key: 'price',
-      width: 120,
-      render: (price: number) => `${price.toLocaleString()} VNĐ`,
-      sorter: (a: Medicine, b: Medicine) => a.price - b.price,
-    },
-    {
-      title: t('medicine.stock'),
-      dataIndex: 'stock',
-      key: 'stock',
+      title: 'Nồng độ',
+      dataIndex: 'nongDo',
+      key: 'nongDo',
       width: 100,
-      render: (stock: number, record: Medicine) => `${stock} ${record.unit}`,
-      sorter: (a: Medicine, b: Medicine) => a.stock - b.stock,
     },
     {
-      title: t('common.status'),
-      dataIndex: 'status',
-      key: 'status',
+      title: 'Dạng bào chế',
+      dataIndex: 'dangBaoChe',
+      key: 'dangBaoChe',
       width: 120,
-      render: (status: string) => (
-        <Tag color={getStatusColor(status)}>
-          {getStatusText(status)}
+    },
+    {
+      title: 'Hãng sản xuất',
+      dataIndex: 'hangSanXuat',
+      key: 'hangSanXuat',
+      width: 180,
+      ellipsis: true,
+    },
+    {
+      title: 'Nước sản xuất',
+      dataIndex: 'nuocSanXuat',
+      key: 'nuocSanXuat',
+      width: 120,
+    },
+    {
+      title: 'Giá bán',
+      dataIndex: 'giaBan',
+      key: 'giaBan',
+      width: 120,
+      render: (giaBan?: number) => giaBan ? `${giaBan.toLocaleString()} VNĐ` : '-',
+      sorter: (a: ThuocResponse, b: ThuocResponse) => (a.giaBan || 0) - (b.giaBan || 0),
+    },
+    {
+      title: 'Đơn vị tính',
+      dataIndex: 'donViTinh',
+      key: 'donViTinh',
+      width: 100,
+    },
+    {
+      title: 'Nhóm thuốc',
+      dataIndex: 'nhomThuoc',
+      key: 'nhomThuoc',
+      width: 120,
+      render: (nhomThuoc?: string) => (
+        <Tag color={getNhomThuocColor(nhomThuoc)}>
+          {getNhomThuocText(nhomThuoc)}
         </Tag>
       ),
-      filters: [
-        { text: t('medicine.available'), value: 'available' },
-        { text: t('medicine.outOfStock'), value: 'out_of_stock' },
-        { text: t('medicine.discontinued'), value: 'discontinued' },
-      ],
-      onFilter: (value: boolean | React.Key, record: Medicine) => record.status === value,
     },
     {
-      title: t('medicine.expiryDate'),
-      dataIndex: 'expiryDate',
-      key: 'expiryDate',
+      title: 'Trạng thái',
+      dataIndex: 'kichHoat',
+      key: 'kichHoat',
+      width: 100,
+      render: (kichHoat: boolean) => (
+        <Tag color={kichHoat ? 'green' : 'red'}>
+          {kichHoat ? 'Hoạt động' : 'Không hoạt động'}
+        </Tag>
+      ),
+    },
+    {
+      title: 'Ngày tạo',
+      dataIndex: 'ngayTao',
+      key: 'ngayTao',
       width: 120,
       render: (date: string) => new Date(date).toLocaleDateString('vi-VN'),
-      sorter: (a: Medicine, b: Medicine) => new Date(a.expiryDate).getTime() - new Date(b.expiryDate).getTime(),
     },
     {
-      title: t('common.actions'),
+      title: 'Thao tác',
       key: 'actions',
       width: 120,
       fixed: 'right' as const,
-      render: (_: unknown, record: Medicine) => (
-        <Space size="small">
-          <Tooltip title={t('common.view')}>
-            <Button 
-              type="text" 
-              icon={<EyeOutlined />} 
-              size="small"
-              onClick={() => onView(record)}
-            />
-          </Tooltip>
-          <Tooltip title={t('common.edit')}>
-            <Button 
-              type="text" 
-              icon={<EditOutlined />} 
-              size="small"
-              onClick={() => onEdit(record)}
-            />
-          </Tooltip>
-          <Tooltip title={t('common.delete')}>
-            <Button 
-              type="text" 
-              icon={<DeleteOutlined />} 
-              size="small"
-              danger
-              onClick={() => onDelete(record.id)}
-            />
-          </Tooltip>
+      render: (_: unknown, record: ThuocResponse) => (
+        <Space>
+          <Button 
+            type="text" 
+            icon={<EyeOutlined />} 
+            size="small"
+            onClick={() => onView(record)}
+            style={{ color: '#1890ff' }}
+          />
+          <Button 
+            type="text" 
+            icon={<EditOutlined />} 
+            size="small"
+            onClick={() => onEdit(record)}
+            style={{ color: '#52c41a' }}
+          />
+          <Button 
+            type="text" 
+            icon={<DeleteOutlined />} 
+            size="small"
+            onClick={() => onDelete(record.id)}
+            style={{ color: '#ff4d4f' }}
+          />
         </Space>
       ),
     },
@@ -144,16 +150,9 @@ export const MedicineTable: React.FC<MedicineTableProps> = ({
       columns={columns}
       dataSource={medicines}
       rowKey="id"
-      pagination={{
-        total: medicines.length,
-        pageSize: 10,
-        showSizeChanger: true,
-        showQuickJumper: true,
-        showTotal: (total, range) => 
-          `${range[0]}-${range[1]} ${t('common.of')} ${total} ${t('medicine.medicines')}`,
-      }}
-      scroll={{ x: 1200 }}
-      size="middle"
+      loading={loading}
+      pagination={false}
+      scroll={{ x: 1500 }}
     />
   )
 } 

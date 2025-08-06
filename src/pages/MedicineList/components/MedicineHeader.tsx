@@ -1,11 +1,9 @@
 import React from 'react'
-import { Button, Input, Typography } from 'antd'
-import { PlusOutlined, SearchOutlined } from '@ant-design/icons'
-import { useLanguage } from '@/hooks/useLanguage'
-import { StyledCard } from '../styled'
+import { Input, Space } from 'antd'
+import { PlusOutlined } from '@ant-design/icons'
+import { Button } from '@/components/Button'
 import { SPACING } from '@/constants'
 
-const { Title } = Typography
 const { Search } = Input
 
 interface MedicineHeaderProps {
@@ -13,39 +11,30 @@ interface MedicineHeaderProps {
   onSearch: (value: string) => void
 }
 
-export const MedicineHeader: React.FC<MedicineHeaderProps> = ({
-  onAdd,
-  onSearch
-}) => {
-  const { t } = useLanguage()
-
+export const MedicineHeader: React.FC<MedicineHeaderProps> = ({ onAdd, onSearch }) => {
   return (
-    <StyledCard>
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'space-between', 
-        alignItems: 'center', 
-        marginBottom: SPACING.MARGIN_MD 
-      }}>
-        <Title level={2}>{t('medicine.title')}</Title>
-        <Button 
-          type="primary" 
+    <div style={{ 
+      display: 'flex', 
+      justifyContent: 'space-between', 
+      alignItems: 'center', 
+      marginBottom: SPACING.MARGIN_MD 
+    }}>
+      <h2>Quản lý thuốc</h2>
+      <Space>
+        <Search
+          placeholder="Tìm kiếm thuốc..."
+          allowClear
+          onSearch={onSearch}
+          style={{ width: 300 }}
+        />
+        <Button
+          type="primary"
           icon={<PlusOutlined />}
           onClick={onAdd}
-          size="large"
         >
-          {t('medicine.addMedicine')}
+          Thêm thuốc mới
         </Button>
-      </div>
-      
-      <Search
-        placeholder={t('medicine.searchMedicine')}
-        allowClear
-        enterButton={<SearchOutlined />}
-        size="large"
-        onSearch={onSearch}
-        style={{ marginBottom: SPACING.MARGIN_MD }}
-      />
-    </StyledCard>
+      </Space>
+    </div>
   )
 } 

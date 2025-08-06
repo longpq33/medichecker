@@ -2,12 +2,10 @@ import styled from 'styled-components'
 import { Card, Form, Button, DatePicker, Typography } from 'antd'
 import { 
   SPACING, 
+  BORDER_RADIUS, 
+  COLORS, 
   FONT_SIZE, 
   FONT_WEIGHT, 
-  BORDER_RADIUS, 
-  SHADOWS, 
-  COLORS, 
-  GRADIENTS,
   TRANSITIONS,
   BUTTON_STYLES,
   FORM_STYLES
@@ -143,15 +141,15 @@ export const PrimaryButton = styled(Button)`
   padding: ${BUTTON_STYLES.PADDING};
   font-weight: ${BUTTON_STYLES.FONT_WEIGHT};
   border-radius: ${BUTTON_STYLES.BORDER_RADIUS};
-  background: ${GRADIENTS.PRIMARY};
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   border: none;
-  color: ${COLORS.BG_PRIMARY};
-  transition: ${BUTTON_STYLES.TRANSITION};
-
+  color: white;
+  
   &:hover {
-    background: ${GRADIENTS.PRIMARY_HOVER};
+    background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(24, 144, 255, 0.3);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    color: #1890ff;
   }
 `
 
@@ -161,33 +159,31 @@ export const SecondaryButton = styled(Button)`
   font-weight: ${BUTTON_STYLES.FONT_WEIGHT};
   border-radius: ${BUTTON_STYLES.BORDER_RADIUS};
   border: 1px solid ${COLORS.BORDER_PRIMARY};
-  color: ${COLORS.TEXT_SECONDARY};
+  color: ${COLORS.TEXT_PRIMARY};
   background: ${COLORS.BG_PRIMARY};
-
+  
   &:hover {
-    border-color: ${COLORS.PRIMARY};
-    color: ${COLORS.PRIMARY};
-    transform: translateY(-1px);
-    box-shadow: ${SHADOWS.SM};
+    border-color: #1890ff;
+    color: #1890ff;
   }
 `
 
 export const BackButton = styled(Button)`
   margin-bottom: ${SPACING.MARGIN_MD};
   height: ${BUTTON_STYLES.HEIGHT};
-  padding: 0 ${SPACING.PADDING_MD};
+  padding: ${BUTTON_STYLES.PADDING};
   font-weight: ${BUTTON_STYLES.FONT_WEIGHT};
   border-radius: ${BUTTON_STYLES.BORDER_RADIUS};
   border: 1px solid ${COLORS.BORDER_PRIMARY};
-  color: ${COLORS.TEXT_SECONDARY};
+  color: ${COLORS.TEXT_PRIMARY};
   background: ${COLORS.BG_PRIMARY};
-  box-shadow: ${SHADOWS.SM};
-
+  box-shadow: none;
+  
   &:hover {
-    border-color: ${COLORS.PRIMARY};
-    color: ${COLORS.PRIMARY};
+    border-color: #1890ff;
+    color: #1890ff;
     transform: translateY(-1px);
-    box-shadow: ${SHADOWS.MD};
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   }
 `
 

@@ -1,11 +1,9 @@
 import React from 'react'
-import { Button, Input, Typography } from 'antd'
-import { PlusOutlined, SearchOutlined } from '@ant-design/icons'
-import { useLanguage } from '@/hooks/useLanguage'
-import { StyledCard } from '../styled'
+import { Input, Space } from 'antd'
+import { PlusOutlined } from '@ant-design/icons'
+import { Button } from '@/components/Button'
 import { SPACING } from '@/constants'
 
-const { Title } = Typography
 const { Search } = Input
 
 interface PatientHeaderProps {
@@ -13,38 +11,30 @@ interface PatientHeaderProps {
   onSearch: (value: string) => void
 }
 
-export const PatientHeader: React.FC<PatientHeaderProps> = ({
-  onAdd,
-  onSearch
-}) => {
-  const { t } = useLanguage()
-
+export const PatientHeader: React.FC<PatientHeaderProps> = ({ onAdd, onSearch }) => {
   return (
-    <StyledCard>
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'space-between', 
-        alignItems: 'center', 
-        marginBottom: SPACING.MARGIN_MD 
-      }}>
-        <Title level={2}>{t('patient.title')}</Title>
-        <Button 
-          type="primary" 
+    <div style={{ 
+      display: 'flex', 
+      justifyContent: 'space-between', 
+      alignItems: 'center', 
+      marginBottom: SPACING.MARGIN_MD 
+    }}>
+      <h2>Quản lý bệnh nhân</h2>
+      <Space>
+        <Search
+          placeholder="Tìm kiếm bệnh nhân..."
+          allowClear
+          onSearch={onSearch}
+          style={{ width: 300 }}
+        />
+        <Button
+          type="primary"
           icon={<PlusOutlined />}
           onClick={onAdd}
         >
-          {t('patient.addPatient')}
+          Thêm bệnh nhân mới
         </Button>
-      </div>
-      
-      <Search
-        placeholder={t('patient.searchPatient')}
-        allowClear
-        enterButton={<SearchOutlined />}
-        size="large"
-        onSearch={onSearch}
-        style={{ marginBottom: SPACING.MARGIN_MD }}
-      />
-    </StyledCard>
+      </Space>
+    </div>
   )
 } 

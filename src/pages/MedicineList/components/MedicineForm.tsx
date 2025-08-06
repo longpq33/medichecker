@@ -1,25 +1,12 @@
 import React from 'react'
-import { Form, Input, Select, InputNumber, DatePicker, Modal } from 'antd'
-import { useLanguage } from '@/hooks/useLanguage'
+import { Form, Input, Select, InputNumber, Modal } from 'antd'
+import type { ThuocResponse } from '@/types'
 
 const { Option } = Select
 
-interface Medicine {
-  id: string
-  name: string
-  code: string
-  category: string
-  manufacturer: string
-  price: number
-  stock: number
-  unit: string
-  status: 'available' | 'out_of_stock' | 'discontinued'
-  expiryDate: string
-}
-
 interface MedicineFormProps {
   visible: boolean
-  editingMedicine: Medicine | null
+  editingMedicine: ThuocResponse | null
   onCancel: () => void
   onOk: () => void
   form: ReturnType<typeof Form.useForm>[0]
@@ -32,120 +19,109 @@ export const MedicineForm: React.FC<MedicineFormProps> = ({
   onOk,
   form
 }) => {
-  const { t } = useLanguage()
-
   return (
     <Modal
-      title={editingMedicine ? t('medicine.editMedicine') : t('medicine.addMedicine')}
+      title={editingMedicine ? 'Chỉnh sửa thuốc' : 'Thêm thuốc mới'}
       open={visible}
       onOk={onOk}
       onCancel={onCancel}
       width={600}
-      okText={t('common.save')}
-      cancelText={t('common.cancel')}
+      okText="Lưu"
+      cancelText="Hủy"
     >
       <Form
         form={form}
         layout="vertical"
       >
         <Form.Item
-          name="name"
-          label={t('medicine.medicineName')}
-          rules={[{ required: true, message: t('validation.required', { field: t('medicine.medicineName') }) }]}
+          name="tenThuoc"
+          label="Tên thuốc"
+          rules={[{ required: true, message: 'Vui lòng nhập tên thuốc' }]}
         >
-          <Input placeholder={t('medicine.medicineName')} />
+          <Input placeholder="Nhập tên thuốc" />
         </Form.Item>
         
         <Form.Item
-          name="code"
-          label={t('medicine.medicineCode')}
-          rules={[{ required: true, message: t('validation.required', { field: t('medicine.medicineCode') }) }]}
+          name="tenHoatChat"
+          label="Tên hoạt chất"
         >
-          <Input placeholder={t('medicine.medicineCode')} />
+          <Input placeholder="Nhập tên hoạt chất" />
         </Form.Item>
         
         <Form.Item
-          name="category"
-          label={t('medicine.category')}
-          rules={[{ required: true, message: t('validation.required', { field: t('medicine.category') }) }]}
+          name="nongDo"
+          label="Nồng độ"
         >
-          <Select placeholder={t('medicine.category')}>
-            <Option value="Thuốc giảm đau">{t('medicine.categories.painRelief')}</Option>
-            <Option value="Thuốc kháng sinh">{t('medicine.categories.antibiotic')}</Option>
-            <Option value="Vitamin">{t('medicine.categories.vitamin')}</Option>
-            <Option value="Thuốc tim mạch">{t('medicine.categories.cardiovascular')}</Option>
-            <Option value="Thuốc tiêu hóa">{t('medicine.categories.digestive')}</Option>
-          </Select>
+          <Input placeholder="Nhập nồng độ" />
         </Form.Item>
         
         <Form.Item
-          name="manufacturer"
-          label={t('medicine.manufacturer')}
-          rules={[{ required: true, message: t('validation.required', { field: t('medicine.manufacturer') }) }]}
+          name="dangBaoChe"
+          label="Dạng bào chế"
         >
-          <Input placeholder={t('medicine.manufacturer')} />
+          <Input placeholder="Nhập dạng bào chế" />
         </Form.Item>
         
         <Form.Item
-          name="price"
-          label={t('medicine.price')}
-          rules={[{ required: true, message: t('validation.required', { field: t('medicine.price') }) }]}
+          name="hangSanXuat"
+          label="Hãng sản xuất"
+        >
+          <Input placeholder="Nhập hãng sản xuất" />
+        </Form.Item>
+        
+        <Form.Item
+          name="nuocSanXuat"
+          label="Nước sản xuất"
+        >
+          <Input placeholder="Nhập nước sản xuất" />
+        </Form.Item>
+        
+        <Form.Item
+          name="giaBan"
+          label="Giá bán"
         >
           <InputNumber
             style={{ width: '100%' }}
             formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
             min={0}
-            placeholder={t('medicine.price')}
+            placeholder="Nhập giá bán"
           />
         </Form.Item>
         
         <Form.Item
-          name="stock"
-          label={t('medicine.stock')}
-          rules={[{ required: true, message: t('validation.required', { field: t('medicine.stock') }) }]}
+          name="donViTinh"
+          label="Đơn vị tính"
         >
-          <InputNumber
-            style={{ width: '100%' }}
-            min={0}
-            placeholder={t('medicine.stock')}
-          />
+          <Input placeholder="Nhập đơn vị tính" />
         </Form.Item>
         
         <Form.Item
-          name="unit"
-          label={t('medicine.unit')}
-          rules={[{ required: true, message: t('validation.required', { field: t('medicine.unit') }) }]}
+          name="chiDinh"
+          label="Chỉ định"
         >
-          <Select placeholder={t('medicine.unit')}>
-            <Option value="Viên">{t('medicine.units.pill')}</Option>
-            <Option value="Chai">{t('medicine.units.bottle')}</Option>
-            <Option value="Hộp">{t('medicine.units.box')}</Option>
-            <Option value="Gói">{t('medicine.units.pack')}</Option>
+          <Input.TextArea rows={3} placeholder="Nhập chỉ định" />
+        </Form.Item>
+        
+        <Form.Item
+          name="chongChiDinh"
+          label="Chống chỉ định"
+        >
+          <Input.TextArea rows={3} placeholder="Nhập chống chỉ định" />
+        </Form.Item>
+        
+        <Form.Item
+          name="nhomThuoc"
+          label="Nhóm thuốc"
+        >
+          <Select placeholder="Chọn nhóm thuốc">
+            <Option value="KHANG_SINH">Kháng sinh</Option>
+            <Option value="GIAM_DAU">Giảm đau</Option>
+            <Option value="CHONG_VIEM">Chống viêm</Option>
+            <Option value="TIM_MACH">Tim mạch</Option>
+            <Option value="TIEU_HOA">Tiêu hóa</Option>
+            <Option value="HOI_SUC">Hồi sức</Option>
+            <Option value="KHAC">Khác</Option>
           </Select>
-        </Form.Item>
-        
-        <Form.Item
-          name="status"
-          label={t('common.status')}
-          rules={[{ required: true, message: t('validation.required', { field: t('common.status') }) }]}
-        >
-          <Select placeholder={t('common.status')}>
-            <Option value="available">{t('medicine.available')}</Option>
-            <Option value="out_of_stock">{t('medicine.outOfStock')}</Option>
-            <Option value="discontinued">{t('medicine.discontinued')}</Option>
-          </Select>
-        </Form.Item>
-        
-        <Form.Item
-          name="expiryDate"
-          label={t('medicine.expiryDate')}
-          rules={[{ required: true, message: t('validation.required', { field: t('medicine.expiryDate') }) }]}
-        >
-          <DatePicker 
-            style={{ width: '100%' }}
-            format="DD/MM/YYYY"
-            placeholder={t('medicine.expiryDate')}
-          />
         </Form.Item>
       </Form>
     </Modal>

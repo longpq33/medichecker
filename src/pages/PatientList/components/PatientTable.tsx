@@ -1,108 +1,99 @@
 import React from 'react'
-import { Table, Tag, Button } from 'antd'
+import { Table, Tag, Button, Space } from 'antd'
 import { EditOutlined, DeleteOutlined, EyeOutlined } from '@ant-design/icons'
-import { useLanguage } from '@/hooks/useLanguage'
-import { ActionButtons } from '../styled'
-
-interface Patient {
-  id: string
-  name: string
-  phone: string
-  email: string
-  age: number
-  gender: 'male' | 'female' | 'other'
-  address: string
-  status: 'active' | 'inactive' | 'pending'
-  createdAt: string
-}
+import type { BenhNhanResponse } from '@/types'
 
 interface PatientTableProps {
-  patients: Patient[]
-  onEdit: (patient: Patient) => void
-  onDelete: (id: string) => void
-  onView: (patient: Patient) => void
-  getStatusColor: (status: string) => string
-  getStatusText: (status: string) => string
-  getGenderText: (gender: string) => string
+  patients: BenhNhanResponse[]
+  loading?: boolean
+  onEdit: (patient: BenhNhanResponse) => void
+  onDelete: (id: number) => void
+  onView: (patient: BenhNhanResponse) => void
+  getGenderText: (gender?: string) => string
+  getGenderColor: (gender?: string) => string
 }
 
 export const PatientTable: React.FC<PatientTableProps> = ({
   patients,
+  loading = false,
   onEdit,
   onDelete,
   onView,
-  getStatusColor,
-  getStatusText,
-  getGenderText
+  getGenderText,
+  getGenderColor
 }) => {
-  const { t } = useLanguage()
-
   const columns = [
     {
-      title: t('patient.patientName'),
-      dataIndex: 'name',
-      key: 'name',
+      title: 'Mã BN',
+      dataIndex: 'maBenhNhan',
+      key: 'maBenhNhan',
+      width: 120,
     },
     {
-      title: t('common.phone'),
-      dataIndex: 'phone',
-      key: 'phone',
+      title: 'Họ tên',
+      dataIndex: 'hoTen',
+      key: 'hoTen',
     },
     {
-      title: t('common.email'),
+      title: 'Số điện thoại',
+      dataIndex: 'soDienThoai',
+      key: 'soDienThoai',
+    },
+    {
+      title: 'Email',
       dataIndex: 'email',
       key: 'email',
     },
     {
-      title: t('common.age'),
-      dataIndex: 'age',
-      key: 'age',
-    },
-    {
-      title: t('common.gender'),
-      dataIndex: 'gender',
-      key: 'gender',
-      render: (gender: string) => (
-        <Tag color={gender === 'male' ? 'blue' : 'pink'}>
+      title: 'Giới tính',
+      dataIndex: 'gioiTinh',
+      key: 'gioiTinh',
+      render: (gender?: string) => (
+        <Tag color={getGenderColor(gender)}>
           {getGenderText(gender)}
         </Tag>
       ),
     },
     {
-      title: t('common.status'),
-      dataIndex: 'status',
-      key: 'status',
-      render: (status: string) => (
-        <Tag color={getStatusColor(status)}>
-          {getStatusText(status)}
-        </Tag>
-      ),
+      title: 'Địa chỉ',
+      dataIndex: 'diaChi',
+      key: 'diaChi',
+      ellipsis: true,
     },
     {
-      title: t('common.actions'),
+      title: 'Ngày tạo',
+      dataIndex: 'ngayTao',
+      key: 'ngayTao',
+      render: (date: string) => new Date(date).toLocaleDateString('vi-VN'),
+    },
+    {
+      title: 'Thao tác',
       key: 'actions',
-      render: (_: unknown, record: Patient) => (
-        <ActionButtons>
+      width: 120,
+      render: (_: unknown, record: BenhNhanResponse) => (
+        <Space>
           <Button 
             type="text" 
             icon={<EyeOutlined />} 
             size="small"
             onClick={() => onView(record)}
+            style={{ color: '#1890ff' }}
           />
           <Button 
             type="text" 
             icon={<EditOutlined />} 
             size="small"
             onClick={() => onEdit(record)}
+            style={{ color: '#52c41a' }}
           />
           <Button 
             type="text" 
             icon={<DeleteOutlined />} 
             size="small"
-            danger
             onClick={() => onDelete(record.id)}
+            style={{ color: '#ff4d4f' }}
           />
-        </ActionButtons>
+        </Space>
       ),
     },
   ]
@@ -112,14 +103,8 @@ export const PatientTable: React.FC<PatientTableProps> = ({
       columns={columns}
       dataSource={patients}
       rowKey="id"
-      pagination={{
-        total: patients.length,
-        pageSize: 10,
-        showSizeChanger: true,
-        showQuickJumper: true,
-        showTotal: (total, range) => 
-          `${range[0]}-${range[1]} ${t('common.of')} ${total} ${t('patient.patients')}`,
-      }}
+      loading={loading}
+      pagination={false}
     />
   )
 } 

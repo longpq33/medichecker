@@ -1,108 +1,162 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { 
   Modal,
-  Form
+  Form,
+  message,
+  Pagination
 } from 'antd'
-import { useLanguage } from '@/hooks/useLanguage'
 import { PatientForm, PatientTable, PatientHeader } from './components'
+import type { BenhNhanResponse } from '@/types'
+import dayjs from 'dayjs'
 
-interface Patient {
-  id: string
-  name: string
-  phone: string
-  email: string
-  age: number
-  gender: 'male' | 'female' | 'other'
-  address: string
-  status: 'active' | 'inactive' | 'pending'
-  createdAt: string
-}
-
-const mockPatients: Patient[] = [
+// Mock data cho development
+const mockPatients: BenhNhanResponse[] = [
   {
-    id: '1',
-    name: 'Nguyễn Văn A',
-    phone: '0123456789',
-    email: 'nguyenvana@email.com',
-    age: 35,
-    gender: 'male',
-    address: 'Hà Nội',
-    status: 'active',
-    createdAt: '2024-01-15',
+    id: 1,
+    maBenhNhan: 'BN001',
+    hoTen: 'Nguyễn Văn An',
+    ngaySinh: '1990-05-15',
+    gioiTinh: 'NAM',
+    soDienThoai: '0123456789',
+    email: 'nguyenvanan@email.com',
+    diaChi: '123 Đường ABC, Quận 1, TP.HCM',
+    soBaoHiem: 'BH001234567',
+    ngayTao: '2024-01-15T10:00:00',
+    ngayCapNhat: '2024-01-15T10:00:00'
   },
   {
-    id: '2',
-    name: 'Trần Thị B',
-    phone: '0987654321',
-    email: 'tranthib@email.com',
-    age: 28,
-    gender: 'female',
-    address: 'TP.HCM',
-    status: 'active',
-    createdAt: '2024-01-10',
+    id: 2,
+    maBenhNhan: 'BN002',
+    hoTen: 'Trần Thị Bình',
+    ngaySinh: '1985-08-22',
+    gioiTinh: 'NU',
+    soDienThoai: '0987654321',
+    email: 'tranthibinh@email.com',
+    diaChi: '456 Đường XYZ, Quận 2, TP.HCM',
+    soBaoHiem: 'BH098765432',
+    ngayTao: '2024-01-16T14:30:00',
+    ngayCapNhat: '2024-01-16T14:30:00'
   },
   {
-    id: '3',
-    name: 'Lê Văn C',
-    phone: '0555666777',
-    email: 'levanc@email.com',
-    age: 45,
-    gender: 'male',
-    address: 'Đà Nẵng',
-    status: 'inactive',
-    createdAt: '2024-01-05',
+    id: 3,
+    maBenhNhan: 'BN003',
+    hoTen: 'Lê Văn Cường',
+    ngaySinh: '1978-12-10',
+    gioiTinh: 'NAM',
+    soDienThoai: '0555666777',
+    email: 'levancuong@email.com',
+    diaChi: '789 Đường DEF, Quận 3, TP.HCM',
+    soBaoHiem: 'BH055566677',
+    ngayTao: '2024-01-17T09:15:00',
+    ngayCapNhat: '2024-01-17T09:15:00'
   },
+  {
+    id: 4,
+    maBenhNhan: 'BN004',
+    hoTen: 'Phạm Thị Dung',
+    ngaySinh: '1992-03-25',
+    gioiTinh: 'NU',
+    soDienThoai: '0333444555',
+    email: 'phamthidung@email.com',
+    diaChi: '321 Đường GHI, Quận 4, TP.HCM',
+    soBaoHiem: 'BH033344455',
+    ngayTao: '2024-01-18T11:45:00',
+    ngayCapNhat: '2024-01-18T11:45:00'
+  },
+  {
+    id: 5,
+    maBenhNhan: 'BN005',
+    hoTen: 'Hoàng Văn Em',
+    ngaySinh: '1988-07-08',
+    gioiTinh: 'NAM',
+    soDienThoai: '0777888999',
+    email: 'hoangvanem@email.com',
+    diaChi: '654 Đường JKL, Quận 5, TP.HCM',
+    soBaoHiem: 'BH077788899',
+    ngayTao: '2024-01-19T16:20:00',
+    ngayCapNhat: '2024-01-19T16:20:00'
+  }
 ]
 
 export const PatientList: React.FC = () => {
-  const [patients, setPatients] = useState<Patient[]>(mockPatients)
+  const [patients, setPatients] = useState<BenhNhanResponse[]>(mockPatients)
+  const [loading, setLoading] = useState(false)
   const [searchText, setSearchText] = useState('')
   const [isModalVisible, setIsModalVisible] = useState(false)
-  const [editingPatient, setEditingPatient] = useState<Patient | null>(null)
+  const [editingPatient, setEditingPatient] = useState<BenhNhanResponse | null>(null)
   const [form] = Form.useForm()
-  const { t } = useLanguage()
+  
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1)
+  const [pageSize, setPageSize] = useState(10)
+  const [total, setTotal] = useState(mockPatients.length)
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'active':
-        return 'green'
-      case 'inactive':
-        return 'red'
-      case 'pending':
+  // Fetch patients (using mock data for now)
+  const fetchPatients = async (page: number = 1, size: number = 10, keyword?: string) => {
+    try {
+      setLoading(true)
+      // Simulate API delay
+      await new Promise(resolve => setTimeout(resolve, 500))
+      
+      let filteredData = mockPatients
+      if (keyword) {
+        filteredData = mockPatients.filter(patient =>
+          patient.hoTen.toLowerCase().includes(keyword.toLowerCase()) ||
+          patient.maBenhNhan.toLowerCase().includes(keyword.toLowerCase()) ||
+          patient.soDienThoai?.includes(keyword) ||
+          patient.email?.toLowerCase().includes(keyword.toLowerCase())
+        )
+      }
+      
+      const startIndex = (page - 1) * size
+      const endIndex = startIndex + size
+      const paginatedData = filteredData.slice(startIndex, endIndex)
+      
+      setPatients(paginatedData)
+      setTotal(filteredData.length)
+      setCurrentPage(page)
+      setPageSize(size)
+    } catch (error) {
+      message.error('Lỗi khi tải danh sách bệnh nhân')
+      console.error('Error fetching patients:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    fetchPatients()
+  }, [])
+
+  const getGenderText = (gender?: string) => {
+    switch (gender) {
+      case 'NAM':
+        return 'Nam'
+      case 'NU':
+        return 'Nữ'
+      case 'KHAC':
+        return 'Khác'
+      default:
+        return 'Chưa xác định'
+    }
+  }
+
+  const getGenderColor = (gender?: string) => {
+    switch (gender) {
+      case 'NAM':
+        return 'blue'
+      case 'NU':
+        return 'pink'
+      case 'KHAC':
         return 'orange'
       default:
         return 'default'
     }
   }
 
-  const getStatusText = (status: string) => {
-    switch (status) {
-      case 'active':
-        return t('common.active')
-      case 'inactive':
-        return t('common.inactive')
-      case 'pending':
-        return t('common.pending')
-      default:
-        return status
-    }
-  }
-
-  const getGenderText = (gender: string) => {
-    switch (gender) {
-      case 'male':
-        return t('common.male')
-      case 'female':
-        return t('common.female')
-      case 'other':
-        return t('common.other')
-      default:
-        return gender
-    }
-  }
-
   const handleSearch = (value: string) => {
     setSearchText(value)
+    fetchPatients(1, pageSize, value)
   }
 
   const handleAdd = () => {
@@ -111,53 +165,77 @@ export const PatientList: React.FC = () => {
     setIsModalVisible(true)
   }
 
-  const handleEdit = (patient: Patient) => {
+  const handleEdit = (patient: BenhNhanResponse) => {
     setEditingPatient(patient)
-    form.setFieldsValue(patient)
+    form.setFieldsValue({
+      hoTen: patient.hoTen,
+      ngaySinh: patient.ngaySinh ? dayjs(patient.ngaySinh) : undefined,
+      gioiTinh: patient.gioiTinh,
+      soDienThoai: patient.soDienThoai,
+      email: patient.email,
+      diaChi: patient.diaChi,
+      soBaoHiem: patient.soBaoHiem,
+    })
     setIsModalVisible(true)
   }
 
-  const handleView = (patient: Patient) => {
-    // Navigate to patient detail page
+  const handleView = (patient: BenhNhanResponse) => {
     window.location.href = `/patients/${patient.id}`
   }
 
-  const handleDelete = (id: string) => {
+  const handleDelete = (id: number) => {
     Modal.confirm({
-      title: t('messages.confirmDelete'),
-      content: t('patient.deleteConfirm'),
-      onOk: () => {
-        setPatients(patients.filter(p => p.id !== id))
+      title: 'Xác nhận xóa',
+      content: 'Bạn có chắc chắn muốn xóa bệnh nhân này?',
+      onOk: async () => {
+        try {
+          // Simulate API call
+          await new Promise(resolve => setTimeout(resolve, 500))
+          setPatients(patients.filter(p => p.id !== id))
+          message.success('Xóa bệnh nhân thành công')
+          fetchPatients(currentPage, pageSize, searchText)
+        } catch (error) {
+          message.error('Lỗi khi xóa bệnh nhân')
+          console.error('Error deleting patient:', error)
+        }
       },
     })
   }
 
-  const handleModalOk = () => {
-    form.validateFields().then((values) => {
+  const handleModalOk = async () => {
+    try {
+      const values = await form.validateFields()
       if (editingPatient) {
         // Update existing patient
-        setPatients(patients.map(p => 
-          p.id === editingPatient.id ? { ...p, ...values } : p
-        ))
+        await new Promise(resolve => setTimeout(resolve, 500))
+        const updatedPatient = { ...editingPatient, ...values }
+        setPatients(patients.map(p => p.id === editingPatient.id ? updatedPatient : p))
+        message.success('Cập nhật bệnh nhân thành công')
       } else {
         // Add new patient
-        const newPatient: Patient = {
-          id: Date.now().toString(),
+        await new Promise(resolve => setTimeout(resolve, 500))
+        const newPatient: BenhNhanResponse = {
+          id: Date.now(),
+          maBenhNhan: `BN${String(Date.now()).slice(-3)}`,
           ...values,
-          createdAt: new Date().toISOString().split('T')[0],
+          ngayTao: new Date().toISOString(),
+          ngayCapNhat: new Date().toISOString()
         }
-        setPatients([...patients, newPatient])
+        setPatients([newPatient, ...patients])
+        message.success('Thêm bệnh nhân thành công')
       }
       setIsModalVisible(false)
       form.resetFields()
-    })
+      fetchPatients(currentPage, pageSize, searchText)
+    } catch (error) {
+      message.error('Lỗi khi lưu bệnh nhân')
+      console.error('Error saving patient:', error)
+    }
   }
 
-  const filteredPatients = patients.filter(patient =>
-    patient.name.toLowerCase().includes(searchText.toLowerCase()) ||
-    patient.phone.includes(searchText) ||
-    patient.email.toLowerCase().includes(searchText.toLowerCase())
-  )
+  const handlePageChange = (page: number, size?: number) => {
+    fetchPatients(page, size || pageSize, searchText)
+  }
 
   return (
     <div>
@@ -167,14 +245,27 @@ export const PatientList: React.FC = () => {
       />
       
       <PatientTable
-        patients={filteredPatients}
+        patients={patients}
+        loading={loading}
         onEdit={handleEdit}
         onDelete={handleDelete}
         onView={handleView}
-        getStatusColor={getStatusColor}
-        getStatusText={getStatusText}
         getGenderText={getGenderText}
+        getGenderColor={getGenderColor}
       />
+
+      <div style={{ textAlign: 'center', marginTop: '20px' }}>
+        <Pagination
+          current={currentPage}
+          pageSize={pageSize}
+          total={total}
+          showSizeChanger
+          showQuickJumper
+          showTotal={(total, range) => `${range[0]}-${range[1]} của ${total} bệnh nhân`}
+          onChange={handlePageChange}
+          onShowSizeChange={handlePageChange}
+        />
+      </div>
 
       <PatientForm
         visible={isModalVisible}

@@ -1,16 +1,15 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { 
   Modal,
   Form,
   Card,
   message,
-  Button,
   Input,
   Select,
   Table,
   Tag,
   Space,
-  Popconfirm
+  Pagination
 } from 'antd'
 import { 
   PlusOutlined, 
@@ -22,53 +21,60 @@ import { useLanguage } from '@/hooks/useLanguage'
 import dayjs from 'dayjs'
 import { useNavigate } from 'react-router-dom'
 import { SPACING } from '@/constants'
+import { Button } from '@/components/Button'
+import type { DonThuocResponse } from '@/types'
 
 const { Option } = Select
 
-interface Prescription {
-  id: number
-  maDonThuoc: string
-  benhNhan: {
-    id: number
-    hoTen: string
-  }
-  bacSiKeDon: string
-  ghiChu?: string
-  trangThai: 'MOI_TAO' | 'DA_DUYET' | 'DANG_THUC_HIEN' | 'HOAN_THANH' | 'HUY_BO'
-  ngayKeDon: string
-  danhSachThuoc: Array<{
-    id: number
-    thuoc: {
-      id: number
-      tenThuoc: string
-      giaBan: number
-    }
-    soLuong: number
-    thanhTien: number
-  }>
-}
-
-const mockPrescriptions: Prescription[] = [
+// Mock data cho development
+const mockPrescriptions: DonThuocResponse[] = [
   {
     id: 1,
     maDonThuoc: 'DT001',
     benhNhan: {
       id: 1,
-      hoTen: 'Nguyễn Văn A'
+      maBenhNhan: 'BN001',
+      hoTen: 'Nguyễn Văn An',
+      ngaySinh: '1990-05-15',
+      gioiTinh: 'NAM',
+      soDienThoai: '0123456789',
+      email: 'nguyenvanan@email.com',
+      diaChi: '123 Đường ABC, Quận 1, TP.HCM',
+      soBaoHiem: 'BH001234567',
+      ngayTao: '2024-01-15T10:00:00',
+      ngayCapNhat: '2024-01-15T10:00:00'
     },
-    bacSiKeDon: 'BS. Nguyễn Văn B',
-    ghiChu: 'Uống sau ăn',
+    bacSiKeDon: 'BS. Trần Thị Bình',
+    ghiChu: 'Uống sau ăn, theo dõi huyết áp',
     trangThai: 'DA_DUYET',
-    ngayKeDon: '2024-01-15T10:30:00',
+    ngayKeDon: '2024-01-20T10:30:00',
     danhSachThuoc: [
       {
         id: 1,
         thuoc: {
           id: 1,
+          maThuoc: 'TH001',
           tenThuoc: 'Paracetamol 500mg',
-          giaBan: 5000
+          tenHoatChat: 'Paracetamol',
+          nongDo: '500mg',
+          dangBaoChe: 'Viên nén',
+          hangSanXuat: 'Công ty Dược phẩm A',
+          nuocSanXuat: 'Việt Nam',
+          giaBan: 5000,
+          donViTinh: 'Viên',
+          chiDinh: 'Giảm đau, hạ sốt',
+          chongChiDinh: 'Dị ứng với Paracetamol',
+          nhomThuoc: 'GIAM_DAU',
+          kichHoat: true,
+          ngayTao: '2024-01-15T10:00:00'
         },
         soLuong: 30,
+        lieuDung: '1 viên/lần',
+        duongDung: 'Uống',
+        tanSuat: '3 lần/ngày',
+        thoiGianDung: '7 ngày',
+        huongDanSuDung: 'Uống sau ăn',
+        giaDonVi: 5000,
         thanhTien: 150000
       }
     ]
@@ -78,35 +84,145 @@ const mockPrescriptions: Prescription[] = [
     maDonThuoc: 'DT002',
     benhNhan: {
       id: 2,
-      hoTen: 'Trần Thị B'
+      maBenhNhan: 'BN002',
+      hoTen: 'Trần Thị Bình',
+      ngaySinh: '1985-08-22',
+      gioiTinh: 'NU',
+      soDienThoai: '0987654321',
+      email: 'tranthibinh@email.com',
+      diaChi: '456 Đường XYZ, Quận 2, TP.HCM',
+      soBaoHiem: 'BH098765432',
+      ngayTao: '2024-01-16T14:30:00',
+      ngayCapNhat: '2024-01-16T14:30:00'
     },
-    bacSiKeDon: 'BS. Lê Văn C',
+    bacSiKeDon: 'BS. Lê Văn Cường',
     ghiChu: 'Uống trước ăn 30 phút',
     trangThai: 'MOI_TAO',
-    ngayKeDon: '2024-01-16T14:20:00',
+    ngayKeDon: '2024-01-21T14:20:00',
     danhSachThuoc: [
       {
         id: 2,
         thuoc: {
           id: 2,
+          maThuoc: 'TH002',
           tenThuoc: 'Amoxicillin 250mg',
-          giaBan: 15000
+          tenHoatChat: 'Amoxicillin',
+          nongDo: '250mg',
+          dangBaoChe: 'Viên nang',
+          hangSanXuat: 'Công ty Dược phẩm B',
+          nuocSanXuat: 'Việt Nam',
+          giaBan: 15000,
+          donViTinh: 'Viên',
+          chiDinh: 'Điều trị nhiễm khuẩn',
+          chongChiDinh: 'Dị ứng với Penicillin',
+          nhomThuoc: 'KHANG_SINH',
+          kichHoat: true,
+          ngayTao: '2024-01-16T14:30:00'
         },
         soLuong: 20,
+        lieuDung: '1 viên/lần',
+        duongDung: 'Uống',
+        tanSuat: '2 lần/ngày',
+        thoiGianDung: '10 ngày',
+        huongDanSuDung: 'Uống trước ăn',
+        giaDonVi: 15000,
         thanhTien: 300000
+      }
+    ]
+  },
+  {
+    id: 3,
+    maDonThuoc: 'DT003',
+    benhNhan: {
+      id: 3,
+      maBenhNhan: 'BN003',
+      hoTen: 'Lê Văn Cường',
+      ngaySinh: '1978-12-10',
+      gioiTinh: 'NAM',
+      soDienThoai: '0555666777',
+      email: 'levancuong@email.com',
+      diaChi: '789 Đường DEF, Quận 3, TP.HCM',
+      soBaoHiem: 'BH055566677',
+      ngayTao: '2024-01-17T09:15:00',
+      ngayCapNhat: '2024-01-17T09:15:00'
+    },
+    bacSiKeDon: 'BS. Phạm Thị Dung',
+    ghiChu: 'Theo dõi huyết áp hàng ngày',
+    trangThai: 'DANG_THUC_HIEN',
+    ngayKeDon: '2024-01-22T09:15:00',
+    danhSachThuoc: [
+      {
+        id: 3,
+        thuoc: {
+          id: 5,
+          maThuoc: 'TH005',
+          tenThuoc: 'Amlodipine 5mg',
+          tenHoatChat: 'Amlodipine',
+          nongDo: '5mg',
+          dangBaoChe: 'Viên nén',
+          hangSanXuat: 'Công ty Dược phẩm E',
+          nuocSanXuat: 'Việt Nam',
+          giaBan: 25000,
+          donViTinh: 'Viên',
+          chiDinh: 'Điều trị tăng huyết áp',
+          chongChiDinh: 'Suy tim nặng',
+          nhomThuoc: 'TIM_MACH',
+          kichHoat: true,
+          ngayTao: '2024-01-19T16:20:00'
+        },
+        soLuong: 30,
+        lieuDung: '1 viên/lần',
+        duongDung: 'Uống',
+        tanSuat: '1 lần/ngày',
+        thoiGianDung: '30 ngày',
+        huongDanSuDung: 'Uống vào buổi sáng',
+        giaDonVi: 25000,
+        thanhTien: 750000
       }
     ]
   }
 ]
 
 export const PrescriptionList: React.FC = () => {
-  const [prescriptions, setPrescriptions] = useState<Prescription[]>(mockPrescriptions)
-  const [searchText, setSearchText] = useState('')
+  const [prescriptions, setPrescriptions] = useState<DonThuocResponse[]>(mockPrescriptions)
+  const [loading, setLoading] = useState(false)
   const [isModalVisible, setIsModalVisible] = useState(false)
-  const [editingPrescription, setEditingPrescription] = useState<Prescription | null>(null)
+  const [editingPrescription, setEditingPrescription] = useState<DonThuocResponse | null>(null)
   const [form] = Form.useForm()
   const { t } = useLanguage()
   const navigate = useNavigate()
+  
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1)
+  const [pageSize, setPageSize] = useState(10)
+  const [total, setTotal] = useState(mockPrescriptions.length)
+
+  // Fetch prescriptions (using mock data for now)
+  const fetchPrescriptions = async (page: number = 1, size: number = 10) => {
+    try {
+      setLoading(true)
+      // Simulate API delay
+      await new Promise(resolve => setTimeout(resolve, 500))
+      
+      const startIndex = (page - 1) * size
+      const endIndex = startIndex + size
+      const paginatedData = mockPrescriptions.slice(startIndex, endIndex)
+      
+      setPrescriptions(paginatedData)
+      setTotal(mockPrescriptions.length)
+      setCurrentPage(page)
+      setPageSize(size)
+    } catch (error) {
+      message.error('Lỗi khi tải danh sách đơn thuốc')
+      console.error('Error fetching prescriptions:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    fetchPrescriptions()
+  }, [])
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -117,7 +233,7 @@ export const PrescriptionList: React.FC = () => {
       case 'DANG_THUC_HIEN':
         return 'orange'
       case 'HOAN_THANH':
-        return 'green'
+        return 'purple'
       case 'HUY_BO':
         return 'red'
       default:
@@ -128,22 +244,23 @@ export const PrescriptionList: React.FC = () => {
   const getStatusText = (status: string) => {
     switch (status) {
       case 'MOI_TAO':
-        return t('prescription.status.new')
+        return 'Mới tạo'
       case 'DA_DUYET':
-        return t('prescription.status.approved')
+        return 'Đã duyệt'
       case 'DANG_THUC_HIEN':
-        return t('prescription.status.inProgress')
+        return 'Đang thực hiện'
       case 'HOAN_THANH':
-        return t('prescription.status.completed')
+        return 'Hoàn thành'
       case 'HUY_BO':
-        return t('prescription.status.cancelled')
+        return 'Hủy bỏ'
       default:
         return status
     }
   }
 
   const handleSearch = (value: string) => {
-    setSearchText(value)
+    // TODO: Implement search functionality
+    console.log('Search:', value)
   }
 
   const handleAdd = () => {
@@ -152,84 +269,101 @@ export const PrescriptionList: React.FC = () => {
     setIsModalVisible(true)
   }
 
-  const handleEdit = (prescription: Prescription) => {
+  const handleEdit = (prescription: DonThuocResponse) => {
     setEditingPrescription(prescription)
     form.setFieldsValue({
       benhNhanId: prescription.benhNhan.id,
       bacSiKeDon: prescription.bacSiKeDon,
-      ghiChu: prescription.ghiChu
+      ghiChu: prescription.ghiChu,
     })
     setIsModalVisible(true)
   }
 
-  const handleView = (prescription: Prescription) => {
-    // Navigate to prescription detail page
+  const handleView = (prescription: DonThuocResponse) => {
     navigate(`/prescriptions/${prescription.id}`)
   }
 
   const handleDelete = (id: number) => {
-    setPrescriptions(prescriptions.filter(p => p.id !== id))
-    message.success(t('prescription.deleteSuccess'))
+    Modal.confirm({
+      title: 'Xác nhận xóa',
+      content: 'Bạn có chắc chắn muốn xóa đơn thuốc này?',
+      onOk: async () => {
+        try {
+          // Simulate API call
+          await new Promise(resolve => setTimeout(resolve, 500))
+          setPrescriptions(prescriptions.filter(p => p.id !== id))
+          message.success('Xóa đơn thuốc thành công')
+          fetchPrescriptions(currentPage, pageSize)
+        } catch (error) {
+          message.error('Lỗi khi xóa đơn thuốc')
+          console.error('Error deleting prescription:', error)
+        }
+      },
+    })
   }
 
-  const handleModalOk = () => {
-    form.validateFields().then((values) => {
+  const handleModalOk = async () => {
+    try {
+      const values = await form.validateFields()
       if (editingPrescription) {
-        // Update prescription
-        setPrescriptions(prescriptions.map(p => 
-          p.id === editingPrescription.id 
-            ? { ...p, ...values }
-            : p
-        ))
-        message.success(t('prescription.updateSuccess'))
+        // Update existing prescription
+        await new Promise(resolve => setTimeout(resolve, 500))
+        const updatedPrescription = { ...editingPrescription, ...values }
+        setPrescriptions(prescriptions.map(p => p.id === editingPrescription.id ? updatedPrescription : p))
+        message.success('Cập nhật đơn thuốc thành công')
       } else {
-        // Create new prescription
-        const newPrescription: Prescription = {
+        // Add new prescription
+        await new Promise(resolve => setTimeout(resolve, 500))
+        const newPrescription: DonThuocResponse = {
           id: Date.now(),
           maDonThuoc: `DT${String(Date.now()).slice(-3)}`,
-          benhNhan: {
-            id: values.benhNhanId,
-            hoTen: 'Bệnh nhân mới'
-          },
+          benhNhan: mockPrescriptions[0].benhNhan, // Mock patient
           bacSiKeDon: values.bacSiKeDon,
           ghiChu: values.ghiChu,
           trangThai: 'MOI_TAO',
           ngayKeDon: new Date().toISOString(),
           danhSachThuoc: []
         }
-        setPrescriptions([...prescriptions, newPrescription])
-        message.success(t('prescription.createSuccess'))
+        setPrescriptions([newPrescription, ...prescriptions])
+        message.success('Thêm đơn thuốc thành công')
       }
       setIsModalVisible(false)
-    })
+      form.resetFields()
+      fetchPrescriptions(currentPage, pageSize)
+    } catch (error) {
+      message.error('Lỗi khi lưu đơn thuốc')
+      console.error('Error saving prescription:', error)
+    }
+  }
+
+  const handlePageChange = (page: number, size?: number) => {
+    fetchPrescriptions(page, size || pageSize)
   }
 
   const columns = [
     {
-      title: t('prescription.prescriptionCode'),
+      title: 'Mã đơn thuốc',
       dataIndex: 'maDonThuoc',
       key: 'maDonThuoc',
+      width: 120,
     },
     {
-      title: t('prescription.patientName'),
+      title: 'Bệnh nhân',
       dataIndex: ['benhNhan', 'hoTen'],
-      key: 'patientName',
+      key: 'benhNhan',
+      width: 150,
     },
     {
-      title: t('prescription.doctorName'),
+      title: 'Bác sĩ kê đơn',
       dataIndex: 'bacSiKeDon',
-      key: 'doctorName',
+      key: 'bacSiKeDon',
+      width: 150,
     },
     {
-      title: t('prescription.prescriptionDate'),
-      dataIndex: 'ngayKeDon',
-      key: 'prescriptionDate',
-      render: (date: string) => dayjs(date).format('DD/MM/YYYY HH:mm'),
-    },
-    {
-      title: t('prescription.prescriptionStatus'),
+      title: 'Trạng thái',
       dataIndex: 'trangThai',
-      key: 'status',
+      key: 'trangThai',
+      width: 120,
       render: (status: string) => (
         <Tag color={getStatusColor(status)}>
           {getStatusText(status)}
@@ -237,46 +371,50 @@ export const PrescriptionList: React.FC = () => {
       ),
     },
     {
-      title: t('common.actions'),
+      title: 'Ngày kê đơn',
+      dataIndex: 'ngayKeDon',
+      key: 'ngayKeDon',
+      width: 120,
+      render: (date: string) => dayjs(date).format('DD/MM/YYYY HH:mm'),
+    },
+    {
+      title: 'Số thuốc',
+      dataIndex: 'danhSachThuoc',
+      key: 'soThuoc',
+      width: 100,
+      render: (danhSachThuoc: DonThuocResponse['danhSachThuoc']) => danhSachThuoc?.length || 0,
+    },
+    {
+      title: 'Thao tác',
       key: 'actions',
-      render: (_: unknown, record: Prescription) => (
+      width: 120,
+      render: (_: unknown, record: DonThuocResponse) => (
         <Space>
-          <Button
-            type="text"
-            icon={<EyeOutlined />}
+          <Button 
+            type="text" 
+            icon={<EyeOutlined />} 
+            size="small"
             onClick={() => handleView(record)}
-            title={t('common.view')}
+            style={{ color: '#1890ff' }}
           />
-          <Button
-            type="text"
-            icon={<EditOutlined />}
+          <Button 
+            type="text" 
+            icon={<EditOutlined />} 
+            size="small"
             onClick={() => handleEdit(record)}
-            title={t('common.edit')}
+            style={{ color: '#52c41a' }}
           />
-          <Popconfirm
-            title={t('prescription.deleteConfirm')}
-            description={t('prescription.deleteWarning')}
-            onConfirm={() => handleDelete(record.id)}
-            okText={t('common.save')}
-            cancelText={t('common.cancel')}
-          >
-            <Button
-              type="text"
-              danger
-              icon={<DeleteOutlined />}
-              title={t('common.delete')}
-            />
-          </Popconfirm>
+          <Button 
+            type="text" 
+            icon={<DeleteOutlined />} 
+            size="small"
+            onClick={() => handleDelete(record.id)}
+            style={{ color: '#ff4d4f' }}
+          />
         </Space>
       ),
     },
   ]
-
-  const filteredPrescriptions = prescriptions.filter(prescription =>
-    prescription.maDonThuoc.toLowerCase().includes(searchText.toLowerCase()) ||
-    prescription.benhNhan.hoTen.toLowerCase().includes(searchText.toLowerCase()) ||
-    prescription.bacSiKeDon.toLowerCase().includes(searchText.toLowerCase())
-  )
 
   return (
     <div>
@@ -308,25 +446,35 @@ export const PrescriptionList: React.FC = () => {
 
         <Table
           columns={columns}
-          dataSource={filteredPrescriptions}
+          dataSource={prescriptions}
           rowKey="id"
-          pagination={{
-            total: filteredPrescriptions.length,
-            pageSize: 10,
-            showSizeChanger: true,
-            showQuickJumper: true,
-            showTotal: (total, range) =>
-              `${range[0]}-${range[1]} of ${total} ${t('prescription.prescriptions')}`,
-          }}
+          loading={loading}
+          pagination={false}
         />
+
+        <div style={{ textAlign: 'center', marginTop: '20px' }}>
+          <Pagination
+            current={currentPage}
+            pageSize={pageSize}
+            total={total}
+            showSizeChanger
+            showQuickJumper
+            showTotal={(total, range) => `${range[0]}-${range[1]} của ${total} đơn thuốc`}
+            onChange={handlePageChange}
+            onShowSizeChange={handlePageChange}
+          />
+        </div>
       </Card>
 
+      {/* Modal thêm/sửa đơn thuốc */}
       <Modal
-        title={editingPrescription ? t('prescription.editPrescription') : t('prescription.addPrescription')}
+        title={editingPrescription ? 'Chỉnh sửa đơn thuốc' : 'Thêm đơn thuốc mới'}
         open={isModalVisible}
         onOk={handleModalOk}
         onCancel={() => setIsModalVisible(false)}
         width={600}
+        okText="Lưu"
+        cancelText="Hủy"
       >
         <Form
           form={form}
@@ -334,28 +482,31 @@ export const PrescriptionList: React.FC = () => {
         >
           <Form.Item
             name="benhNhanId"
-            label={t('prescription.patientName')}
-            rules={[{ required: true, message: t('validation.required', { field: t('prescription.patientName') }) }]}
+            label="Bệnh nhân"
+            rules={[{ required: true, message: 'Vui lòng chọn bệnh nhân' }]}
           >
-            <Select placeholder={t('prescription.patientName')}>
-              <Option value={1}>Nguyễn Văn A</Option>
-              <Option value={2}>Trần Thị B</Option>
+            <Select placeholder="Chọn bệnh nhân">
+              {mockPrescriptions.map(prescription => (
+                <Option key={prescription.benhNhan.id} value={prescription.benhNhan.id}>
+                  {prescription.benhNhan.hoTen} - {prescription.benhNhan.maBenhNhan}
+                </Option>
+              ))}
             </Select>
           </Form.Item>
           
           <Form.Item
             name="bacSiKeDon"
-            label={t('prescription.doctorName')}
-            rules={[{ required: true, message: t('validation.required', { field: t('prescription.doctorName') }) }]}
+            label="Bác sĩ kê đơn"
+            rules={[{ required: true, message: 'Vui lòng nhập tên bác sĩ' }]}
           >
-            <Input />
+            <Input placeholder="Nhập tên bác sĩ kê đơn" />
           </Form.Item>
           
           <Form.Item
             name="ghiChu"
-            label={t('prescription.prescriptionNotes')}
+            label="Ghi chú"
           >
-            <Input.TextArea rows={3} />
+            <Input.TextArea rows={3} placeholder="Nhập ghi chú cho đơn thuốc" />
           </Form.Item>
         </Form>
       </Modal>
