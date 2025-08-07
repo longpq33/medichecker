@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { 
   Typography, 
   Tag, 
@@ -23,7 +23,8 @@ import {
   PlusOutlined,
   FileTextOutlined,
   TeamOutlined,
-  AlertOutlined
+  AlertOutlined,
+  EditOutlined
 } from '@ant-design/icons'
 import { useParams, useNavigate } from 'react-router-dom'
 import dayjs from 'dayjs'
@@ -37,6 +38,8 @@ import {
 } from './styled'
 import { usePatient } from '@/hooks/usePatients'
 import { useLanguage } from '@/hooks/useLanguage'
+import { EditTreatmentModal } from './components/EditTreatmentModal'
+import type { LichSuDieuTriResponse } from '@/types'
 
 const { Text, Title } = Typography
 
@@ -46,8 +49,12 @@ export const PatientDetail: React.FC = () => {
   const navigate = useNavigate()
   const { t } = useLanguage()
   
+  // State cho edit modal
+  const [editModalVisible, setEditModalVisible] = useState(false)
+  const [selectedTreatment, setSelectedTreatment] = useState<LichSuDieuTriResponse | null>(null)
+  
   // Sử dụng hook
-  const { patient, isLoadingPatient } = usePatient(parseInt(id || '0'))
+  const { patient, isLoadingPatient, refetchPatient } = usePatient(parseInt(id || '0'))
 
   const getGenderText = (gender?: string) => {
     switch (gender) {
@@ -94,6 +101,22 @@ export const PatientDetail: React.FC = () => {
 
   const handleAddTreatment = () => {
     navigate(`/patients/${id}/add-treatment`)
+  }
+
+  const handleEditTreatment = (treatment: LichSuDieuTriResponse) => {
+    setSelectedTreatment(treatment)
+    setEditModalVisible(true)
+  }
+
+  const handleEditSuccess = () => {
+    setEditModalVisible(false)
+    setSelectedTreatment(null)
+    refetchPatient()
+  }
+
+  const handleEditCancel = () => {
+    setEditModalVisible(false)
+    setSelectedTreatment(null)
   }
 
   if (isLoadingPatient) {
@@ -379,6 +402,24 @@ export const PatientDetail: React.FC = () => {
                         </div>
                       )}
                     </div>
+                    
+                    {/* Edit Button */}
+                    <div style={{ marginLeft: '16px' }}>
+                      <Tag
+                        style={{ 
+                          cursor: 'pointer',
+                          backgroundColor: '#f0f9ff',
+                          color: '#0369a1',
+                          border: '1px solid #0ea5e9',
+                          borderRadius: '6px',
+                          padding: '4px 8px'
+                        }}
+                        onClick={() => handleEditTreatment(treatment)}
+                      >
+                        <EditOutlined style={{ marginRight: '4px' }} />
+                        {t('common.edit')}
+                      </Tag>
+                    </div>
                   </div>
                 </Card>
               ))}
@@ -488,6 +529,14 @@ export const PatientDetail: React.FC = () => {
           </AddTreatmentButton>
         </div>
       </div>
+
+      <EditTreatmentModal
+        visible={editModalVisible}
+        treatment={selectedTreatment}
+        patientId={parseInt(id || '0')}
+        onSuccess={handleEditSuccess}
+        onCancel={handleEditCancel}
+      />
     </div>
   )
 } 

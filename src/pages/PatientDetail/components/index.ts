@@ -1,0 +1,1 @@
+export { EditTreatmentModal } from './EditTreatmentModal' 

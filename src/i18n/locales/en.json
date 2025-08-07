@@ -193,6 +193,7 @@
   },
   "treatment": {
     "title": "Add New Treatment",
+    "editTitle": "Edit Treatment",
     "diagnosisInfo": "Diagnosis Information",
     "diagnosisCode": "Diagnosis Code",
     "diagnosisCodePlaceholder": "Enter diagnosis code...",
@@ -237,6 +238,7 @@
     "confirmCancel": "Confirm Cancel",
     "cancelMessage": "Are you sure you want to cancel? Unsaved data will be lost.",
     "successMessage": "Treatment added successfully!",
+    "updateSuccessMessage": "Treatment updated successfully!",
     "errorMessage": "An error occurred, please try again",
     "validation": {
       "noMedicines": "Please add at least one medicine",

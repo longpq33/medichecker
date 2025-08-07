@@ -193,6 +193,7 @@
   },
   "treatment": {
     "title": "Thêm Điều Trị Mới",
+    "editTitle": "Chỉnh sửa điều trị",
     "diagnosisInfo": "Thông tin chẩn đoán",
     "diagnosisCode": "Mã chẩn đoán",
     "diagnosisCodePlaceholder": "Nhập mã chẩn đoán...",
@@ -237,6 +238,7 @@
     "confirmCancel": "Xác nhận hủy",
     "cancelMessage": "Bạn có chắc chắn muốn hủy? Dữ liệu chưa lưu sẽ bị mất.",
     "successMessage": "Thêm điều trị thành công!",
+    "updateSuccessMessage": "Cập nhật điều trị thành công!",
     "errorMessage": "Có lỗi xảy ra, vui lòng thử lại",
     "validation": {
       "noMedicines": "Vui lòng thêm ít nhất một loại thuốc",

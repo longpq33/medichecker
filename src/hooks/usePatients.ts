@@ -81,6 +81,7 @@ export const usePatient = (id: number) => {
     data: patient,
     isLoading: isLoadingPatient,
     error: patientError,
+    refetch: refetchPatient,
   } = useQuery({
     queryKey: ['patient', id],
     queryFn: () => patientService.getChiTietBenhNhan(id),
@@ -91,5 +92,6 @@ export const usePatient = (id: number) => {
     patient,
     isLoadingPatient,
     patientError,
+    refetchPatient,
   }
 } 

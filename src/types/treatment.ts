@@ -6,7 +6,7 @@ export interface LichSuDieuTriRequest {
   chanDoanPhu?: string
   trieuChung?: string
   bacSiDieuTri: string
-  trangThai: 'MOI_TAO' | 'DA_DUYET' | 'DANG_DIEU_TRI' | 'HOAN_THANH' | 'HUY_BO'
+  trangThai: 'MOI_TAO' | 'DA_DUYET' | 'DANG_DIEU_TRI' | 'HOAN_THANH' | 'HUY_BO' | 'DANG_THUC_HIEN'
   ngayBatDau: string
   donThuocDieuTri?: DonThuocDieuTriRequest
 }
