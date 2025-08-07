@@ -30,27 +30,31 @@ export const PatientTable: React.FC<PatientTableProps> = ({
       title: t('patient.patientCode'),
       dataIndex: 'maBenhNhan',
       key: 'maBenhNhan',
-      width: 120,
+      width: 140,
     },
     {
       title: t('patient.fullName'),
       dataIndex: 'hoTen',
       key: 'hoTen',
+      width: 200,
     },
     {
       title: t('common.phone'),
       dataIndex: 'soDienThoai',
       key: 'soDienThoai',
+      width: 150,
     },
     {
       title: t('common.email'),
       dataIndex: 'email',
       key: 'email',
+      width: 200,
     },
     {
       title: t('common.gender'),
       dataIndex: 'gioiTinh',
       key: 'gioiTinh',
+      width: 120,
       render: (gender?: string) => (
         <Tag color={getGenderColor(gender)}>
           {getGenderText(gender)}
@@ -61,18 +65,20 @@ export const PatientTable: React.FC<PatientTableProps> = ({
       title: t('common.address'),
       dataIndex: 'diaChi',
       key: 'diaChi',
+      width: 250,
       ellipsis: true,
     },
     {
       title: t('common.createdDate'),
       dataIndex: 'ngayTao',
       key: 'ngayTao',
+      width: 140,
       render: (date: string) => new Date(date).toLocaleDateString('vi-VN'),
     },
     {
       title: t('common.actions'),
       key: 'actions',
-      width: 120,
+      width: 140,
       render: (_: unknown, record: BenhNhanResponse) => (
         <Space>
           <Button 

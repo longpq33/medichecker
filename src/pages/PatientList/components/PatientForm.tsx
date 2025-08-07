@@ -30,6 +30,12 @@ export const PatientForm: React.FC<PatientFormProps> = ({
       onOk={onOk}
       onCancel={onCancel}
       width={600}
+      style={{ top: 20 }}
+      bodyStyle={{ 
+        maxHeight: '70vh', 
+        overflowY: 'auto',
+        paddingRight: '8px'
+      }}
     >
       <Form
         form={form}

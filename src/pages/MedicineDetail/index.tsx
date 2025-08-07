@@ -15,7 +15,6 @@ import {
 } from 'antd'
 import { 
   ArrowLeftOutlined, 
-  EditOutlined, 
   MedicineBoxOutlined,
   DollarOutlined,
   CalendarOutlined,
@@ -144,9 +143,9 @@ export const MedicineDetail: React.FC = () => {
   const isExpiringSoon = dayjs(medicine.ngayHetHan).diff(dayjs(), 'month') <= 3
 
   return (
-    <div style={{ padding: '24px' }}>
+    <div>
       <Card>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '24px' }}>
           <Space>
             <Button 
               icon={<ArrowLeftOutlined />} 
@@ -157,11 +156,6 @@ export const MedicineDetail: React.FC = () => {
             <Title level={3} style={{ margin: 0 }}>
               {t('medicine.medicineInfo')} - {medicine.maThuoc}
             </Title>
-          </Space>
-          <Space>
-            <Button icon={<EditOutlined />} type="primary">
-              {t('common.edit')}
-            </Button>
           </Space>
         </div>
 

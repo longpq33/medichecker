@@ -1,172 +1,69 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { 
-  Modal,
   Form,
   message,
   Pagination
 } from 'antd'
 import { useNavigate } from 'react-router-dom'
-import { MedicineForm, MedicineTable, MedicineHeader } from './components'
+import { MedicineForm, MedicineTable, MedicineHeader, DeleteMedicineModal } from './components'
+import { useMedicines } from '@/hooks/useMedicines'
+import { useLanguage } from '@/hooks/useLanguage'
 import type { ThuocResponse } from '@/types'
 import { MedicineListContainer } from './styled'
 
-// Mock data cho development
-const mockMedicines: ThuocResponse[] = [
-  {
-    id: 1,
-    maThuoc: 'TH001',
-    tenThuoc: 'Paracetamol 500mg',
-    tenHoatChat: 'Paracetamol',
-    nongDo: '500mg',
-    dangBaoChe: 'Viên nén',
-    hangSanXuat: 'Công ty Dược phẩm A',
-    nuocSanXuat: 'Việt Nam',
-    giaBan: 5000,
-    donViTinh: 'Viên',
-    chiDinh: 'Giảm đau, hạ sốt',
-    chongChiDinh: 'Dị ứng với Paracetamol',
-    nhomThuoc: 'GIAM_DAU',
-    kichHoat: true,
-    ngayTao: '2024-01-15T10:00:00'
-  },
-  {
-    id: 2,
-    maThuoc: 'TH002',
-    tenThuoc: 'Amoxicillin 250mg',
-    tenHoatChat: 'Amoxicillin',
-    nongDo: '250mg',
-    dangBaoChe: 'Viên nang',
-    hangSanXuat: 'Công ty Dược phẩm B',
-    nuocSanXuat: 'Việt Nam',
-    giaBan: 15000,
-    donViTinh: 'Viên',
-    chiDinh: 'Điều trị nhiễm khuẩn',
-    chongChiDinh: 'Dị ứng với Penicillin',
-    nhomThuoc: 'KHANG_SINH',
-    kichHoat: true,
-    ngayTao: '2024-01-16T14:30:00'
-  },
-  {
-    id: 3,
-    maThuoc: 'TH003',
-    tenThuoc: 'Vitamin C 1000mg',
-    tenHoatChat: 'Ascorbic Acid',
-    nongDo: '1000mg',
-    dangBaoChe: 'Viên sủi',
-    hangSanXuat: 'Công ty Dược phẩm C',
-    nuocSanXuat: 'Việt Nam',
-    giaBan: 8000,
-    donViTinh: 'Viên',
-    chiDinh: 'Bổ sung vitamin C',
-    chongChiDinh: 'Không có',
-    nhomThuoc: 'KHAC',
-    kichHoat: true,
-    ngayTao: '2024-01-17T09:15:00'
-  },
-  {
-    id: 4,
-    maThuoc: 'TH004',
-    tenThuoc: 'Ibuprofen 400mg',
-    tenHoatChat: 'Ibuprofen',
-    nongDo: '400mg',
-    dangBaoChe: 'Viên nén',
-    hangSanXuat: 'Công ty Dược phẩm D',
-    nuocSanXuat: 'Việt Nam',
-    giaBan: 12000,
-    donViTinh: 'Viên',
-    chiDinh: 'Giảm đau, chống viêm',
-    chongChiDinh: 'Loét dạ dày',
-    nhomThuoc: 'CHONG_VIEM',
-    kichHoat: true,
-    ngayTao: '2024-01-18T11:45:00'
-  },
-  {
-    id: 5,
-    maThuoc: 'TH005',
-    tenThuoc: 'Amlodipine 5mg',
-    tenHoatChat: 'Amlodipine',
-    nongDo: '5mg',
-    dangBaoChe: 'Viên nén',
-    hangSanXuat: 'Công ty Dược phẩm E',
-    nuocSanXuat: 'Việt Nam',
-    giaBan: 25000,
-    donViTinh: 'Viên',
-    chiDinh: 'Điều trị tăng huyết áp',
-    chongChiDinh: 'Suy tim nặng',
-    nhomThuoc: 'TIM_MACH',
-    kichHoat: true,
-    ngayTao: '2024-01-19T16:20:00'
-  }
-]
-
 export const MedicineList: React.FC = () => {
-  const [medicines, setMedicines] = useState<ThuocResponse[]>(mockMedicines)
-  const [loading, setLoading] = useState(false)
+  const { t } = useLanguage()
   const [searchText, setSearchText] = useState('')
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [editingMedicine, setEditingMedicine] = useState<ThuocResponse | null>(null)
   const [form] = Form.useForm()
   const navigate = useNavigate()
   
+  // Delete modal state
+  const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false)
+  const [deletingMedicine, setDeletingMedicine] = useState<ThuocResponse | null>(null)
+  
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1)
   const [pageSize, setPageSize] = useState(10)
-  const [total, setTotal] = useState(mockMedicines.length)
 
-  // Fetch medicines (using mock data for now)
-  const fetchMedicines = async (page: number = 1, size: number = 10, keyword?: string) => {
-    try {
-      setLoading(true)
-      // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 500))
-      
-      let filteredData = mockMedicines
-      if (keyword) {
-        filteredData = mockMedicines.filter(medicine =>
-          medicine.tenThuoc.toLowerCase().includes(keyword.toLowerCase()) ||
-          medicine.maThuoc.toLowerCase().includes(keyword.toLowerCase()) ||
-          medicine.tenHoatChat?.toLowerCase().includes(keyword.toLowerCase())
-        )
-      }
-      
-      const startIndex = (page - 1) * size
-      const endIndex = startIndex + size
-      const paginatedData = filteredData.slice(startIndex, endIndex)
-      
-      setMedicines(paginatedData)
-      setTotal(filteredData.length)
-      setCurrentPage(page)
-      setPageSize(size)
-    } catch (error) {
-      message.error('Lỗi khi tải danh sách thuốc')
-      console.error('Error fetching medicines:', error)
-    } finally {
-      setLoading(false)
-    }
-  }
+  // Sử dụng hook
+  const {
+    medicinesData,
+    isLoadingMedicines,
+    createMedicine,
+    updateMedicine,
+    deleteMedicine,
+  } = useMedicines(
+    { 
+      page: currentPage - 1, 
+      size: pageSize,
+      sort: ['tenThuoc']
+    },
+    searchText
+  )
 
-  useEffect(() => {
-    fetchMedicines()
-  }, [])
+  const medicines = medicinesData?.content || []
+  const total = medicinesData?.totalElements || 0
 
   const getNhomThuocText = (nhomThuoc?: string) => {
     switch (nhomThuoc) {
       case 'KHANG_SINH':
-        return 'Kháng sinh'
+        return t('medicine.groups.antibiotic')
       case 'GIAM_DAU':
-        return 'Giảm đau'
+        return t('medicine.groups.painkiller')
       case 'CHONG_VIEM':
-        return 'Chống viêm'
+        return t('medicine.groups.antiInflammatory')
       case 'TIM_MACH':
-        return 'Tim mạch'
+        return t('medicine.groups.cardiovascular')
       case 'TIEU_HOA':
-        return 'Tiêu hóa'
+        return t('medicine.groups.digestive')
       case 'HOI_SUC':
-        return 'Hồi sức'
+        return t('medicine.groups.respiratory')
       case 'KHAC':
-        return 'Khác'
+        return t('medicine.groups.other')
       default:
-        return 'Chưa phân loại'
+        return t('medicine.noData')
     }
   }
 
@@ -193,7 +90,7 @@ export const MedicineList: React.FC = () => {
 
   const handleSearch = (value: string) => {
     setSearchText(value)
-    fetchMedicines(1, pageSize, value)
+    setCurrentPage(1) // Reset về trang đầu khi search
   }
 
   const handleAdd = () => {
@@ -225,57 +122,53 @@ export const MedicineList: React.FC = () => {
   }
 
   const handleDelete = (id: number) => {
-    Modal.confirm({
-      title: 'Xác nhận xóa',
-      content: 'Bạn có chắc chắn muốn xóa thuốc này?',
-      onOk: async () => {
-        try {
-          // Simulate API call
-          await new Promise(resolve => setTimeout(resolve, 500))
-          setMedicines(medicines.filter(m => m.id !== id))
-          message.success('Xóa thuốc thành công')
-          fetchMedicines(currentPage, pageSize, searchText)
-        } catch (error) {
-          message.error('Lỗi khi xóa thuốc')
-          console.error('Error deleting medicine:', error)
-        }
-      },
-    })
+    const medicine = medicines.find(m => m.id === id)
+    if (medicine) {
+      setDeletingMedicine(medicine)
+      setIsDeleteModalVisible(true)
+    }
+  }
+
+  const handleDeleteConfirm = async () => {
+    if (deletingMedicine) {
+      try {
+        await deleteMedicine(deletingMedicine.id)
+        setIsDeleteModalVisible(false)
+        setDeletingMedicine(null)
+      } catch {
+        message.error(t('medicine.deleteError'))
+      }
+    }
+  }
+
+  const handleDeleteCancel = () => {
+    setIsDeleteModalVisible(false)
+    setDeletingMedicine(null)
   }
 
   const handleModalOk = async () => {
     try {
       const values = await form.validateFields()
+      
       if (editingMedicine) {
         // Update existing medicine
-        await new Promise(resolve => setTimeout(resolve, 500))
-        const updatedMedicine = { ...editingMedicine, ...values }
-        setMedicines(medicines.map(m => m.id === editingMedicine.id ? updatedMedicine : m))
-        message.success('Cập nhật thuốc thành công')
+        await updateMedicine({ id: editingMedicine.id, data: values })
       } else {
         // Add new medicine
-        await new Promise(resolve => setTimeout(resolve, 500))
-        const newMedicine: ThuocResponse = {
-          id: Date.now(),
-          maThuoc: `TH${String(Date.now()).slice(-3)}`,
-          ...values,
-          kichHoat: true,
-          ngayTao: new Date().toISOString()
-        }
-        setMedicines([newMedicine, ...medicines])
-        message.success('Thêm thuốc thành công')
+        await createMedicine(values)
       }
       setIsModalVisible(false)
       form.resetFields()
-      fetchMedicines(currentPage, pageSize, searchText)
-    } catch (error) {
-      message.error('Lỗi khi lưu thuốc')
-      console.error('Error saving medicine:', error)
+    } catch {
+      message.error(t('medicine.createError'))
     }
   }
 
   const handlePageChange = (page: number, size?: number) => {
-    fetchMedicines(page, size || pageSize, searchText)
+    setCurrentPage(page)
+    if (size) {
+      setPageSize(size)
+    }
   }
 
   return (
@@ -287,7 +180,7 @@ export const MedicineList: React.FC = () => {
       
       <MedicineTable
         medicines={medicines}
-        loading={loading}
+        loading={isLoadingMedicines}
         onEdit={handleEdit}
         onDelete={handleDelete}
         onView={handleView}
@@ -314,6 +207,14 @@ export const MedicineList: React.FC = () => {
         onCancel={() => setIsModalVisible(false)}
         onOk={handleModalOk}
         form={form}
+      />
+
+      <DeleteMedicineModal
+        visible={isDeleteModalVisible}
+        medicine={deletingMedicine}
+        onCancel={handleDeleteCancel}
+        onConfirm={handleDeleteConfirm}
+        loading={false}
       />
     </MedicineListContainer>
   )
