@@ -2,6 +2,7 @@ import React from 'react'
 import { Input, Space } from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
 import { Button } from '@/components/Button'
+import { useLanguage } from '@/hooks/useLanguage'
 import { SPACING } from '@/constants'
 
 const { Search } = Input
@@ -12,6 +13,8 @@ interface PatientHeaderProps {
 }
 
 export const PatientHeader: React.FC<PatientHeaderProps> = ({ onAdd, onSearch }) => {
+  const { t } = useLanguage()
+
   return (
     <div style={{ 
       display: 'flex', 
@@ -19,10 +22,10 @@ export const PatientHeader: React.FC<PatientHeaderProps> = ({ onAdd, onSearch })
       alignItems: 'center', 
       marginBottom: SPACING.MARGIN_MD 
     }}>
-      <h2>Quản lý bệnh nhân</h2>
+      <h2>{t('patient.title')}</h2>
       <Space>
         <Search
-          placeholder="Tìm kiếm bệnh nhân..."
+          placeholder={t('patient.searchPatient')}
           allowClear
           onSearch={onSearch}
           style={{ width: 300 }}
@@ -32,7 +35,7 @@ export const PatientHeader: React.FC<PatientHeaderProps> = ({ onAdd, onSearch })
           icon={<PlusOutlined />}
           onClick={onAdd}
         >
-          Thêm bệnh nhân mới
+          {t('patient.addPatient')}
         </Button>
       </Space>
     </div>

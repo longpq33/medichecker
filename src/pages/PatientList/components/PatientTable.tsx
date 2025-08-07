@@ -2,6 +2,7 @@ import React from 'react'
 import { Table, Tag, Button, Space } from 'antd'
 import { EditOutlined, DeleteOutlined, EyeOutlined } from '@ant-design/icons'
 import type { BenhNhanResponse } from '@/types'
+import { useLanguage } from '@/hooks/useLanguage'
 
 interface PatientTableProps {
   patients: BenhNhanResponse[]
@@ -22,30 +23,32 @@ export const PatientTable: React.FC<PatientTableProps> = ({
   getGenderText,
   getGenderColor
 }) => {
+  const { t } = useLanguage()
+
   const columns = [
     {
-      title: 'Mã BN',
+      title: t('patient.patientCode'),
       dataIndex: 'maBenhNhan',
       key: 'maBenhNhan',
       width: 120,
     },
     {
-      title: 'Họ tên',
+      title: t('patient.fullName'),
       dataIndex: 'hoTen',
       key: 'hoTen',
     },
     {
-      title: 'Số điện thoại',
+      title: t('common.phone'),
       dataIndex: 'soDienThoai',
       key: 'soDienThoai',
     },
     {
-      title: 'Email',
+      title: t('common.email'),
       dataIndex: 'email',
       key: 'email',
     },
     {
-      title: 'Giới tính',
+      title: t('common.gender'),
       dataIndex: 'gioiTinh',
       key: 'gioiTinh',
       render: (gender?: string) => (
@@ -55,19 +58,19 @@ export const PatientTable: React.FC<PatientTableProps> = ({
       ),
     },
     {
-      title: 'Địa chỉ',
+      title: t('common.address'),
       dataIndex: 'diaChi',
       key: 'diaChi',
       ellipsis: true,
     },
     {
-      title: 'Ngày tạo',
+      title: t('common.createdDate'),
       dataIndex: 'ngayTao',
       key: 'ngayTao',
       render: (date: string) => new Date(date).toLocaleDateString('vi-VN'),
     },
     {
-      title: 'Thao tác',
+      title: t('common.actions'),
       key: 'actions',
       width: 120,
       render: (_: unknown, record: BenhNhanResponse) => (

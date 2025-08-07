@@ -39,6 +39,7 @@ export const StyledSider = styled(Sider)`
       display: flex;
       justify-content: center;
       align-items: center;
+      font-weight: 400;
       
       &:hover {
         background: rgba(255, 255, 255, 0.1) !important;
@@ -48,6 +49,7 @@ export const StyledSider = styled(Sider)`
       &.ant-menu-item-selected {
         background: rgba(255, 255, 255, 0.2) !important;
         box-shadow: none;
+        font-weight: 500;
         
         &::before {
           display: none;
@@ -75,14 +77,16 @@ export const StyledHeader = styled(Header)`
   width: 100% !important;
   min-width: 0;
   height: 72px;
-  position: sticky;
+  position: fixed;
   top: 0;
+  right: 0;
   z-index: 999;
   border-bottom: 1px solid ${COLORS.BORDER_PRIMARY};
 `
 
 export const StyledContent = styled(Content)`
   padding: ${SPACING.PADDING_XL};
+  padding-top: calc(72px + ${SPACING.PADDING_XL});
   background: ${COLORS.BG_PRIMARY};
   min-height: calc(100vh - 72px);
   width: 100% !important;

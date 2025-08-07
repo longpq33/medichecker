@@ -2,6 +2,7 @@ import React from 'react'
 import { Modal, Form, Input, Select, DatePicker } from 'antd'
 import type { FormInstance } from 'antd/es/form'
 import type { BenhNhanResponse } from '@/types'
+import { useLanguage } from '@/hooks/useLanguage'
 
 const { Option } = Select
 
@@ -20,9 +21,11 @@ export const PatientForm: React.FC<PatientFormProps> = ({
   onOk,
   form
 }) => {
+  const { t } = useLanguage()
+
   return (
     <Modal
-      title={editingPatient ? 'Chỉnh sửa bệnh nhân' : 'Thêm bệnh nhân mới'}
+      title={editingPatient ? t('patient.editPatient') : t('patient.addPatient')}
       open={visible}
       onOk={onOk}
       onCancel={onCancel}
@@ -34,40 +37,40 @@ export const PatientForm: React.FC<PatientFormProps> = ({
       >
         <Form.Item
           name="hoTen"
-          label="Họ tên"
-          rules={[{ required: true, message: 'Vui lòng nhập họ tên' }]}
+          label={t('patient.fullName')}
+          rules={[{ required: true, message: t('patient.fullName') + ' ' + t('common.required') }]}
         >
           <Input />
         </Form.Item>
         
         <Form.Item
           name="ngaySinh"
-          label="Ngày sinh"
+          label={t('patient.dateOfBirth')}
         >
           <DatePicker 
             style={{ width: '100%' }}
             format="DD/MM/YYYY"
-            placeholder="Chọn ngày sinh"
+            placeholder={t('patient.dateOfBirth')}
           />
         </Form.Item>
         
         <Form.Item
           name="gioiTinh"
-          label="Giới tính"
+          label={t('common.gender')}
         >
-          <Select placeholder="Chọn giới tính">
-            <Option value="NAM">Nam</Option>
-            <Option value="NU">Nữ</Option>
-            <Option value="KHAC">Khác</Option>
+          <Select placeholder={t('common.gender')}>
+            <Option value="NAM">{t('common.male')}</Option>
+            <Option value="NU">{t('common.female')}</Option>
+            <Option value="KHAC">{t('common.other')}</Option>
           </Select>
         </Form.Item>
         
         <Form.Item
           name="soDienThoai"
-          label="Số điện thoại"
+          label={t('common.phone')}
           rules={[
-            { required: true, message: 'Vui lòng nhập số điện thoại' },
-            { pattern: /^[0-9]{10,11}$/, message: 'Số điện thoại không hợp lệ' }
+            { required: true, message: t('common.phone') + ' ' + t('common.required') },
+            { pattern: /^[0-9]{10,11}$/, message: t('common.phone') + ' ' + t('common.invalid') }
           ]}
         >
           <Input />
@@ -75,9 +78,9 @@ export const PatientForm: React.FC<PatientFormProps> = ({
         
         <Form.Item
           name="email"
-          label="Email"
+          label={t('common.email')}
           rules={[
-            { type: 'email', message: 'Email không hợp lệ' }
+            { type: 'email', message: t('common.email') + ' ' + t('common.invalid') }
           ]}
         >
           <Input />
@@ -85,14 +88,14 @@ export const PatientForm: React.FC<PatientFormProps> = ({
         
         <Form.Item
           name="diaChi"
-          label="Địa chỉ"
+          label={t('common.address')}
         >
           <Input.TextArea rows={3} />
         </Form.Item>
         
         <Form.Item
           name="soBaoHiem"
-          label="Số bảo hiểm"
+          label={t('patient.insurance')}
         >
           <Input />
         </Form.Item>

@@ -209,25 +209,37 @@ export const InfoCard = styled(Card)`
   }
   
   .info-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: ${SPACING.GAP_LG};
+    display: flex;
+    flex-direction: column;
+    gap: 0;
     
     .info-item {
       display: flex;
       align-items: center;
-      margin-bottom: ${SPACING.MARGIN_MD};
+      justify-content: space-between;
+      padding: ${SPACING.PADDING_MD} 0;
+      border-bottom: 1px solid ${COLORS.BORDER_SECONDARY};
+      
+      &:last-child {
+        border-bottom: none;
+      }
       
       .info-label {
+        display: flex;
+        align-items: center;
         font-weight: ${FONT_WEIGHT.MEDIUM};
         color: ${COLORS.TEXT_SECONDARY};
-        min-width: 120px;
+        min-width: 140px;
         margin-right: ${SPACING.MARGIN_MD};
+        font-size: ${FONT_SIZE.SM};
       }
       
       .info-value {
         color: ${COLORS.TEXT_PRIMARY};
         font-weight: ${FONT_WEIGHT.MEDIUM};
+        flex: 1;
+        text-align: right;
+        font-size: ${FONT_SIZE.SM};
       }
     }
   }

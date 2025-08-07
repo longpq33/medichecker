@@ -1,5 +1,6 @@
 // Types cho bệnh nhân
 import type { LichSuDieuTriResponse } from './treatment'
+import type { ThuocResponse } from './medicine'
 
 export interface BenhLyNen {
   id: number
@@ -12,9 +13,10 @@ export interface BenhLyNen {
 
 export interface DiUng {
   id: number
-  tenDiUng: string
-  moTa?: string
+  thuoc: ThuocResponse
+  trieuChung?: string
   mucDoNghiemTrong?: string
+  ngayPhatHien?: string
 }
 
 export interface BenhNhanRequest {

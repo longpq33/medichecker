@@ -19,8 +19,6 @@ import {
   MailOutlined,
   HomeOutlined,
   CalendarOutlined,
-  IdcardOutlined,
-  EditOutlined,
   ClockCircleOutlined,
   PlusOutlined,
   FileTextOutlined,
@@ -31,7 +29,6 @@ import { useParams, useNavigate } from 'react-router-dom'
 import dayjs from 'dayjs'
 import { 
   PatientHeader,
-  ActionButton,
   BackButton,
   PatientStats,
   InfoCard,
@@ -39,53 +36,15 @@ import {
   AddTreatmentButton
 } from './styled'
 import { usePatient } from '@/hooks/usePatients'
+import { useLanguage } from '@/hooks/useLanguage'
 
 const { Text, Title } = Typography
 
-// Mock data cho lịch sử điều trị - chỉ sử dụng khi API chưa sẵn sàng
-// const mockTreatmentHistory = [
-//   {
-//     id: 1,
-//     ngayKham: '2024-01-20T10:30:00',
-//     bacSi: 'BS. Trần Thị B',
-//     chuanDoan: 'Cảm cúm, sốt nhẹ',
-//     donThuoc: 'DT001',
-//     trangThai: 'HOAN_THANH',
-//     ghiChu: 'Bệnh nhân đáp ứng tốt với điều trị, triệu chứng giảm sau 3 ngày',
-//     danhSachThuoc: [
-//       { tenThuoc: 'Paracetamol 500mg', lieuDung: '3 lần/ngày' },
-//       { tenThuoc: 'Vitamin C 1000mg', lieuDung: '1 lần/ngày' }
-//     ]
-//   },
-//   {
-//     id: 2,
-//     ngayKham: '2024-01-15T14:20:00',
-//     bacSi: 'BS. Lê Văn Cường',
-//     chuanDoan: 'Viêm họng',
-//     donThuoc: 'DT002',
-//     trangThai: 'DANG_THUC_HIEN',
-//     ghiChu: 'Uống thuốc kháng sinh theo đơn',
-//     danhSachThuoc: [
-//       { tenThuoc: 'Amoxicillin 250mg', lieuDung: '2 lần/ngày' }
-//     ]
-//   },
-//   {
-//     id: 3,
-//     ngayKham: '2024-01-10T09:15:00',
-//     bacSi: 'BS. Phạm Thị Dung',
-//     chuanDoan: 'Tăng huyết áp',
-//     donThuoc: 'DT003',
-//     trangThai: 'DA_DUYET',
-//     ghiChu: 'Theo dõi huyết áp hàng ngày',
-//     danhSachThuoc: [
-//       { tenThuoc: 'Amlodipine 5mg', lieuDung: '1 lần/ngày' }
-//     ]
-//   }
-// ]
 
 export const PatientDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
+  const { t } = useLanguage()
   
   // Sử dụng hook
   const { patient, isLoadingPatient } = usePatient(parseInt(id || '0'))
@@ -93,13 +52,13 @@ export const PatientDetail: React.FC = () => {
   const getGenderText = (gender?: string) => {
     switch (gender) {
       case 'NAM':
-        return 'Nam'
+        return t('common.male')
       case 'NU':
-        return 'Nữ'
+        return t('common.female')
       case 'KHAC':
-        return 'Khác'
+        return t('common.other')
       default:
-        return 'Chưa xác định'
+        return t('patient.noData')
     }
   }
 
@@ -119,17 +78,17 @@ export const PatientDetail: React.FC = () => {
   const getTreatmentStatusText = (status: string) => {
     switch (status) {
       case 'MOI_TAO':
-        return 'Mới tạo'
+        return t('patient.treatmentStatus')
       case 'DA_DUYET':
-        return 'Đã duyệt'
-      case 'DANG_THUC_HIEN':
-        return 'Đang thực hiện'
+        return t('patient.treatmentStatus')
+      case 'DANG_DIEU_TRI':
+        return t('patient.treatmentStatus')
       case 'HOAN_THANH':
-        return 'Hoàn thành'
+        return t('patient.treatmentStatus')
       case 'HUY_BO':
-        return 'Hủy bỏ'
+        return t('patient.treatmentStatus')
       default:
-        return status
+        return t('patient.noData')
     }
   }
 
@@ -151,45 +110,11 @@ export const PatientDetail: React.FC = () => {
       label: (
         <Space>
           <UserOutlined />
-          Tổng quan
+          {t('patient.overview')}
         </Space>
       ),
       children: (
         <div>
-          {/* Top Section - Summary Cards */}
-          <Row gutter={[24, 24]} style={{ marginBottom: '24px' }}>
-            <Col xs={24} sm={8}>
-              <Card>
-                <Statistic
-                  title="Tổng số lần khám"
-                  value={patient.danhSachDieuTri?.length || 0}
-                  prefix={<TeamOutlined />}
-                  valueStyle={{ color: '#1f2937' }}
-                />
-              </Card>
-            </Col>
-            <Col xs={24} sm={8}>
-              <Card>
-                <Statistic
-                  title="Lần khám gần nhất"
-                  value={patient.danhSachDieuTri && patient.danhSachDieuTri.length > 0 ? dayjs(patient.danhSachDieuTri[0]?.ngayKham).format('DD/MM/YYYY') : 'Chưa có'}
-                  prefix={<CalendarOutlined />}
-                  valueStyle={{ color: '#1f2937' }}
-                />
-              </Card>
-            </Col>
-            <Col xs={24} sm={8}>
-              <Card>
-                <Statistic
-                  title="Lịch hẹn tiếp theo"
-                  value="15/02/2024"
-                  prefix={<ClockCircleOutlined />}
-                  valueStyle={{ color: '#8b5cf6' }}
-                />
-              </Card>
-            </Col>
-          </Row>
-
           {/* Bottom Section - Main Information Cards */}
           <Row gutter={[24, 24]}>
             <Col xs={24} lg={12}>
@@ -197,7 +122,7 @@ export const PatientDetail: React.FC = () => {
                 title={
                   <Space>
                     <UserOutlined />
-                    Thông tin cá nhân
+                    {t('patient.personalInfo')}
                   </Space>
                 }
               >
@@ -205,23 +130,23 @@ export const PatientDetail: React.FC = () => {
                   <div className="info-item">
                     <span className="info-label">
                       <UserOutlined style={{ marginRight: '8px' }} />
-                      Họ tên:
+                      {t('patient.fullName')}:
                     </span>
-                    <span className="info-value">{patient.hoTen}</span>
+                    <span className="info-value">{patient.hoTen || '---'}</span>
                   </div>
                   <div className="info-item">
                     <span className="info-label">
                       <CalendarOutlined style={{ marginRight: '8px' }} />
-                      Tuổi:
+                      {t('common.age')}:
                     </span>
                     <span className="info-value">
-                      {patient.ngaySinh ? `${dayjs().diff(dayjs(patient.ngaySinh), 'year')} tuổi` : 'Chưa có'}
+                      {patient.ngaySinh ? `${dayjs().diff(dayjs(patient.ngaySinh), 'year')} ${t('common.age')}` : '---'}
                     </span>
                   </div>
                   <div className="info-item">
                     <span className="info-label">
                       <UserOutlined style={{ marginRight: '8px' }} />
-                      Giới tính:
+                      {t('common.gender')}:
                     </span>
                     <span className="info-value">
                       <Tag color={getGenderColor(patient.gioiTinh)}>
@@ -229,33 +154,27 @@ export const PatientDetail: React.FC = () => {
                       </Tag>
                     </span>
                   </div>
-                  {patient.soDienThoai && (
-                    <div className="info-item">
-                      <span className="info-label">
-                        <PhoneOutlined style={{ marginRight: '8px' }} />
-                        Số điện thoại:
-                      </span>
-                      <span className="info-value">{patient.soDienThoai}</span>
-                    </div>
-                  )}
-                  {patient.email && (
-                    <div className="info-item">
-                      <span className="info-label">
-                        <MailOutlined style={{ marginRight: '8px' }} />
-                        Email:
-                      </span>
-                      <span className="info-value">{patient.email}</span>
-                    </div>
-                  )}
-                  {patient.diaChi && (
-                    <div className="info-item">
-                      <span className="info-label">
-                        <HomeOutlined style={{ marginRight: '8px' }} />
-                        Địa chỉ:
-                      </span>
-                      <span className="info-value">{patient.diaChi}</span>
-                    </div>
-                  )}
+                  <div className="info-item">
+                    <span className="info-label">
+                      <PhoneOutlined style={{ marginRight: '8px' }} />
+                      {t('common.phone')}:
+                    </span>
+                    <span className="info-value">{patient.soDienThoai || '---'}</span>
+                  </div>
+                  <div className="info-item">
+                    <span className="info-label">
+                      <MailOutlined style={{ marginRight: '8px' }} />
+                      {t('common.email')}:
+                    </span>
+                    <span className="info-value">{patient.email || '---'}</span>
+                  </div>
+                  <div className="info-item">
+                    <span className="info-label">
+                      <HomeOutlined style={{ marginRight: '8px' }} />
+                      {t('common.address')}:
+                    </span>
+                    <span className="info-value">{patient.diaChi || '---'}</span>
+                  </div>
                 </div>
               </InfoCard>
             </Col>
@@ -265,7 +184,7 @@ export const PatientDetail: React.FC = () => {
                 title={
                   <Space>
                     <MedicineBoxOutlined />
-                    Thông tin y tế
+                    {t('patient.medicalInfo')}
                   </Space>
                 }
               >
@@ -273,25 +192,29 @@ export const PatientDetail: React.FC = () => {
                   <div className="info-item">
                     <span className="info-label">
                       <MedicineBoxOutlined style={{ marginRight: '8px' }} />
-                      Nhóm máu:
+                      {t('patient.bloodType')}:
                     </span>
                     <span className="info-value">
-                      <Tag color="red" style={{ backgroundColor: '#fef2f2', color: '#dc2626', border: '1px solid #fecaca' }}>
-                        {patient.nhomMau || 'A+'}
-                      </Tag>
+                      {patient.nhomMau ? (
+                        <Tag color="red" style={{ backgroundColor: '#fef2f2', color: '#dc2626', border: '1px solid #fecaca' }}>
+                          {patient.nhomMau}
+                        </Tag>
+                      ) : (
+                        '---'
+                      )}
                     </span>
                   </div>
                   <div className="info-item">
                     <span className="info-label">
                       <PhoneOutlined style={{ marginRight: '8px' }} />
-                      Liên hệ khẩn cấp:
+                      {t('patient.emergencyContact')}:
                     </span>
-                    <span className="info-value">{patient.lienHeKhanCap || '0987654321 (Vợ)'}</span>
+                    <span className="info-value">{patient.lienHeKhanCap || '---'}</span>
                   </div>
                   <div className="info-item">
                     <span className="info-label">
                       <FileTextOutlined style={{ marginRight: '8px' }} />
-                      Tiền sử bệnh:
+                      {t('patient.medicalHistory')}:
                     </span>
                     <span className="info-value">
                       {patient.danhSachBenhLyNen && patient.danhSachBenhLyNen.length > 0 ? (
@@ -303,36 +226,27 @@ export const PatientDetail: React.FC = () => {
                           ))}
                         </Space>
                       ) : (
-                        'Tiền sử bệnh tim mạch, huyết áp cao'
+                        '---'
                       )}
                     </span>
                   </div>
                   <div className="info-item">
                     <span className="info-label">
                       <AlertOutlined style={{ marginRight: '8px' }} />
-                      Dị ứng:
+                      {t('patient.allergies')}:
                     </span>
                     <span className="info-value">
                       {patient.danhSachDiUng && patient.danhSachDiUng.length > 0 ? (
                         <Space wrap>
                           {patient.danhSachDiUng.map((diUng) => (
                             <Tag key={diUng.id} color="red" style={{ backgroundColor: '#fef2f2', color: '#dc2626', border: '1px solid #fecaca' }}>
-                              {diUng.tenDiUng}
+                              {diUng.thuoc.tenThuoc}
+                              {diUng.trieuChung && ` (${diUng.trieuChung})`}
                             </Tag>
                           ))}
                         </Space>
                       ) : (
-                        <Space wrap>
-                          <Tag color="red" style={{ backgroundColor: '#fef2f2', color: '#dc2626', border: '1px solid #fecaca' }}>
-                            Penicillin
-                          </Tag>
-                          <Tag color="red" style={{ backgroundColor: '#fef2f2', color: '#dc2626', border: '1px solid #fecaca' }}>
-                            Aspirin
-                          </Tag>
-                          <Tag color="red" style={{ backgroundColor: '#fef2f2', color: '#dc2626', border: '1px solid #fecaca' }}>
-                            Sulfa drugs
-                          </Tag>
-                        </Space>
+                        '---'
                       )}
                     </span>
                   </div>
@@ -348,7 +262,7 @@ export const PatientDetail: React.FC = () => {
       label: (
         <Space>
           <MedicineBoxOutlined />
-          Lịch sử điều trị
+          {t('patient.treatmentHistory')}
         </Space>
       ),
       children: (
@@ -359,13 +273,7 @@ export const PatientDetail: React.FC = () => {
             alignItems: 'center', 
             marginBottom: '24px' 
           }}>
-            <Title level={4}>Lịch sử điều trị</Title>
-            <AddTreatmentButton
-              icon={<PlusOutlined />}
-              onClick={handleAddTreatment}
-            >
-              Thêm điều trị mới
-            </AddTreatmentButton>
+            <Title level={4}>{t('patient.treatmentHistory')}</Title>
           </div>
 
           {patient.danhSachDieuTri && patient.danhSachDieuTri.length > 0 ? (
@@ -384,11 +292,11 @@ export const PatientDetail: React.FC = () => {
                       {/* Date and Status */}
                       <div style={{ display: 'flex', alignItems: 'center', marginBottom: '16px' }}>
                         <div style={{ fontWeight: 'bold', fontSize: '16px', marginRight: '12px' }}>
-                          {dayjs(treatment.ngayKham).format('DD/MM/YYYY')}
+                          {treatment.donThuocDieuTri ? dayjs(treatment.donThuocDieuTri.ngayKeDon).format('DD/MM/YYYY') : t('patient.noData')}
                         </div>
                         <Badge
                           status={treatment.trangThai === 'HOAN_THANH' ? 'success' : 
-                                 treatment.trangThai === 'DANG_THUC_HIEN' ? 'processing' : 
+                                 treatment.trangThai === 'DANG_DIEU_TRI' ? 'processing' : 
                                  treatment.trangThai === 'DA_DUYET' ? 'default' : 'warning'}
                           text={getTreatmentStatusText(treatment.trangThai)}
                         />
@@ -397,12 +305,25 @@ export const PatientDetail: React.FC = () => {
                       {/* Diagnosis */}
                       <div style={{ marginBottom: '16px' }}>
                         <div style={{ fontWeight: 'bold', marginBottom: '8px', color: '#374151' }}>
-                          Chẩn đoán
+                          {t('patient.diagnosis')}
                         </div>
                         <div style={{ color: '#6b7280' }}>
-                          {treatment.chuanDoan}
+                          {treatment.chanDoanChinh}
+                          {treatment.chanDoanPhu && ` - ${treatment.chanDoanPhu}`}
                         </div>
                       </div>
+
+                      {/* Symptoms */}
+                      {treatment.trieuChung && (
+                        <div style={{ marginBottom: '16px' }}>
+                          <div style={{ fontWeight: 'bold', marginBottom: '8px', color: '#374151' }}>
+                            {t('patient.symptoms')}
+                          </div>
+                          <div style={{ color: '#6b7280' }}>
+                            {treatment.trieuChung}
+                          </div>
+                        </div>
+                      )}
 
                       {/* Doctor and Prescription in a row */}
                       <div style={{ display: 'flex', gap: '24px', marginBottom: '16px' }}>
@@ -410,37 +331,37 @@ export const PatientDetail: React.FC = () => {
                         <div style={{ flex: 1 }}>
                           <div style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
                             <UserOutlined style={{ marginRight: '8px', color: '#6b7280' }} />
-                            <span style={{ fontWeight: 'bold', color: '#374151' }}>Bác sĩ</span>
+                            <span style={{ fontWeight: 'bold', color: '#374151' }}>{t('patient.doctor')}</span>
                           </div>
                           <div style={{ color: '#6b7280' }}>
-                            {treatment.bacSi}
+                            {treatment.bacSiDieuTri}
                           </div>
                         </div>
                       </div>
 
                       {/* Notes */}
-                      {treatment.ghiChu && (
+                      {treatment.donThuocDieuTri?.ghiChu && (
                         <div style={{ marginBottom: '16px' }}>
                           <div style={{ fontWeight: 'bold', marginBottom: '8px', color: '#374151' }}>
-                            Ghi chú
+                            {t('patient.notes')}
                           </div>
                           <div style={{ color: '#6b7280' }}>
-                            {treatment.ghiChu}
+                            {treatment.donThuocDieuTri.ghiChu}
                           </div>
                         </div>
                       )}
 
                       {/* Medicine List */}
-                      {treatment.danhSachThuoc && treatment.danhSachThuoc.length > 0 && (
+                      {treatment.donThuocDieuTri?.danhSachThuoc && treatment.donThuocDieuTri.danhSachThuoc.length > 0 && (
                         <div>
                           <div style={{ fontWeight: 'bold', marginBottom: '8px', color: '#374151' }}>
-                            Danh sách thuốc
+                            {t('patient.medicineList')}
                           </div>
                           <div style={{ color: '#6b7280', marginBottom: '8px' }}>
-                            {treatment.danhSachThuoc.map(med => `${med.thuoc.tenThuoc} x ${med.lieuDung}`).join(', ')}
+                            {treatment.donThuocDieuTri.danhSachThuoc.map(med => `${med.thuoc.tenThuoc} x ${med.lieuDung}`).join(', ')}
                           </div>
                           <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-                            {treatment.danhSachThuoc.map((med, index) => (
+                            {treatment.donThuocDieuTri.danhSachThuoc.map((med, index) => (
                               <Tag 
                                 key={index}
                                 style={{ 
@@ -464,8 +385,8 @@ export const PatientDetail: React.FC = () => {
             </div>
           ) : (
             <Alert
-              message="Chưa có lịch sử điều trị"
-              description="Bệnh nhân chưa có lịch sử điều trị nào."
+              message={t('patient.noTreatmentHistory')}
+              description={t('patient.noTreatmentHistoryDesc')}
               type="info"
               showIcon
             />
@@ -476,9 +397,9 @@ export const PatientDetail: React.FC = () => {
   ]
 
   return (
-    <div style={{ padding: '24px' }}>
+    <div>
       <BackButton onClick={() => navigate('/patients')}>
-        <ArrowLeftOutlined /> Quay lại
+        <ArrowLeftOutlined /> {t('patient.back')}
       </BackButton>
 
       <PatientHeader>
@@ -492,7 +413,7 @@ export const PatientDetail: React.FC = () => {
         <div className="patient-info">
           <h1 className="patient-name">{patient.hoTen}</h1>
           <div className="patient-meta">
-            <Tag className="status-tag">Mã BN: {patient.maBenhNhan}</Tag>
+            <Tag className="status-tag">{t('patient.patientId')}: {patient.maBenhNhan}</Tag>
             <Tag color={getGenderColor(patient.gioiTinh)}>
               {getGenderText(patient.gioiTinh)}
             </Tag>
@@ -515,45 +436,58 @@ export const PatientDetail: React.FC = () => {
             )}
           </div>
         </div>
-        
-        <div className="patient-actions">
-          <ActionButton type="primary" icon={<EditOutlined />}>
-            Chỉnh sửa
-          </ActionButton>
-        </div>
       </PatientHeader>
 
       <PatientStats>
         <Card>
           <Statistic
-            title="Ngày tạo"
-            value={dayjs(patient.ngayTao).format('DD/MM/YYYY')}
-            prefix={<CalendarOutlined />}
+            title={t('patient.totalAppointments')}
+            value={patient.danhSachDieuTri ? patient.danhSachDieuTri.length : 0}
+            prefix={<TeamOutlined />}
+            valueStyle={{ color: '#10b981' }}
           />
         </Card>
         <Card>
           <Statistic
-            title="Ngày cập nhật"
-            value={dayjs(patient.ngayCapNhat).format('DD/MM/YYYY')}
-            prefix={<ClockCircleOutlined />}
+            title={t('patient.lastAppointment')}
+            value={patient.danhSachDieuTri && patient.danhSachDieuTri.length > 0 ? dayjs(patient.danhSachDieuTri[0]?.donThuocDieuTri?.ngayKeDon).format('DD/MM/YYYY') : t('patient.noData')}
+            prefix={<CalendarOutlined />}
+            valueStyle={{ color: '#1f2937' }}
           />
         </Card>
-        {patient.soBaoHiem && (
-          <Card>
-            <Statistic
-              title="Số bảo hiểm"
-              value={patient.soBaoHiem}
-              prefix={<IdcardOutlined />}
-            />
-          </Card>
-        )}
+        <Card>
+          <Statistic
+            title={t('patient.nextAppointment')}
+            value={t('patient.noData')}
+            prefix={<ClockCircleOutlined />}
+            valueStyle={{ color: '#8b5cf6' }}
+          />
+        </Card>
       </PatientStats>
 
-      <StyledTabs
-        defaultActiveKey="overview"
-        items={tabItems}
-        size="large"
-      />
+      <div style={{ 
+        position: 'relative',
+        marginBottom: '24px' 
+      }}>
+        <StyledTabs
+          defaultActiveKey="overview"
+          items={tabItems}
+          size="large"
+        />
+        <div style={{ 
+          position: 'absolute',
+          top: '8px',
+          right: '0',
+          zIndex: 1
+        }}>
+          <AddTreatmentButton
+            icon={<PlusOutlined />}
+            onClick={handleAddTreatment}
+          >
+            {t('patient.addTreatment')}
+          </AddTreatmentButton>
+        </div>
+      </div>
     </div>
   )
 } 

@@ -7,11 +7,13 @@ import {
 } from 'antd'
 import { PatientForm, PatientTable, PatientHeader } from './components'
 import { usePatients } from '@/hooks/usePatients'
+import { useLanguage } from '@/hooks/useLanguage'
 import type { BenhNhanResponse } from '@/types'
 import dayjs from 'dayjs'
 import { PatientListContainer } from './styled'
 
 export const PatientList: React.FC = () => {
+  const { t } = useLanguage()
   const [searchText, setSearchText] = useState('')
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [editingPatient, setEditingPatient] = useState<BenhNhanResponse | null>(null)
@@ -47,13 +49,13 @@ export const PatientList: React.FC = () => {
   const getGenderText = (gender?: string) => {
     switch (gender) {
       case 'NAM':
-        return 'Nam'
+        return t('common.male')
       case 'NU':
-        return 'Nữ'
+        return t('common.female')
       case 'KHAC':
-        return 'Khác'
+        return t('common.other')
       default:
-        return 'Chưa xác định'
+        return t('patient.noData')
     }
   }
 
@@ -207,29 +209,29 @@ export const PatientList: React.FC = () => {
 
       {/* Delete Confirmation Modal */}
       <Modal
-        title="Xác nhận xóa bệnh nhân"
+        title={t('patient.confirmDelete')}
         open={isDeleteModalVisible}
         onOk={handleDeleteConfirm}
         onCancel={handleDeleteCancel}
-        okText="Xóa"
-        cancelText="Hủy"
+        okText={t('common.delete')}
+        cancelText={t('common.cancel')}
         okType="danger"
         confirmLoading={false}
       >
         {deletingPatient && (
           <div>
-            <p>Bạn có chắc chắn muốn xóa bệnh nhân này?</p>
+            <p>{t('patient.deleteConfirm')}</p>
             <div style={{ marginTop: '8px', padding: '8px', backgroundColor: '#f5f5f5', borderRadius: '4px' }}>
-              <strong>Thông tin bệnh nhân:</strong>
+              <strong>{t('patient.patientInfo')}:</strong>
               <br />
-              Mã BN: {deletingPatient.maBenhNhan}
+              {t('patient.patientCode')}: {deletingPatient.maBenhNhan}
               <br />
-              Họ tên: {deletingPatient.hoTen}
+              {t('patient.fullName')}: {deletingPatient.hoTen}
               <br />
-              Số điện thoại: {deletingPatient.soDienThoai || 'Chưa có'}
+              {t('common.phone')}: {deletingPatient.soDienThoai || t('patient.noData')}
             </div>
             <p style={{ color: '#ff4d4f', marginTop: '8px', fontWeight: 'bold' }}>
-              ⚠️ Lưu ý: Hành động này không thể hoàn tác!
+              ⚠️ {t('patient.deleteWarning')}
             </p>
           </div>
         )}

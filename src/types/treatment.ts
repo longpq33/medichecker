@@ -20,14 +20,27 @@ export interface ThuocDieuTri {
 
 export interface LichSuDieuTriResponse {
   id: number
-  ngayKham: string
-  bacSi: string
-  chuanDoan: string
+  maChanDoan?: string
+  chanDoanChinh: string
+  chanDoanPhu?: string
+  trieuChung?: string
+  bacSiDieuTri: string
+  trangThai: 'MOI_TAO' | 'DA_DUYET' | 'DANG_DIEU_TRI' | 'HOAN_THANH' | 'HUY_BO'
+  ngayBatDau?: string
+  ngayKetThuc?: string
+  ngayCapNhat?: string
+  donThuocDieuTri?: DonThuocDieuTri
+}
+
+export interface DonThuocDieuTri {
+  id: number
+  maDonThuoc: string
+  benhNhan?: any
+  bacSiKeDon: string
   ghiChu?: string
-  trangThai: 'MOI_TAO' | 'DA_DUYET' | 'DANG_THUC_HIEN' | 'HOAN_THANH' | 'HUY_BO'
+  trangThai: string
+  ngayKeDon: string
   danhSachThuoc: ThuocDieuTriResponse[]
-  ngayTao: string
-  ngayCapNhat: string
 }
 
 export interface ThuocDieuTriResponse {
