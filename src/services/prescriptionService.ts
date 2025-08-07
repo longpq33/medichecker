@@ -9,11 +9,12 @@ import type {
 
 export const prescriptionService = {
   // Lấy danh sách đơn thuốc với phân trang
-  getDanhSachDonThuoc: async (pageable: Pageable, benhNhanId?: number) => {
+  getDanhSachDonThuoc: async (pageable: Pageable, keyword?: string) => {
     const params = new URLSearchParams()
-    params.append('pageable', JSON.stringify(pageable))
-    if (benhNhanId) {
-      params.append('benhNhanId', benhNhanId.toString())
+    params.append('page', pageable.page.toString())
+    params.append('size', pageable.size.toString())
+    if (keyword) {
+      params.append('keyword', keyword)
     }
     
     const response = await api.get<PageDonThuocResponse>(`/prescriptions?${params.toString()}`)

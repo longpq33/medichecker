@@ -16,10 +16,9 @@ import {
 import { 
   ArrowLeftOutlined, 
   EditOutlined, 
-  PrinterOutlined,
-  MedicineBoxOutlined,
-  CalendarOutlined,
-  DollarOutlined
+  DollarOutlined, 
+  MedicineBoxOutlined, 
+  CalendarOutlined 
 } from '@ant-design/icons'
 import { useLanguage } from '@/hooks/useLanguage'
 import dayjs from 'dayjs'
@@ -249,9 +248,6 @@ export const PrescriptionDetail: React.FC = () => {
           <Space>
             <Button icon={<EditOutlined />} type="primary">
               {t('common.edit')}
-            </Button>
-            <Button icon={<PrinterOutlined />}>
-              In đơn thuốc
             </Button>
           </Space>
         </div>

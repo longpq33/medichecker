@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import { 
   Typography, 
   Tag, 
@@ -9,8 +9,7 @@ import {
   Col,
   Statistic,
   Space,
-  Alert,
-  message
+  Alert
 } from 'antd'
 import { 
   ArrowLeftOutlined,
@@ -22,7 +21,6 @@ import {
   CalendarOutlined,
   IdcardOutlined,
   EditOutlined,
-  PrinterOutlined,
   ClockCircleOutlined,
   PlusOutlined,
   FileTextOutlined,
@@ -40,89 +38,57 @@ import {
   StyledTabs,
   AddTreatmentButton
 } from './styled'
-import type { BenhNhanResponse } from '@/types'
+import { usePatient } from '@/hooks/usePatients'
 
 const { Text, Title } = Typography
 
-// Mock data cho lịch sử điều trị
-const mockTreatmentHistory = [
-  {
-    id: 1,
-    ngayKham: '2024-01-20T10:30:00',
-    bacSi: 'BS. Trần Thị B',
-    chuanDoan: 'Cảm cúm, sốt nhẹ',
-    donThuoc: 'DT001',
-    trangThai: 'HOAN_THANH',
-    ghiChu: 'Bệnh nhân đáp ứng tốt với điều trị, triệu chứng giảm sau 3 ngày',
-    danhSachThuoc: [
-      { tenThuoc: 'Paracetamol 500mg', lieuDung: '3 lần/ngày' },
-      { tenThuoc: 'Vitamin C 1000mg', lieuDung: '1 lần/ngày' }
-    ]
-  },
-  {
-    id: 2,
-    ngayKham: '2024-01-15T14:20:00',
-    bacSi: 'BS. Lê Văn Cường',
-    chuanDoan: 'Viêm họng',
-    donThuoc: 'DT002',
-    trangThai: 'DANG_THUC_HIEN',
-    ghiChu: 'Uống thuốc kháng sinh theo đơn',
-    danhSachThuoc: [
-      { tenThuoc: 'Amoxicillin 250mg', lieuDung: '2 lần/ngày' }
-    ]
-  },
-  {
-    id: 3,
-    ngayKham: '2024-01-10T09:15:00',
-    bacSi: 'BS. Phạm Thị Dung',
-    chuanDoan: 'Tăng huyết áp',
-    donThuoc: 'DT003',
-    trangThai: 'DA_DUYET',
-    ghiChu: 'Theo dõi huyết áp hàng ngày',
-    danhSachThuoc: [
-      { tenThuoc: 'Amlodipine 5mg', lieuDung: '1 lần/ngày' }
-    ]
-  }
-]
+// Mock data cho lịch sử điều trị - chỉ sử dụng khi API chưa sẵn sàng
+// const mockTreatmentHistory = [
+//   {
+//     id: 1,
+//     ngayKham: '2024-01-20T10:30:00',
+//     bacSi: 'BS. Trần Thị B',
+//     chuanDoan: 'Cảm cúm, sốt nhẹ',
+//     donThuoc: 'DT001',
+//     trangThai: 'HOAN_THANH',
+//     ghiChu: 'Bệnh nhân đáp ứng tốt với điều trị, triệu chứng giảm sau 3 ngày',
+//     danhSachThuoc: [
+//       { tenThuoc: 'Paracetamol 500mg', lieuDung: '3 lần/ngày' },
+//       { tenThuoc: 'Vitamin C 1000mg', lieuDung: '1 lần/ngày' }
+//     ]
+//   },
+//   {
+//     id: 2,
+//     ngayKham: '2024-01-15T14:20:00',
+//     bacSi: 'BS. Lê Văn Cường',
+//     chuanDoan: 'Viêm họng',
+//     donThuoc: 'DT002',
+//     trangThai: 'DANG_THUC_HIEN',
+//     ghiChu: 'Uống thuốc kháng sinh theo đơn',
+//     danhSachThuoc: [
+//       { tenThuoc: 'Amoxicillin 250mg', lieuDung: '2 lần/ngày' }
+//     ]
+//   },
+//   {
+//     id: 3,
+//     ngayKham: '2024-01-10T09:15:00',
+//     bacSi: 'BS. Phạm Thị Dung',
+//     chuanDoan: 'Tăng huyết áp',
+//     donThuoc: 'DT003',
+//     trangThai: 'DA_DUYET',
+//     ghiChu: 'Theo dõi huyết áp hàng ngày',
+//     danhSachThuoc: [
+//       { tenThuoc: 'Amlodipine 5mg', lieuDung: '1 lần/ngày' }
+//     ]
+//   }
+// ]
 
 export const PatientDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
-  const [patient, setPatient] = useState<BenhNhanResponse | null>(null)
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    const fetchPatient = async () => {
-      if (!id) return
-      
-      try {
-        setLoading(true)
-        // Simulate API call with mock data
-        await new Promise(resolve => setTimeout(resolve, 500))
-        const mockPatient: BenhNhanResponse = {
-          id: parseInt(id),
-          maBenhNhan: 'BN001',
-          hoTen: 'Nguyễn Văn An',
-          ngaySinh: '1990-05-15',
-          gioiTinh: 'NAM',
-          soDienThoai: '0123456789',
-          email: 'nguyenvanan@email.com',
-          diaChi: '123 Đường ABC, Quận 1, TP.HCM',
-          soBaoHiem: 'BH001234567',
-          ngayTao: '2024-01-15T10:00:00',
-          ngayCapNhat: '2024-01-15T10:00:00'
-        }
-        setPatient(mockPatient)
-      } catch (error) {
-        message.error('Lỗi khi tải thông tin bệnh nhân')
-        console.error('Error fetching patient:', error)
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    fetchPatient()
-  }, [id])
+  
+  // Sử dụng hook
+  const { patient, isLoadingPatient } = usePatient(parseInt(id || '0'))
 
   const getGenderText = (gender?: string) => {
     switch (gender) {
@@ -171,7 +137,7 @@ export const PatientDetail: React.FC = () => {
     navigate(`/patients/${id}/add-treatment`)
   }
 
-  if (loading) {
+  if (isLoadingPatient) {
     return <div>Đang tải...</div>
   }
 
@@ -196,7 +162,7 @@ export const PatientDetail: React.FC = () => {
               <Card>
                 <Statistic
                   title="Tổng số lần khám"
-                  value={mockTreatmentHistory.length}
+                  value={patient.danhSachDieuTri?.length || 0}
                   prefix={<TeamOutlined />}
                   valueStyle={{ color: '#1f2937' }}
                 />
@@ -206,7 +172,7 @@ export const PatientDetail: React.FC = () => {
               <Card>
                 <Statistic
                   title="Lần khám gần nhất"
-                  value={mockTreatmentHistory.length > 0 ? dayjs(mockTreatmentHistory[0]?.ngayKham).format('DD/MM/YYYY') : 'Chưa có'}
+                  value={patient.danhSachDieuTri && patient.danhSachDieuTri.length > 0 ? dayjs(patient.danhSachDieuTri[0]?.ngayKham).format('DD/MM/YYYY') : 'Chưa có'}
                   prefix={<CalendarOutlined />}
                   valueStyle={{ color: '#1f2937' }}
                 />
@@ -311,7 +277,7 @@ export const PatientDetail: React.FC = () => {
                     </span>
                     <span className="info-value">
                       <Tag color="red" style={{ backgroundColor: '#fef2f2', color: '#dc2626', border: '1px solid #fecaca' }}>
-                        A+
+                        {patient.nhomMau || 'A+'}
                       </Tag>
                     </span>
                   </div>
@@ -320,14 +286,26 @@ export const PatientDetail: React.FC = () => {
                       <PhoneOutlined style={{ marginRight: '8px' }} />
                       Liên hệ khẩn cấp:
                     </span>
-                    <span className="info-value">0987654321 (Vợ)</span>
+                    <span className="info-value">{patient.lienHeKhanCap || '0987654321 (Vợ)'}</span>
                   </div>
                   <div className="info-item">
                     <span className="info-label">
                       <FileTextOutlined style={{ marginRight: '8px' }} />
                       Tiền sử bệnh:
                     </span>
-                    <span className="info-value">Tiền sử bệnh tim mạch, huyết áp cao</span>
+                    <span className="info-value">
+                      {patient.danhSachBenhLyNen && patient.danhSachBenhLyNen.length > 0 ? (
+                        <Space wrap>
+                          {patient.danhSachBenhLyNen.map((benhLy) => (
+                            <Tag key={benhLy.id} color="blue" style={{ backgroundColor: '#eff6ff', color: '#1d4ed8', border: '1px solid #dbeafe' }}>
+                              {benhLy.tenBenh}
+                            </Tag>
+                          ))}
+                        </Space>
+                      ) : (
+                        'Tiền sử bệnh tim mạch, huyết áp cao'
+                      )}
+                    </span>
                   </div>
                   <div className="info-item">
                     <span className="info-label">
@@ -335,17 +313,27 @@ export const PatientDetail: React.FC = () => {
                       Dị ứng:
                     </span>
                     <span className="info-value">
-                      <Space wrap>
-                        <Tag color="red" style={{ backgroundColor: '#fef2f2', color: '#dc2626', border: '1px solid #fecaca' }}>
-                          Penicillin
-                        </Tag>
-                        <Tag color="red" style={{ backgroundColor: '#fef2f2', color: '#dc2626', border: '1px solid #fecaca' }}>
-                          Aspirin
-                        </Tag>
-                        <Tag color="red" style={{ backgroundColor: '#fef2f2', color: '#dc2626', border: '1px solid #fecaca' }}>
-                          Sulfa drugs
-                        </Tag>
-                      </Space>
+                      {patient.danhSachDiUng && patient.danhSachDiUng.length > 0 ? (
+                        <Space wrap>
+                          {patient.danhSachDiUng.map((diUng) => (
+                            <Tag key={diUng.id} color="red" style={{ backgroundColor: '#fef2f2', color: '#dc2626', border: '1px solid #fecaca' }}>
+                              {diUng.tenDiUng}
+                            </Tag>
+                          ))}
+                        </Space>
+                      ) : (
+                        <Space wrap>
+                          <Tag color="red" style={{ backgroundColor: '#fef2f2', color: '#dc2626', border: '1px solid #fecaca' }}>
+                            Penicillin
+                          </Tag>
+                          <Tag color="red" style={{ backgroundColor: '#fef2f2', color: '#dc2626', border: '1px solid #fecaca' }}>
+                            Aspirin
+                          </Tag>
+                          <Tag color="red" style={{ backgroundColor: '#fef2f2', color: '#dc2626', border: '1px solid #fecaca' }}>
+                            Sulfa drugs
+                          </Tag>
+                        </Space>
+                      )}
                     </span>
                   </div>
                 </div>
@@ -380,9 +368,9 @@ export const PatientDetail: React.FC = () => {
             </AddTreatmentButton>
           </div>
 
-          {mockTreatmentHistory.length > 0 ? (
+          {patient.danhSachDieuTri && patient.danhSachDieuTri.length > 0 ? (
             <div>
-              {mockTreatmentHistory.map((treatment) => (
+              {patient.danhSachDieuTri.map((treatment) => (
                 <Card 
                   key={treatment.id} 
                   style={{ 
@@ -428,15 +416,28 @@ export const PatientDetail: React.FC = () => {
                             {treatment.bacSi}
                           </div>
                         </div>
+                      </div>
 
-                        {/* Prescription */}
-                        <div style={{ flex: 1 }}>
-                          <div style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
-                            <FileTextOutlined style={{ marginRight: '8px', color: '#6b7280' }} />
-                            <span style={{ fontWeight: 'bold', color: '#374151' }}>Đơn thuốc</span>
+                      {/* Notes */}
+                      {treatment.ghiChu && (
+                        <div style={{ marginBottom: '16px' }}>
+                          <div style={{ fontWeight: 'bold', marginBottom: '8px', color: '#374151' }}>
+                            Ghi chú
+                          </div>
+                          <div style={{ color: '#6b7280' }}>
+                            {treatment.ghiChu}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Medicine List */}
+                      {treatment.danhSachThuoc && treatment.danhSachThuoc.length > 0 && (
+                        <div>
+                          <div style={{ fontWeight: 'bold', marginBottom: '8px', color: '#374151' }}>
+                            Danh sách thuốc
                           </div>
                           <div style={{ color: '#6b7280', marginBottom: '8px' }}>
-                            {treatment.danhSachThuoc.map(med => `${med.tenThuoc} x ${med.lieuDung}`).join(', ')}
+                            {treatment.danhSachThuoc.map(med => `${med.thuoc.tenThuoc} x ${med.lieuDung}`).join(', ')}
                           </div>
                           <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
                             {treatment.danhSachThuoc.map((med, index) => (
@@ -450,31 +451,9 @@ export const PatientDetail: React.FC = () => {
                                   padding: '4px 12px'
                                 }}
                               >
-                                {med.tenThuoc}
+                                {med.thuoc.tenThuoc}
                               </Tag>
                             ))}
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Notes */}
-                      {treatment.ghiChu && (
-                        <div>
-                          <div style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
-                            <FileTextOutlined style={{ marginRight: '8px', color: '#6b7280' }} />
-                            <span style={{ fontWeight: 'bold', color: '#374151' }}>Ghi chú</span>
-                          </div>
-                          <div style={{ 
-                            backgroundColor: '#eff6ff', 
-                            border: '1px solid #dbeafe',
-                            borderRadius: '8px',
-                            padding: '12px',
-                            color: '#1d4ed8'
-                          }}>
-                            <div style={{ display: 'flex', alignItems: 'flex-start' }}>
-                              <AlertOutlined style={{ marginRight: '8px', marginTop: '2px' }} />
-                              <span>{treatment.ghiChu}</span>
-                            </div>
                           </div>
                         </div>
                       )}
@@ -486,7 +465,7 @@ export const PatientDetail: React.FC = () => {
           ) : (
             <Alert
               message="Chưa có lịch sử điều trị"
-              description="Bệnh nhân chưa có lịch sử điều trị nào được ghi nhận."
+              description="Bệnh nhân chưa có lịch sử điều trị nào."
               type="info"
               showIcon
             />
@@ -540,9 +519,6 @@ export const PatientDetail: React.FC = () => {
         <div className="patient-actions">
           <ActionButton type="primary" icon={<EditOutlined />}>
             Chỉnh sửa
-          </ActionButton>
-          <ActionButton icon={<PrinterOutlined />}>
-            In thông tin
           </ActionButton>
         </div>
       </PatientHeader>

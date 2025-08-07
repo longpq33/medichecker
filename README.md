@@ -25,7 +25,6 @@ MediChecker là một ứng dụng web hiện đại được xây dựng để 
 - Tạo và quản lý đơn thuốc
 - Thêm thuốc vào đơn với liều lượng
 - Theo dõi trạng thái đơn thuốc
-- In đơn thuốc
 
 ### 🔍 Phân tích thông minh
 - Phân tích tương tác thuốc

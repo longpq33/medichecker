@@ -1,4 +1,22 @@
 // Types cho bệnh nhân
+import type { LichSuDieuTriResponse } from './treatment'
+
+export interface BenhLyNen {
+  id: number
+  maBenh: string
+  tenBenh: string
+  moTa?: string
+  mucDoNghiemTrong?: string
+  ngayChanDoan?: string
+}
+
+export interface DiUng {
+  id: number
+  tenDiUng: string
+  moTa?: string
+  mucDoNghiemTrong?: string
+}
+
 export interface BenhNhanRequest {
   hoTen: string
   ngaySinh?: string
@@ -21,6 +39,11 @@ export interface BenhNhanResponse {
   soBaoHiem?: string
   ngayTao: string
   ngayCapNhat: string
+  nhomMau?: string
+  lienHeKhanCap?: string
+  danhSachBenhLyNen?: BenhLyNen[]
+  danhSachDiUng?: DiUng[]
+  danhSachDieuTri?: LichSuDieuTriResponse[]
 }
 
 export interface PageBenhNhanResponse {

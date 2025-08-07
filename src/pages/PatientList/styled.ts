@@ -8,6 +8,12 @@ import {
   FONT_WEIGHT 
 } from '@/constants'
 
+export const PatientListContainer = styled.div`
+  padding: ${SPACING.PADDING_XL};
+  border: 1px solid ${COLORS.BORDER_PRIMARY};
+  border-radius: ${BORDER_RADIUS.SM};
+`;
+
 export const StyledCard = styled(Card)`
   margin-bottom: ${SPACING.MARGIN_XL};
   width: 100%;

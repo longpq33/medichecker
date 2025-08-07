@@ -8,6 +8,7 @@ import {
 import { useNavigate } from 'react-router-dom'
 import { MedicineForm, MedicineTable, MedicineHeader } from './components'
 import type { ThuocResponse } from '@/types'
+import { MedicineListContainer } from './styled'
 
 // Mock data cho development
 const mockMedicines: ThuocResponse[] = [
@@ -278,7 +279,7 @@ export const MedicineList: React.FC = () => {
   }
 
   return (
-    <div>
+    <MedicineListContainer>
       <MedicineHeader 
         onAdd={handleAdd}
         onSearch={handleSearch}
@@ -314,6 +315,6 @@ export const MedicineList: React.FC = () => {
         onOk={handleModalOk}
         form={form}
       />
-    </div>
+    </MedicineListContainer>
   )
 } 

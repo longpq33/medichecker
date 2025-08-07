@@ -36,6 +36,9 @@ export const StyledSider = styled(Sider)`
       margin: ${SPACING.MARGIN_XS} ${SPACING.MARGIN_MD};
       border-radius: ${BORDER_RADIUS.MD};
       transition: ${TRANSITIONS.NORMAL};
+      display: flex;
+      justify-content: center;
+      align-items: center;
       
       &:hover {
         background: rgba(255, 255, 255, 0.1) !important;

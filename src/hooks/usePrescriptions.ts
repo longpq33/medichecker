@@ -3,7 +3,7 @@ import { message } from 'antd'
 import { prescriptionService } from '@/services'
 import type { DonThuocRequest, ChiTietDonThuocRequest, Pageable } from '@/types'
 
-export const usePrescriptions = (pageable: Pageable, benhNhanId?: number) => {
+export const usePrescriptions = (pageable: Pageable, keyword?: string) => {
   const queryClient = useQueryClient()
 
   // Query danh sách đơn thuốc
@@ -13,8 +13,8 @@ export const usePrescriptions = (pageable: Pageable, benhNhanId?: number) => {
     error: prescriptionsError,
     refetch: refetchPrescriptions,
   } = useQuery({
-    queryKey: ['prescriptions', pageable, benhNhanId],
-    queryFn: () => prescriptionService.getDanhSachDonThuoc(pageable, benhNhanId),
+    queryKey: ['prescriptions', pageable, keyword],
+    queryFn: () => prescriptionService.getDanhSachDonThuoc(pageable, keyword),
     keepPreviousData: true,
   })
 
