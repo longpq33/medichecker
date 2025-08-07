@@ -5,127 +5,65 @@ import {
   Descriptions, 
   Tag, 
   Button, 
-  Space, 
-  Divider,
   Typography,
   Row,
   Col,
   Statistic,
-  Alert
+  Alert,
+  Spin,
+  Space
 } from 'antd'
 import { 
   ArrowLeftOutlined, 
   MedicineBoxOutlined,
   DollarOutlined,
   CalendarOutlined,
-  SafetyOutlined,
-  InfoCircleOutlined
+  InfoCircleOutlined,
+  SafetyOutlined
 } from '@ant-design/icons'
 import { useLanguage } from '@/hooks/useLanguage'
+import { useMedicine } from '@/hooks/useMedicines'
 import dayjs from 'dayjs'
 
 const { Title } = Typography
-
-interface MedicineDetail {
-  id: number
-  maThuoc: string
-  tenThuoc: string
-  tenHoatChat: string
-  nongDo: string
-  dangBaoChe: string
-  hangSanXuat: string
-  nuocSanXuat: string
-  giaBan: number
-  donViTinh: string
-  chiDinh: string
-  chongChiDinh: string
-  tacDungPhu: string
-  lieuDungNguoiLon: string
-  lieuDungTreEm: string
-  nhomThuoc: 'KHANG_SINH' | 'GIAM_DAU' | 'CHONG_VIEM' | 'TIM_MACH' | 'TIEU_HOA' | 'HOI_SUC' | 'KHAC'
-  kichHoat: boolean
-  ngayTao: string
-  ngayHetHan: string
-  soLuongTon: number
-  donViNhoNhat: string
-  baoQuan: string
-  thanhPhan: string
-  quyCach: string
-  dangKiemSoat: boolean
-  thuocKeDon: boolean
-  thuocBaoHiem: boolean
-}
-
-const mockMedicineDetail: MedicineDetail = {
-  id: 1,
-  maThuoc: 'T001',
-  tenThuoc: 'Paracetamol 500mg',
-  tenHoatChat: 'Paracetamol',
-  nongDo: '500mg',
-  dangBaoChe: 'Viên nén',
-  hangSanXuat: 'Công ty Dược phẩm ABC',
-  nuocSanXuat: 'Việt Nam',
-  giaBan: 5000,
-  donViTinh: 'Viên',
-  chiDinh: 'Giảm đau, hạ sốt trong các trường hợp: đau đầu, đau răng, đau cơ, đau khớp, đau bụng kinh, sốt do cảm cúm, sốt do nhiễm khuẩn.',
-  chongChiDinh: 'Quá mẫn với paracetamol hoặc bất kỳ thành phần nào của thuốc. Bệnh nhân suy gan nặng.',
-  tacDungPhu: 'Hiếm gặp: phản ứng dị ứng, mày đay, phù mạch. Rất hiếm: giảm bạch cầu, thiếu máu, tổn thương gan.',
-  lieuDungNguoiLon: 'Người lớn và trẻ em trên 12 tuổi: 1-2 viên/lần, 3-4 lần/ngày. Không quá 8 viên/ngày.',
-  lieuDungTreEm: 'Trẻ em 6-12 tuổi: 0.5-1 viên/lần, 3-4 lần/ngày. Trẻ em dưới 6 tuổi: tham khảo ý kiến bác sĩ.',
-  nhomThuoc: 'GIAM_DAU',
-  kichHoat: true,
-  ngayTao: '2024-01-01T00:00:00',
-  ngayHetHan: '2026-12-31T00:00:00',
-  soLuongTon: 1000,
-  donViNhoNhat: 'Hộp 10 vỉ x 10 viên',
-  baoQuan: 'Bảo quản ở nhiệt độ không quá 30°C, tránh ánh sáng trực tiếp và ẩm.',
-  thanhPhan: 'Paracetamol 500mg, tá dược vừa đủ 1 viên.',
-  quyCach: 'Hộp 10 vỉ x 10 viên',
-  dangKiemSoat: false,
-  thuocKeDon: false,
-  thuocBaoHiem: true
-}
 
 export const MedicineDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
   const { t } = useLanguage()
   
-  // Mock data - trong thực tế sẽ fetch từ API dựa trên id
-  const medicine = mockMedicineDetail
-  
-  // Log id để tránh lỗi unused variable
-  console.log('Medicine ID:', id)
+  // Sử dụng hook để lấy dữ liệu thuốc
+  const { medicine, isLoadingMedicine, medicineError } = useMedicine(parseInt(id || '0'))
 
-  const getDrugGroupText = (group: string) => {
+  const getDrugGroupText = (group?: string) => {
     switch (group) {
       case 'KHANG_SINH':
-        return 'Kháng sinh'
+        return t('medicine.groups.antibiotic')
       case 'GIAM_DAU':
-        return 'Giảm đau'
+        return t('medicine.groups.painkiller')
       case 'CHONG_VIEM':
-        return 'Chống viêm'
+        return t('medicine.groups.antiInflammatory')
       case 'TIM_MACH':
-        return 'Tim mạch'
+        return t('medicine.groups.cardiovascular')
       case 'TIEU_HOA':
-        return 'Tiêu hóa'
+        return t('medicine.groups.digestive')
       case 'HOI_SUC':
-        return 'Hồi sức'
+        return t('medicine.groups.respiratory')
       case 'KHAC':
-        return 'Khác'
+        return t('medicine.groups.other')
       default:
-        return group
+        return t('medicine.noData')
     }
   }
 
-  const getDrugGroupColor = (group: string) => {
+  const getDrugGroupColor = (group?: string) => {
     switch (group) {
       case 'KHANG_SINH':
         return 'red'
       case 'GIAM_DAU':
-        return 'blue'
-      case 'CHONG_VIEM':
         return 'orange'
+      case 'CHONG_VIEM':
+        return 'blue'
       case 'TIM_MACH':
         return 'purple'
       case 'TIEU_HOA':
@@ -139,197 +77,156 @@ export const MedicineDetail: React.FC = () => {
     }
   }
 
-  const isExpired = dayjs(medicine.ngayHetHan).isBefore(dayjs())
-  const isExpiringSoon = dayjs(medicine.ngayHetHan).diff(dayjs(), 'month') <= 3
+  if (isLoadingMedicine) {
+    return (
+      <div style={{ 
+        display: 'flex', 
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        height: '50vh' 
+      }}>
+        <Spin size="large" />
+      </div>
+    )
+  }
+
+  if (medicineError || !medicine) {
+    return (
+      <div style={{ padding: '24px' }}>
+        <Alert
+          message={t('medicine.error')}
+          description={t('medicine.noData')}
+          type="error"
+          showIcon
+          action={
+            <Button size="small" onClick={() => navigate('/medicines')}>
+              {t('medicine.backToMedicines')}
+            </Button>
+          }
+        />
+      </div>
+    )
+  }
 
   return (
     <div>
-      <Card>
-        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '24px' }}>
-          <Space>
-            <Button 
-              icon={<ArrowLeftOutlined />} 
-              onClick={() => navigate('/medicines')}
-            >
-              Quay lại
-            </Button>
-            <Title level={3} style={{ margin: 0 }}>
-              {t('medicine.medicineInfo')} - {medicine.maThuoc}
+      <div style={{ marginBottom: '24px' }}>
+        <Button 
+          icon={<ArrowLeftOutlined />} 
+          onClick={() => navigate('/medicines')}
+          style={{ marginBottom: '16px' }}
+        >
+          {t('medicine.backToMedicines')}
+        </Button>
+        
+        <Card>
+          <div style={{ display: 'flex', alignItems: 'center', marginBottom: '24px' }}>
+            <MedicineBoxOutlined style={{ fontSize: '24px', marginRight: '12px', color: '#1890ff' }} />
+            <Title level={2} style={{ margin: 0 }}>
+              {medicine.tenThuoc}
             </Title>
-          </Space>
-        </div>
-
-        {(isExpired || isExpiringSoon) && (
-          <Alert
-            message={isExpired ? "Thuốc đã hết hạn!" : "Thuốc sắp hết hạn!"}
-            description={isExpired 
-              ? `Thuốc đã hết hạn từ ${dayjs(medicine.ngayHetHan).format('DD/MM/YYYY')}`
-              : `Thuốc sẽ hết hạn vào ${dayjs(medicine.ngayHetHan).format('DD/MM/YYYY')}`
-            }
-            type={isExpired ? "error" : "warning"}
-            showIcon
-            style={{ marginBottom: '16px' }}
-          />
-        )}
-
-        <Row gutter={[16, 16]} style={{ marginBottom: '24px' }}>
-          <Col xs={24} sm={8}>
-            <Statistic
-              title="Giá bán"
-              value={medicine.giaBan}
-              prefix={<DollarOutlined />}
-              suffix="VNĐ"
-              valueStyle={{ color: '#3f8600' }}
-            />
-          </Col>
-          <Col xs={24} sm={8}>
-            <Statistic
-              title="Tồn kho"
-              value={medicine.soLuongTon}
-              prefix={<MedicineBoxOutlined />}
-              suffix={medicine.donViTinh}
-            />
-          </Col>
-          <Col xs={24} sm={8}>
-            <Statistic
-              title="Ngày hết hạn"
-              value={dayjs(medicine.ngayHetHan).format('DD/MM/YYYY')}
-              prefix={<CalendarOutlined />}
-              valueStyle={{ color: isExpired ? '#cf1322' : isExpiringSoon ? '#faad14' : '#3f8600' }}
-            />
-          </Col>
-        </Row>
-
-        <Divider orientation="left">
-          <Title level={4}>Thông tin cơ bản</Title>
-        </Divider>
-
-        <Descriptions bordered column={{ xxl: 4, xl: 3, lg: 3, md: 2, sm: 1, xs: 1 }}>
-          <Descriptions.Item label={t('medicine.medicineCode')} span={2}>
-            {medicine.maThuoc}
-          </Descriptions.Item>
-          <Descriptions.Item label={t('medicine.medicineName')} span={2}>
-            {medicine.tenThuoc}
-          </Descriptions.Item>
-          <Descriptions.Item label="Hoạt chất" span={2}>
-            {medicine.tenHoatChat}
-          </Descriptions.Item>
-          <Descriptions.Item label="Nồng độ" span={2}>
-            {medicine.nongDo}
-          </Descriptions.Item>
-          <Descriptions.Item label="Dạng bào chế" span={2}>
-            {medicine.dangBaoChe}
-          </Descriptions.Item>
-          <Descriptions.Item label="Hãng sản xuất" span={2}>
-            {medicine.hangSanXuat}
-          </Descriptions.Item>
-          <Descriptions.Item label="Nước sản xuất" span={2}>
-            {medicine.nuocSanXuat}
-          </Descriptions.Item>
-          <Descriptions.Item label="Nhóm thuốc" span={2}>
-            <Tag color={getDrugGroupColor(medicine.nhomThuoc)}>
-              {getDrugGroupText(medicine.nhomThuoc)}
-            </Tag>
-          </Descriptions.Item>
-          <Descriptions.Item label="Đơn vị tính" span={1}>
-            {medicine.donViTinh}
-          </Descriptions.Item>
-          <Descriptions.Item label="Quy cách" span={1}>
-            {medicine.quyCach}
-          </Descriptions.Item>
-          <Descriptions.Item label="Thành phần" span={4}>
-            {medicine.thanhPhan}
-          </Descriptions.Item>
-          <Descriptions.Item label="Bảo quản" span={4}>
-            {medicine.baoQuan}
-          </Descriptions.Item>
-        </Descriptions>
-
-        <Divider orientation="left">
-          <Title level={4}>Thông tin y tế</Title>
-        </Divider>
-
-        <Descriptions bordered column={{ xxl: 4, xl: 3, lg: 3, md: 2, sm: 1, xs: 1 }}>
-          <Descriptions.Item label="Chỉ định" span={4}>
-            {medicine.chiDinh}
-          </Descriptions.Item>
-          <Descriptions.Item label="Chống chỉ định" span={4}>
-            {medicine.chongChiDinh}
-          </Descriptions.Item>
-          <Descriptions.Item label="Tác dụng phụ" span={4}>
-            {medicine.tacDungPhu}
-          </Descriptions.Item>
-          <Descriptions.Item label="Liều dùng người lớn" span={2}>
-            {medicine.lieuDungNguoiLon}
-          </Descriptions.Item>
-          <Descriptions.Item label="Liều dùng trẻ em" span={2}>
-            {medicine.lieuDungTreEm}
-          </Descriptions.Item>
-        </Descriptions>
-
-        <Divider orientation="left">
-          <Title level={4}>Thông tin quản lý</Title>
-        </Divider>
-
-        <Descriptions bordered column={{ xxl: 4, xl: 3, lg: 3, md: 2, sm: 1, xs: 1 }}>
-          <Descriptions.Item label="Ngày tạo" span={2}>
-            {dayjs(medicine.ngayTao).format('DD/MM/YYYY HH:mm')}
-          </Descriptions.Item>
-          <Descriptions.Item label="Ngày hết hạn" span={2}>
-            {dayjs(medicine.ngayHetHan).format('DD/MM/YYYY')}
-          </Descriptions.Item>
-          <Descriptions.Item label="Trạng thái" span={1}>
-            <Tag color={medicine.kichHoat ? 'green' : 'red'}>
-              {medicine.kichHoat ? 'Hoạt động' : 'Không hoạt động'}
-            </Tag>
-          </Descriptions.Item>
-          <Descriptions.Item label="Đăng kiểm soát" span={1}>
-            <Tag color={medicine.dangKiemSoat ? 'orange' : 'default'}>
-              {medicine.dangKiemSoat ? 'Có' : 'Không'}
-            </Tag>
-          </Descriptions.Item>
-          <Descriptions.Item label="Thuốc kê đơn" span={1}>
-            <Tag color={medicine.thuocKeDon ? 'red' : 'default'}>
-              {medicine.thuocKeDon ? 'Có' : 'Không'}
-            </Tag>
-          </Descriptions.Item>
-          <Descriptions.Item label="Thuốc bảo hiểm" span={1}>
-            <Tag color={medicine.thuocBaoHiem ? 'blue' : 'default'}>
-              {medicine.thuocBaoHiem ? 'Có' : 'Không'}
-            </Tag>
-          </Descriptions.Item>
-        </Descriptions>
-
-        <Divider orientation="left">
-          <Title level={4}>Lưu ý quan trọng</Title>
-        </Divider>
-
-        <Card size="small">
-          <Space direction="vertical" style={{ width: '100%' }}>
-            <Alert
-              message="Chỉ định"
-              description={medicine.chiDinh}
-              type="info"
-              showIcon
-              icon={<InfoCircleOutlined />}
-            />
-            <Alert
-              message="Chống chỉ định"
-              description={medicine.chongChiDinh}
-              type="warning"
-              showIcon
-              icon={<SafetyOutlined />}
-            />
-            <Alert
-              message="Tác dụng phụ"
-              description={medicine.tacDungPhu}
-              type="error"
-              showIcon
-              icon={<MedicineBoxOutlined />}
-            />
-          </Space>
+          </div>
+          
+          <Row gutter={[16, 16]}>
+            <Col xs={24} md={8}>
+              <Statistic
+                title={t('medicine.drugCode')}
+                value={medicine.maThuoc}
+                prefix={<InfoCircleOutlined />}
+                valueStyle={{ color: '#1890ff' }}
+              />
+            </Col>
+            <Col xs={24} md={8}>
+              <Statistic
+                title={t('medicine.priceValue')}
+                value={medicine.giaBan ? `${medicine.giaBan.toLocaleString()} VNĐ` : '---'}
+                prefix={<DollarOutlined />}
+                valueStyle={{ color: '#52c41a' }}
+              />
+            </Col>
+            <Col xs={24} md={8}>
+              <Statistic
+                title={t('medicine.createdAt')}
+                value={medicine.ngayTao ? dayjs(medicine.ngayTao).format('DD/MM/YYYY') : '---'}
+                prefix={<CalendarOutlined />}
+                valueStyle={{ color: '#722ed1' }}
+              />
+            </Col>
+          </Row>
         </Card>
-      </Card>
+      </div>
+
+      <Row gutter={[24, 24]}>
+        <Col xs={24} lg={16}>
+          <Card title={t('medicine.medicineInfo')}>
+            <Row gutter={[16, 16]}>
+              <Col xs={24} md={12}>
+                <Descriptions column={1} size="small">
+                  <Descriptions.Item label={t('medicine.drugCode')}>
+                    {medicine.maThuoc || '---'}
+                  </Descriptions.Item>
+                  <Descriptions.Item label={t('medicine.drugName')}>
+                    {medicine.tenThuoc || '---'}
+                  </Descriptions.Item>
+                  <Descriptions.Item label={t('medicine.activeIngredientName')}>
+                    {medicine.tenHoatChat || '---'}
+                  </Descriptions.Item>
+                  <Descriptions.Item label={t('medicine.concentrationValue')}>
+                    {medicine.nongDo || '---'}
+                  </Descriptions.Item>
+                  <Descriptions.Item label={t('medicine.dosageFormType')}>
+                    {medicine.dangBaoChe || '---'}
+                  </Descriptions.Item>
+                  <Descriptions.Item label={t('medicine.manufacturerName')}>
+                    {medicine.hangSanXuat || '---'}
+                  </Descriptions.Item>
+                  <Descriptions.Item label={t('medicine.countryOfOrigin')}>
+                    {medicine.nuocSanXuat || '---'}
+                  </Descriptions.Item>
+                  <Descriptions.Item label={t('medicine.unitOfMeasurement')}>
+                    {medicine.donViTinh || '---'}
+                  </Descriptions.Item>
+                  <Descriptions.Item label={t('medicine.drugGroupType')}>
+                    {medicine.nhomThuoc ? (
+                      <Tag color={getDrugGroupColor(medicine.nhomThuoc)}>
+                        {getDrugGroupText(medicine.nhomThuoc)}
+                      </Tag>
+                    ) : (
+                      '---'
+                    )}
+                  </Descriptions.Item>
+                  <Descriptions.Item label={t('medicine.isActive')}>
+                    <Tag color={medicine.kichHoat ? 'green' : 'red'}>
+                      {medicine.kichHoat ? t('medicine.available') : t('medicine.outOfStock')}
+                    </Tag>
+                  </Descriptions.Item>
+                </Descriptions>
+              </Col>
+            </Row>
+          </Card>
+        </Col>
+
+        <Col xs={24} lg={8}>
+          <Card title={t('medicine.indicationsText')} style={{ height: '100%' }}>
+            <Space direction="vertical" style={{ width: '100%' }}>
+              <Alert
+                message={t('medicine.indicationsText')}
+                description={medicine.chiDinh || '---'}
+                type="info"
+                showIcon
+                icon={<InfoCircleOutlined />}
+              />
+              <Alert
+                message={t('medicine.contraindicationsText')}
+                description={medicine.chongChiDinh || '---'}
+                type="warning"
+                showIcon
+                icon={<SafetyOutlined />}
+              />
+            </Space>
+          </Card>
+        </Col>
+      </Row>
     </div>
   )
 } 
