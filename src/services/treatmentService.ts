@@ -24,8 +24,8 @@ export const treatmentService = {
   },
 
   // Tạo mới lịch sử điều trị
-  taoMoiLichSuDieuTri: async (patientId: number, data: LichSuDieuTriRequest) => {
-    const response = await api.post<LichSuDieuTriResponse>(`/patients/${patientId}/treatments`, data)
+  taoMoiLichSuDieuTri: async (data: LichSuDieuTriRequest) => {
+    const response = await api.post<LichSuDieuTriResponse>('/dieu-tri', data)
     return response.data
   },
 

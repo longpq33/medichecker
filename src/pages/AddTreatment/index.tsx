@@ -14,6 +14,8 @@ import {
 } from '@ant-design/icons'
 import dayjs from 'dayjs'
 import { useLanguage } from '@/hooks/useLanguage'
+import { useMedicines } from '@/hooks/useMedicines'
+import { treatmentService } from '@/services/treatmentService'
 import { MedicineItem } from './components'
 import { 
   StyledCard,
@@ -38,31 +40,28 @@ const { TextArea } = Input
 
 interface Medicine {
   id: string
+  thuocId: number
   name: string
-  quantity: string
-  unit: string
-  frequency: string
-  duration: string
+  soLuong: number
+  lieuDung: string
+  duongDung: string
+  tanSuat: string
+  thoiGianDung: string
+  huongDanSuDung?: string
+  giaDonVi: number
+  thanhTien: number
 }
 
 interface TouchedFields {
   [medicineId: string]: {
-    name?: boolean
-    quantity?: boolean
-    unit?: boolean
-    frequency?: boolean
-    duration?: boolean
+    thuocId?: boolean
+    soLuong?: boolean
+    lieuDung?: boolean
+    duongDung?: boolean
+    tanSuat?: boolean
+    thoiGianDung?: boolean
   }
 }
-
-const mockMedicines = [
-  { id: '1', name: 'Paracetamol 500mg', dosage: '1 viên x 3 lần/ngày' },
-  { id: '2', name: 'Amoxicillin 500mg', dosage: '1 viên x 2 lần/ngày' },
-  { id: '3', name: 'Ibuprofen 400mg', dosage: '1 viên x 3 lần/ngày' },
-  { id: '4', name: 'Vitamin C 1000mg', dosage: '1 viên x 1 lần/ngày' },
-  { id: '5', name: 'Omeprazole 20mg', dosage: '1 viên x 1 lần/ngày' },
-  { id: '6', name: 'Cetirizine 10mg', dosage: '1 viên x 1 lần/ngày' },
-]
 
 export const AddTreatment: React.FC = () => {
   const { id: patientId } = useParams<{ id: string }>()
@@ -73,14 +72,32 @@ export const AddTreatment: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const { t } = useLanguage()
 
+  // Lấy danh sách thuốc từ API
+  const { medicinesData, isLoadingMedicines } = useMedicines(
+    { page: 0, size: 1000 }, // Lấy tất cả thuốc
+    undefined
+  )
+
+  // Chuyển đổi dữ liệu từ API thành format cần thiết
+  const availableMedicines = medicinesData?.content?.map(medicine => ({
+    id: medicine.id.toString(),
+    name: medicine.tenThuoc,
+    dosage: `${medicine.nongDo || ''} ${medicine.dangBaoChe || ''}`.trim()
+  })) || []
+
   const handleAddMedicine = () => {
     const newMedicine: Medicine = {
       id: `medicine-${Date.now()}`,
+      thuocId: 0,
       name: '',
-      quantity: '',
-      unit: '',
-      frequency: '',
-      duration: ''
+      soLuong: 0,
+      lieuDung: '',
+      duongDung: '',
+      tanSuat: '',
+      thoiGianDung: '',
+      huongDanSuDung: '',
+      giaDonVi: 0,
+      thanhTien: 0
     }
     setMedicines(prev => [...prev, newMedicine])
   }
@@ -89,7 +106,7 @@ export const AddTreatment: React.FC = () => {
     setMedicines(prev => prev.filter(medicine => medicine.id !== medicineId))
   }
 
-  const handleMedicineChange = (medicineId: string, field: keyof Medicine, value: string) => {
+  const handleMedicineChange = (medicineId: string, field: keyof Medicine, value: string | number) => {
     setMedicines(prev => prev.map(medicine => 
       medicine.id === medicineId ? { ...medicine, [field]: value } : medicine
     ))
@@ -109,32 +126,38 @@ export const AddTreatment: React.FC = () => {
     const errors: string[] = []
     const medicineTouched = touchedFields[medicine.id] || {}
     
-    if (!medicine.name || medicine.name.trim() === '') {
-      if (forceValidate || medicineTouched.name) {
+    if (!medicine.thuocId || medicine.thuocId === 0) {
+      if (forceValidate || medicineTouched.thuocId) {
         errors.push(`${index + 1}: ${t('treatment.validation.selectMedicine')}`)
       }
     }
     
-    if (!medicine.quantity || medicine.quantity.trim() === '') {
-      if (forceValidate || medicineTouched.quantity) {
+    if (!medicine.soLuong || medicine.soLuong <= 0) {
+      if (forceValidate || medicineTouched.soLuong) {
         errors.push(`${index + 1}: ${t('treatment.validation.enterQuantity')}`)
       }
     }
 
-    if (!medicine.unit || medicine.unit.trim() === '') {
-      if (forceValidate || medicineTouched.unit) {
-        errors.push(`${index + 1}: ${t('treatment.validation.selectUnit')}`)
+    if (!medicine.lieuDung || medicine.lieuDung.trim() === '') {
+      if (forceValidate || medicineTouched.lieuDung) {
+        errors.push(`${index + 1}: ${t('treatment.validation.enterDosage')}`)
       }
     }
 
-    if (!medicine.frequency || medicine.frequency.trim() === '') {
-      if (forceValidate || medicineTouched.frequency) {
+    if (!medicine.duongDung || medicine.duongDung.trim() === '') {
+      if (forceValidate || medicineTouched.duongDung) {
+        errors.push(`${index + 1}: ${t('treatment.validation.selectRoute')}`)
+      }
+    }
+
+    if (!medicine.tanSuat || medicine.tanSuat.trim() === '') {
+      if (forceValidate || medicineTouched.tanSuat) {
         errors.push(`${index + 1}: ${t('treatment.validation.selectFrequency')}`)
       }
     }
 
-    if (!medicine.duration || medicine.duration.trim() === '') {
-      if (forceValidate || medicineTouched.duration) {
+    if (!medicine.thoiGianDung || medicine.thoiGianDung.trim() === '') {
+      if (forceValidate || medicineTouched.thoiGianDung) {
         errors.push(`${index + 1}: ${t('treatment.validation.selectDuration')}`)
       }
     }
@@ -146,6 +169,8 @@ export const AddTreatment: React.FC = () => {
     setIsSubmitting(true)
     
     try {
+      const values = await form.validateFields()
+      
       // Validate medicines
       if (medicines.length === 0) {
         message.error(t('treatment.validation.noMedicines'))
@@ -156,11 +181,12 @@ export const AddTreatment: React.FC = () => {
       const allTouchedFields: TouchedFields = {}
       medicines.forEach(medicine => {
         allTouchedFields[medicine.id] = {
-          name: true,
-          quantity: true,
-          unit: true,
-          frequency: true,
-          duration: true
+          thuocId: true,
+          soLuong: true,
+          lieuDung: true,
+          duongDung: true,
+          tanSuat: true,
+          thoiGianDung: true
         }
       })
       setTouchedFields(allTouchedFields)
@@ -179,20 +205,55 @@ export const AddTreatment: React.FC = () => {
       }
 
       // Check for duplicate medicines
-      const medicineNames = medicines.map(m => m.name.toLowerCase().trim())
-      const uniqueNames = new Set(medicineNames)
-      if (uniqueNames.size !== medicineNames.length) {
+      const medicineIds = medicines.map(m => m.thuocId)
+      const uniqueIds = new Set(medicineIds)
+      if (uniqueIds.size !== medicineIds.length) {
         message.error(t('treatment.validation.duplicateMedicine'))
         return
       }
 
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000))
+      // Prepare data for API
+      const treatmentData = {
+        benhNhanId: parseInt(patientId || '0'),
+        maChanDoan: values.maChanDoan,
+        chanDoanChinh: values.chanDoanChinh,
+        chanDoanPhu: values.chanDoanPhu || '',
+        trieuChung: values.trieuChung || '',
+        bacSiDieuTri: values.bacSiDieuTri,
+        trangThai: 'DANG_DIEU_TRI' as const,
+        ngayBatDau: values.ngayBatDau.format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+        donThuocDieuTri: {
+          benhNhanId: parseInt(patientId || '0'),
+          maDonThuoc: `DT${Date.now()}`,
+          bacSiKeDon: values.bacSiDieuTri,
+          ghiChu: values.notes || '',
+          trangThai: 'MOI_TAO' as const,
+          danhSachThuoc: medicines.map(medicine => ({
+            thuocId: medicine.thuocId,
+            soLuong: medicine.soLuong,
+            lieuDung: medicine.lieuDung,
+            duongDung: medicine.duongDung,
+            tanSuat: medicine.tanSuat,
+            thoiGianDung: medicine.thoiGianDung,
+            huongDanSuDung: medicine.huongDanSuDung || '',
+            giaDonVi: medicine.giaDonVi,
+            thanhTien: medicine.thanhTien
+          }))
+        }
+      }
+
+      // Call API
+      await treatmentService.taoMoiLichSuDieuTri(treatmentData)
       
       message.success(t('treatment.successMessage'))
       navigate(`/patients/${patientId}`)
-    } catch {
-      message.error(t('treatment.errorMessage'))
+    } catch (error: unknown) {
+      if (error && typeof error === 'object' && 'errorFields' in error) {
+        // Form validation error
+        return
+      }
+      const errorMessage = error instanceof Error ? error.message : t('treatment.errorMessage')
+      message.error(errorMessage)
     } finally {
       setIsSubmitting(false)
     }
@@ -232,28 +293,76 @@ export const AddTreatment: React.FC = () => {
               handleSubmit()
             }}
             initialValues={{
-              treatmentDate: dayjs()
+              ngayBatDau: dayjs()
             }}
           >
             <FormSection>
               <div className="section-title">{t('treatment.diagnosisInfo')}</div>
               
               <Form.Item
-                name="diagnosis"
-                label={t('treatment.diagnosis')}
+                name="maChanDoan"
+                label={t('treatment.diagnosisCode')}
                 rules={[
-                  { required: true, message: t('validation.required', { field: t('treatment.diagnosis') }) },
-                  { min: 10, message: t('validation.minLength', { field: t('treatment.diagnosis'), min: 10 }) }
+                  { required: true, message: t('validation.required', { field: t('treatment.diagnosisCode') }) }
                 ]}
               >
                 <Input 
-                  placeholder={t('treatment.diagnosisPlaceholder')}
+                  placeholder={t('treatment.diagnosisCodePlaceholder')}
                   size="large"
                 />
               </Form.Item>
 
               <Form.Item
-                name="treatmentDate"
+                name="chanDoanChinh"
+                label={t('treatment.mainDiagnosis')}
+                rules={[
+                  { required: true, message: t('validation.required', { field: t('treatment.mainDiagnosis') }) },
+                  { min: 10, message: t('validation.minLength', { field: t('treatment.mainDiagnosis'), min: 10 }) }
+                ]}
+              >
+                <Input 
+                  placeholder={t('treatment.mainDiagnosisPlaceholder')}
+                  size="large"
+                />
+              </Form.Item>
+
+              <Form.Item
+                name="chanDoanPhu"
+                label={t('treatment.secondaryDiagnosis')}
+              >
+                <Input 
+                  placeholder={t('treatment.secondaryDiagnosisPlaceholder')}
+                  size="large"
+                />
+              </Form.Item>
+
+              <Form.Item
+                name="bacSiDieuTri"
+                label={t('treatment.doctor')}
+                rules={[
+                  { required: true, message: t('validation.required', { field: t('treatment.doctor') }) }
+                ]}
+              >
+                <Input 
+                  placeholder={t('treatment.doctorPlaceholder')}
+                  size="large"
+                />
+              </Form.Item>
+
+              <Form.Item
+                name="trieuChung"
+                label={t('treatment.symptoms')}
+              >
+                <TextArea
+                  placeholder={t('treatment.symptomsPlaceholder')}
+                  rows={3}
+                  showCount
+                  maxLength={200}
+                />
+              </Form.Item>
+
+              <Form.Item
+                name="ngayBatDau"
                 label={t('treatment.treatmentDate')}
                 rules={[
                   { required: true, message: t('validation.required', { field: t('treatment.treatmentDate') }) }
@@ -277,8 +386,10 @@ export const AddTreatment: React.FC = () => {
                   onMedicineChange={handleMedicineChange}
                   onRemove={handleRemoveMedicine}
                   onFieldTouch={handleFieldTouch}
-                  mockMedicines={mockMedicines}
+                  mockMedicines={availableMedicines}
                   validateMedicine={validateMedicine}
+                  isLoadingMedicines={isLoadingMedicines}
+                  medicinesData={medicinesData}
                 />
               ))}
 
@@ -294,8 +405,8 @@ export const AddTreatment: React.FC = () => {
                 <PrescriptionSummary>
                   <SummaryTitle>{t('treatment.summary')}:</SummaryTitle>
                   {medicines.map((medicine, index) => {
-                    const dosageText = medicine.quantity && medicine.unit && medicine.frequency && medicine.duration
-                      ? `${medicine.quantity} ${medicine.unit} ${medicine.frequency} ${t('common.of')} ${medicine.duration}`
+                    const dosageText = medicine.soLuong && medicine.lieuDung && medicine.tanSuat && medicine.thoiGianDung
+                      ? `${medicine.soLuong} ${medicine.lieuDung} ${medicine.tanSuat} ${t('common.of')} ${medicine.thoiGianDung}`
                       : t('treatment.incompleteInfo')
                     
                     return (

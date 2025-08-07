@@ -26,9 +26,8 @@ export const StyledCard = styled(Card)`
 `
 
 export const FormContainer = styled.div`
-  max-width: 800px;
   margin: 0 auto;
-  padding: ${SPACING.PADDING_XL};
+  width: 100%;
 `
 
 export const FormSection = styled.div`
@@ -47,7 +46,7 @@ export const FormSection = styled.div`
 export const MedicineItem = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: ${SPACING.GAP_LG};
+  gap: ${SPACING.GAP_SM};
   align-items: end;
   padding: ${SPACING.PADDING_LG};
   background: ${COLORS.BG_PRIMARY};
@@ -189,7 +188,7 @@ export const BackButton = styled(Button)`
 
 export const StyledForm = styled(Form)`
   .ant-form-item {
-    margin-bottom: ${SPACING.MARGIN_LG};
+    margin-bottom: ${SPACING.MARGIN_SM};
   }
 
   .ant-form-item-label > label {

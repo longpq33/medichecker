@@ -1,11 +1,24 @@
 // Types cho lịch sử điều trị
 export interface LichSuDieuTriRequest {
-  ngayKham: string
-  bacSi: string
-  chuanDoan: string
+  benhNhanId: number
+  maChanDoan: string
+  chanDoanChinh: string
+  chanDoanPhu?: string
+  trieuChung?: string
+  bacSiDieuTri: string
+  trangThai: 'MOI_TAO' | 'DA_DUYET' | 'DANG_DIEU_TRI' | 'HOAN_THANH' | 'HUY_BO'
+  ngayBatDau: string
+  donThuocDieuTri?: DonThuocDieuTriRequest
+}
+
+export interface DonThuocDieuTriRequest {
+  benhNhanId: number
+  dieuTriId?: number
+  maDonThuoc: string
+  bacSiKeDon: string
   ghiChu?: string
   trangThai: 'MOI_TAO' | 'DA_DUYET' | 'DANG_THUC_HIEN' | 'HOAN_THANH' | 'HUY_BO'
-  danhSachThuoc?: ThuocDieuTri[]
+  danhSachThuoc: ThuocDieuTri[]
 }
 
 export interface ThuocDieuTri {
@@ -16,6 +29,8 @@ export interface ThuocDieuTri {
   tanSuat: string
   thoiGianDung: string
   huongDanSuDung?: string
+  giaDonVi: number
+  thanhTien: number
 }
 
 export interface LichSuDieuTriResponse {
