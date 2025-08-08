@@ -2,12 +2,12 @@ import React, { useState } from 'react'
 import { 
   Form,
   message,
-  Pagination,
-  Modal
+  Pagination
 } from 'antd'
-import { PatientForm, PatientTable, PatientHeader } from './components'
+import { PatientForm, PatientTable } from './components'
 import { usePatients } from '@/hooks/usePatients'
 import { useLanguage } from '@/hooks/useLanguage'
+import { PageHeader, ConfirmModal } from '@/components'
 import type { BenhNhanResponse } from '@/types'
 import dayjs from 'dayjs'
 import { PatientListContainer } from './styled'
@@ -45,37 +45,6 @@ export const PatientList: React.FC = () => {
 
   const patients = patientsData?.content || []
   const total = patientsData?.totalElements || 0
-
-  const getGenderText = (gender?: string) => {
-    switch (gender) {
-      case 'NAM':
-        return t('common.male')
-      case 'NU':
-        return t('common.female')
-      case 'KHAC':
-        return t('common.other')
-      default:
-        return t('patient.noData')
-    }
-  }
-
-  const getGenderColor = (gender?: string) => {
-    switch (gender) {
-      case 'NAM':
-        return 'blue'
-      case 'NU':
-        return 'pink'
-      case 'KHAC':
-        return 'orange'
-      default:
-        return 'default'
-    }
-  }
-
-  const handleSearch = (value: string) => {
-    setSearchText(value)
-    setCurrentPage(1) // Reset về trang đầu khi search
-  }
 
   const handleAdd = () => {
     setEditingPatient(null)
@@ -144,10 +113,10 @@ export const PatientList: React.FC = () => {
       
       if (editingPatient) {
         // Update existing patient
-        updatePatient({ id: editingPatient.id, data: formattedValues })
+        await updatePatient({ id: editingPatient.id, data: formattedValues })
       } else {
         // Add new patient
-        createPatient(formattedValues)
+        await createPatient(formattedValues)
       }
       setIsModalVisible(false)
       form.resetFields()
@@ -164,13 +133,42 @@ export const PatientList: React.FC = () => {
     }
   }
 
+  const getGenderText = (gender?: string) => {
+    switch (gender) {
+      case 'NAM':
+        return t('common.male')
+      case 'NU':
+        return t('common.female')
+      case 'KHAC':
+        return t('common.other')
+      default:
+        return gender || ''
+    }
+  }
+
+  const getGenderColor = (gender?: string) => {
+    switch (gender) {
+      case 'NAM':
+        return 'blue'
+      case 'NU':
+        return 'pink'
+      case 'KHAC':
+        return 'orange'
+      default:
+        return 'default'
+    }
+  }
+
   return (
     <PatientListContainer>
-      <PatientHeader 
+      <PageHeader
+        title={t('patient.patientManagement')}
         onAdd={handleAdd}
-        onSearch={handleSearch}
+        onSearch={setSearchText}
+        addButtonText={t('patient.addPatient')}
+        searchPlaceholder={t('patient.searchPlaceholder')}
       />
-      
+
       <PatientTable
         patients={patients}
         loading={isLoadingPatients}
@@ -181,61 +179,35 @@ export const PatientList: React.FC = () => {
         getGenderColor={getGenderColor}
       />
 
-      <div style={{ textAlign: 'center', marginTop: '20px' }}>
+      <div style={{ textAlign: 'right', marginTop: 16 }}>
         <Pagination
           current={currentPage}
           pageSize={pageSize}
           total={total}
+          onChange={handlePageChange}
           showSizeChanger
           showQuickJumper
           showTotal={(total, range) => `${range[0]}-${range[1]} của ${total} bệnh nhân`}
-          onChange={handlePageChange}
-          onShowSizeChange={handlePageChange}
         />
       </div>
 
-      {/* Add/Edit Patient Modal */}
       <PatientForm
         visible={isModalVisible}
         editingPatient={editingPatient}
+        onCancel={() => setIsModalVisible(false)}
         onOk={handleModalOk}
-        onCancel={() => {
-          setIsModalVisible(false)
-          setEditingPatient(null)
-          form.resetFields()
-        }}
         form={form}
       />
 
-      {/* Delete Confirmation Modal */}
-      <Modal
-        title={t('patient.confirmDelete')}
-        open={isDeleteModalVisible}
-        onOk={handleDeleteConfirm}
+      <ConfirmModal
+        visible={isDeleteModalVisible}
+        title={t('patient.deletePatient')}
+        content={t('patient.deleteConfirm', { name: deletingPatient?.hoTen })}
+        onConfirm={handleDeleteConfirm}
         onCancel={handleDeleteCancel}
-        okText={t('common.delete')}
+        confirmText={t('common.delete')}
         cancelText={t('common.cancel')}
-        okType="danger"
-        confirmLoading={false}
-      >
-        {deletingPatient && (
-          <div>
-            <p>{t('patient.deleteConfirm')}</p>
-            <div style={{ marginTop: '8px', padding: '8px', backgroundColor: '#f5f5f5', borderRadius: '4px' }}>
-              <strong>{t('patient.patientInfo')}:</strong>
-              <br />
-              {t('patient.patientCode')}: {deletingPatient.maBenhNhan}
-              <br />
-              {t('patient.fullName')}: {deletingPatient.hoTen}
-              <br />
-              {t('common.phone')}: {deletingPatient.soDienThoai || t('patient.noData')}
-            </div>
-            <p style={{ color: '#ff4d4f', marginTop: '8px', fontWeight: 'bold' }}>
-              ⚠️ {t('patient.deleteWarning')}
-            </p>
-          </div>
-        )}
-      </Modal>
+      />
     </PatientListContainer>
   )
 } 

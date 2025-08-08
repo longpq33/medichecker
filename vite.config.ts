@@ -6,7 +6,7 @@ import { fileURLToPath, URL } from 'node:url'
 export default defineConfig({
   plugins: [react()],
   server: {
-    port: 8081,
+    port: 8083,
     open: true,
   },
   build: {

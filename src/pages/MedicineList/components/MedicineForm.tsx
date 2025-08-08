@@ -1,9 +1,8 @@
 import React from 'react'
-import { Form, Input, Select, InputNumber, Modal } from 'antd'
+import { Form } from 'antd'
 import type { ThuocResponse } from '@/types'
 import { useLanguage } from '@/hooks/useLanguage'
-
-const { Option } = Select
+import { Modal, FormField } from '@/components'
 
 interface MedicineFormProps {
   visible: boolean
@@ -22,116 +21,109 @@ export const MedicineForm: React.FC<MedicineFormProps> = ({
 }) => {
   const { t } = useLanguage()
 
+  const nhomThuocOptions = [
+    { value: 'KHANG_SINH', label: t('medicine.groups.antibiotic') },
+    { value: 'GIAM_DAU', label: t('medicine.groups.painkiller') },
+    { value: 'CHONG_VIEM', label: t('medicine.groups.antiInflammatory') },
+    { value: 'TIM_MACH', label: t('medicine.groups.cardiovascular') },
+    { value: 'TIEU_HOA', label: t('medicine.groups.digestive') },
+    { value: 'HOI_SUC', label: t('medicine.groups.respiratory') },
+    { value: 'KHAC', label: t('medicine.groups.other') }
+  ]
+
   return (
     <Modal
+      visible={visible}
       title={editingMedicine ? t('medicine.editMedicine') : t('medicine.addMedicine')}
-      open={visible}
-      onOk={onOk}
       onCancel={onCancel}
-      width={600}
-      okText={t('common.save')}
-      cancelText={t('common.cancel')}
-      style={{ top: 20 }}
-      bodyStyle={{ 
-        maxHeight: '70vh', 
-        overflowY: 'auto',
-        paddingRight: '8px'
-      }}
+      onOk={onOk}
     >
       <Form
         form={form}
         layout="vertical"
       >
-        <Form.Item
+        <FormField
+          type="input"
           name="tenThuoc"
           label={t('medicine.drugName')}
+          placeholder={t('medicine.drugName')}
           rules={[{ required: true, message: t('medicine.drugName') + ' ' + t('common.required') }]}
-        >
-          <Input placeholder={t('medicine.drugName')} />
-        </Form.Item>
+        />
         
-        <Form.Item
+        <FormField
+          type="input"
           name="tenHoatChat"
           label={t('medicine.activeIngredientName')}
-        >
-          <Input placeholder={t('medicine.activeIngredientName')} />
-        </Form.Item>
+          placeholder={t('medicine.activeIngredientName')}
+        />
         
-        <Form.Item
+        <FormField
+          type="input"
           name="nongDo"
           label={t('medicine.concentrationValue')}
-        >
-          <Input placeholder={t('medicine.concentrationValue')} />
-        </Form.Item>
+          placeholder={t('medicine.concentrationValue')}
+        />
         
-        <Form.Item
+        <FormField
+          type="input"
           name="dangBaoChe"
           label={t('medicine.dosageFormType')}
-        >
-          <Input placeholder={t('medicine.dosageFormType')} />
-        </Form.Item>
+          placeholder={t('medicine.dosageFormType')}
+        />
         
-        <Form.Item
+        <FormField
+          type="input"
           name="hangSanXuat"
           label={t('medicine.manufacturerName')}
-        >
-          <Input placeholder={t('medicine.manufacturerName')} />
-        </Form.Item>
+          placeholder={t('medicine.manufacturerName')}
+        />
         
-        <Form.Item
+        <FormField
+          type="input"
           name="nuocSanXuat"
           label={t('medicine.countryOfOrigin')}
-        >
-          <Input placeholder={t('medicine.countryOfOrigin')} />
-        </Form.Item>
+          placeholder={t('medicine.countryOfOrigin')}
+        />
         
-        <Form.Item
+        <FormField
+          type="number"
           name="giaBan"
           label={t('medicine.priceValue')}
-        >
-          <InputNumber
-            style={{ width: '100%' }}
-            formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-            min={0}
-            placeholder={t('medicine.priceValue')}
-          />
-        </Form.Item>
+          placeholder={t('medicine.priceValue')}
+          numberProps={{
+            formatter: (value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ','),
+            min: 0
+          }}
+        />
         
-        <Form.Item
+        <FormField
+          type="input"
           name="donViTinh"
           label={t('medicine.unitOfMeasurement')}
-        >
-          <Input placeholder={t('medicine.unitOfMeasurement')} />
-        </Form.Item>
+          placeholder={t('medicine.unitOfMeasurement')}
+        />
         
-        <Form.Item
+        <FormField
+          type="textarea"
           name="chiDinh"
           label={t('medicine.indicationsText')}
-        >
-          <Input.TextArea rows={3} placeholder={t('medicine.indicationsText')} />
-        </Form.Item>
+          placeholder={t('medicine.indicationsText')}
+        />
         
-        <Form.Item
+        <FormField
+          type="textarea"
           name="chongChiDinh"
           label={t('medicine.contraindicationsText')}
-        >
-          <Input.TextArea rows={3} placeholder={t('medicine.contraindicationsText')} />
-        </Form.Item>
+          placeholder={t('medicine.contraindicationsText')}
+        />
         
-        <Form.Item
+        <FormField
+          type="select"
           name="nhomThuoc"
           label={t('medicine.drugGroupType')}
-        >
-          <Select placeholder={t('medicine.drugGroupType')}>
-            <Option value="KHANG_SINH">{t('medicine.groups.antibiotic')}</Option>
-            <Option value="GIAM_DAU">{t('medicine.groups.painkiller')}</Option>
-            <Option value="CHONG_VIEM">{t('medicine.groups.antiInflammatory')}</Option>
-            <Option value="TIM_MACH">{t('medicine.groups.cardiovascular')}</Option>
-            <Option value="TIEU_HOA">{t('medicine.groups.digestive')}</Option>
-            <Option value="HOI_SUC">{t('medicine.groups.respiratory')}</Option>
-            <Option value="KHAC">{t('medicine.groups.other')}</Option>
-          </Select>
-        </Form.Item>
+          placeholder={t('medicine.drugGroupType')}
+          options={nhomThuocOptions}
+        />
       </Form>
     </Modal>
   )

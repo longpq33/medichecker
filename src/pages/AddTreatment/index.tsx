@@ -4,28 +4,20 @@ import {
   Form, 
   Input, 
   message,
-  Modal,
-  Card,
   Row,
-  Col,
-  Tag,
-  Space,
-  Typography
+  Col
 } from 'antd'
 import { 
   ArrowLeftOutlined,
   PlusOutlined,
   SaveOutlined,
-  CloseOutlined,
-  UserOutlined,
-  AlertOutlined,
-  FileTextOutlined
+  CloseOutlined
 } from '@ant-design/icons'
-import dayjs from 'dayjs'
 import { useLanguage } from '@/hooks/useLanguage'
 import { useMedicines } from '@/hooks/useMedicines'
 import { usePatient } from '@/hooks/usePatients'
 import { treatmentService } from '@/services/treatmentService'
+import { PatientInfo } from '@/components'
 import { MedicineItem } from './components'
 import { 
   StyledCard,
@@ -37,16 +29,10 @@ import {
   BackButton,
   StyledForm,
   DatePickerStyled,
-  PrescriptionSummary,
-  SummaryTitle,
-  SummaryItem,
-  SummaryMedicineName,
-  SummaryDosageText,
   StyledTitle
 } from './styled'
 
 const { TextArea } = Input
-const { Title, Text } = Typography
 
 interface Medicine {
   id: string
@@ -74,8 +60,9 @@ interface TouchedFields {
 }
 
 export const AddTreatment: React.FC = () => {
-  const { id: patientId } = useParams<{ id: string }>()
+  const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
+  const { t } = useLanguage()
   const [form] = Form.useForm()
   const [medicines, setMedicines] = useState<Medicine[]>([
     {
@@ -94,16 +81,10 @@ export const AddTreatment: React.FC = () => {
   ])
   const [touchedFields, setTouchedFields] = useState<TouchedFields>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const { t } = useLanguage()
 
-  // Lấy thông tin bệnh nhân
-  const { patient, isLoadingPatient } = usePatient(parseInt(patientId || '0'))
-
-  // Lấy danh sách thuốc từ API
-  const { medicinesData, isLoadingMedicines } = useMedicines(
-    { page: 0, size: 1000 }, // Lấy tất cả thuốc
-    undefined
-  )
+  // Sử dụng hooks
+  const { medicinesData } = useMedicines({ page: 0, size: 1000 })
+  const { patient, isLoadingPatient } = usePatient(parseInt(id || '0'))
 
   // Chuyển đổi dữ liệu từ API thành format cần thiết
   const availableMedicines = medicinesData?.content?.map(medicine => ({
@@ -111,16 +92,6 @@ export const AddTreatment: React.FC = () => {
     name: medicine.tenThuoc,
     dosage: `${medicine.nongDo || ''} ${medicine.dangBaoChe || ''}`.trim()
   })) || []
-
-  // Tính tuổi từ ngày sinh
-  const calculateAge = (dateOfBirth?: string) => {
-    if (!dateOfBirth) return null
-    const birthDate = dayjs(dateOfBirth)
-    if (!birthDate.isValid()) return null
-    return dayjs().diff(birthDate, 'year')
-  }
-
-  const age = calculateAge(patient?.ngaySinh)
 
   const handleAddMedicine = () => {
     const newMedicine: Medicine = {
@@ -171,99 +142,80 @@ export const AddTreatment: React.FC = () => {
     
     if (!medicine.soLuong || medicine.soLuong <= 0) {
       if (forceValidate || medicineTouched.soLuong) {
-        errors.push(`${index + 1}: ${t('treatment.validation.enterQuantity')}`)
+        errors.push(`${index + 1}: ${t('treatment.validation.quantity')}`)
       }
     }
-
-    if (!medicine.lieuDung || medicine.lieuDung.trim() === '') {
+    
+    if (!medicine.lieuDung) {
       if (forceValidate || medicineTouched.lieuDung) {
-        errors.push(`${index + 1}: ${t('treatment.validation.enterDosage')}`)
+        errors.push(`${index + 1}: ${t('treatment.validation.dosage')}`)
       }
     }
-
-    if (!medicine.duongDung || medicine.duongDung.trim() === '') {
+    
+    if (!medicine.duongDung) {
       if (forceValidate || medicineTouched.duongDung) {
-        errors.push(`${index + 1}: ${t('treatment.validation.selectRoute')}`)
+        errors.push(`${index + 1}: ${t('treatment.validation.route')}`)
       }
     }
-
-    if (!medicine.tanSuat || medicine.tanSuat.trim() === '') {
+    
+    if (!medicine.tanSuat) {
       if (forceValidate || medicineTouched.tanSuat) {
-        errors.push(`${index + 1}: ${t('treatment.validation.selectFrequency')}`)
+        errors.push(`${index + 1}: ${t('treatment.validation.frequency')}`)
       }
     }
-
-    if (!medicine.thoiGianDung || medicine.thoiGianDung.trim() === '') {
+    
+    if (!medicine.thoiGianDung) {
       if (forceValidate || medicineTouched.thoiGianDung) {
-        errors.push(`${index + 1}: ${t('treatment.validation.selectDuration')}`)
+        errors.push(`${index + 1}: ${t('treatment.validation.duration')}`)
       }
     }
     
     return errors
   }
 
-  const handleSubmit = async () => {
-    setIsSubmitting(true)
-    
+  const handleSubmit = async (values: unknown) => {
     try {
-      const values = await form.validateFields()
+      setIsSubmitting(true)
+      
+      const formValues = values as {
+        maChanDoan: string
+        chanDoanChinh: string
+        chanDoanPhu?: string
+        trieuChung?: string
+        bacSiDieuTri: string
+        ngayBatDau: { format: (format: string) => string }
+        notes?: string
+      }
       
       // Validate medicines
-      if (medicines.length === 0) {
-        message.error(t('treatment.validation.noMedicines'))
-        return
-      }
-
-      // Mark all fields as touched for final validation
-      const allTouchedFields: TouchedFields = {}
-      medicines.forEach(medicine => {
-        allTouchedFields[medicine.id] = {
-          thuocId: true,
-          soLuong: true,
-          lieuDung: true,
-          duongDung: true,
-          tanSuat: true,
-          thoiGianDung: true
-        }
-      })
-      setTouchedFields(allTouchedFields)
-
-      // Validate each medicine with force validation
       const medicineErrors: string[] = []
-      
       medicines.forEach((medicine, index) => {
-        const errors = validateMedicine(medicine, index, true) // Force validate on submit
+        const errors = validateMedicine(medicine, index, true)
         medicineErrors.push(...errors)
       })
-
+      
       if (medicineErrors.length > 0) {
         message.error(medicineErrors.join('\n'))
         return
       }
-
-      // Check for duplicate medicines
-      const medicineIds = medicines.map(m => m.thuocId)
-      const uniqueIds = new Set(medicineIds)
-      if (uniqueIds.size !== medicineIds.length) {
-        message.error(t('treatment.validation.duplicateMedicine'))
-        return
-      }
-
-      // Prepare data for API
+      
+      // Prepare treatment data
       const treatmentData = {
-        benhNhanId: parseInt(patientId || '0'),
-        maChanDoan: values.maChanDoan,
-        chanDoanChinh: values.chanDoanChinh,
-        chanDoanPhu: values.chanDoanPhu || '',
-        trieuChung: values.trieuChung || '',
-        bacSiDieuTri: values.bacSiDieuTri,
+        benhNhanId: parseInt(id || '0'),
+        maChanDoan: formValues.maChanDoan,
+        chanDoanChinh: formValues.chanDoanChinh,
+        chanDoanPhu: formValues.chanDoanPhu || '',
+        trieuChung: formValues.trieuChung || '',
+        bacSiDieuTri: formValues.bacSiDieuTri,
         trangThai: 'DANG_DIEU_TRI' as const,
-        ngayBatDau: values.ngayBatDau.format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+        ngayBatDau: formValues.ngayBatDau.format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+        ghiChu: formValues.notes || '',
         donThuocDieuTri: {
-          benhNhanId: parseInt(patientId || '0'),
+          benhNhanId: parseInt(id || '0'),
+          dieuTriId: 0,
           maDonThuoc: `DT${Date.now()}`,
-          bacSiKeDon: values.bacSiDieuTri,
-          ghiChu: values.notes || '',
+          bacSiKeDon: formValues.bacSiDieuTri,
+          ghiChu: formValues.notes || '',
           trangThai: 'MOI_TAO' as const,
           danhSachThuoc: medicines.map(medicine => ({
             thuocId: medicine.thuocId,
@@ -278,44 +230,49 @@ export const AddTreatment: React.FC = () => {
           }))
         }
       }
-
-      // Call API
-      await treatmentService.taoMoiLichSuDieuTri(treatmentData)
       
-      message.success(t('treatment.successMessage'))
-      navigate(`/patients/${patientId}`)
-    } catch (error: unknown) {
-      if (error && typeof error === 'object' && 'errorFields' in error) {
-        // Form validation error
-        return
-      }
-      const errorMessage = error instanceof Error ? error.message : t('treatment.errorMessage')
-      message.error(errorMessage)
+      await treatmentService.taoMoiLichSuDieuTri(treatmentData)
+      message.success(t('treatment.createSuccess'))
+      navigate(`/patients/${id}`)
+    } catch (error) {
+      console.error('Error creating treatment:', error)
+      message.error(t('treatment.createError'))
     } finally {
       setIsSubmitting(false)
     }
   }
 
   const handleCancel = () => {
-    Modal.confirm({
-      title: t('treatment.confirmCancel'),
-      content: t('treatment.cancelMessage'),
-      onOk: () => navigate(`/patients/${patientId}`)
-    })
+    navigate(`/patients/${id}`)
   }
 
+  // Chuyển đổi dữ liệu patient cho PatientInfo component
+  const patientInfo = patient ? {
+    hoTen: patient.hoTen,
+    ngaySinh: patient.ngaySinh,
+    gioiTinh: patient.gioiTinh,
+    soDienThoai: patient.soDienThoai,
+    email: patient.email,
+    diaChi: patient.diaChi,
+    danhSachDiUng: patient.danhSachDiUng?.map(diUng => diUng.thuoc.tenThuoc) || [],
+    danhSachBenhLyNen: patient.danhSachBenhLyNen?.map(benhLy => benhLy.tenBenh) || []
+  } : {}
+
   return (
-    <div style={{ padding: '24px' }}>
-      <BackButton onClick={() => navigate(`/patients/${patientId}`)}>
-        <ArrowLeftOutlined /> {t('treatment.backToPatient')}
+    <div>
+      <BackButton
+        icon={<ArrowLeftOutlined />}
+        onClick={handleCancel}
+      >
+        {t('common.back')}
       </BackButton>
 
       <StyledTitle level={2}>
-        {t('treatment.title')}
+        {t('treatment.addTreatment')}
       </StyledTitle>
 
       <Row gutter={[24, 24]}>
-        {/* Cột bên trái - Form thêm điều trị */}
+        {/* Cột bên trái - Form */}
         <Col xs={24} lg={16}>
           <StyledCard>
             <StyledForm
@@ -329,53 +286,26 @@ export const AddTreatment: React.FC = () => {
                 <Form.Item
                   name="maChanDoan"
                   label={t('treatment.diagnosisCode')}
-                  rules={[
-                    { required: true, message: t('validation.required', { field: t('treatment.diagnosisCode') }) }
-                  ]}
+                  rules={[{ required: true, message: t('treatment.diagnosisCode') + ' ' + t('common.required') }]}
                 >
-                  <Input 
-                    placeholder={t('treatment.diagnosisCodePlaceholder')}
-                    size="large"
-                  />
+                  <Input placeholder={t('treatment.diagnosisCodePlaceholder')} />
                 </Form.Item>
-
+                
                 <Form.Item
                   name="chanDoanChinh"
                   label={t('treatment.mainDiagnosis')}
-                  rules={[
-                    { required: true, message: t('validation.required', { field: t('treatment.mainDiagnosis') }) },
-                    { min: 10, message: t('validation.minLength', { field: t('treatment.mainDiagnosis'), min: 10 }) }
-                  ]}
+                  rules={[{ required: true, message: t('treatment.mainDiagnosis') + ' ' + t('common.required') }]}
                 >
-                  <Input 
-                    placeholder={t('treatment.mainDiagnosisPlaceholder')}
-                    size="large"
-                  />
+                  <Input placeholder={t('treatment.mainDiagnosisPlaceholder')} />
                 </Form.Item>
-
+                
                 <Form.Item
                   name="chanDoanPhu"
                   label={t('treatment.secondaryDiagnosis')}
                 >
-                  <Input 
-                    placeholder={t('treatment.secondaryDiagnosisPlaceholder')}
-                    size="large"
-                  />
+                  <Input placeholder={t('treatment.secondaryDiagnosisPlaceholder')} />
                 </Form.Item>
-
-                <Form.Item
-                  name="bacSiDieuTri"
-                  label={t('treatment.doctor')}
-                  rules={[
-                    { required: true, message: t('validation.required', { field: t('treatment.doctor') }) }
-                  ]}
-                >
-                  <Input 
-                    placeholder={t('treatment.doctorPlaceholder')}
-                    size="large"
-                  />
-                </Form.Item>
-
+                
                 <Form.Item
                   name="trieuChung"
                   label={t('treatment.symptoms')}
@@ -384,20 +314,27 @@ export const AddTreatment: React.FC = () => {
                     placeholder={t('treatment.symptomsPlaceholder')}
                     rows={3}
                     showCount
-                    maxLength={200}
+                    maxLength={500}
                   />
                 </Form.Item>
-
+                
+                <Form.Item
+                  name="bacSiDieuTri"
+                  label={t('treatment.treatingDoctor')}
+                  rules={[{ required: true, message: t('treatment.treatingDoctor') + ' ' + t('common.required') }]}
+                >
+                  <Input placeholder={t('treatment.treatingDoctorPlaceholder')} />
+                </Form.Item>
+                
                 <Form.Item
                   name="ngayBatDau"
-                  label={t('treatment.treatmentDate')}
-                  rules={[
-                    { required: true, message: t('validation.required', { field: t('treatment.treatmentDate') }) }
-                  ]}
+                  label={t('treatment.startDate')}
+                  rules={[{ required: true, message: t('treatment.startDate') + ' ' + t('common.required') }]}
                 >
-                  <DatePickerStyled 
-                    size="large"
+                  <DatePickerStyled
+                    placeholder={t('treatment.startDatePlaceholder')}
                     format="DD/MM/YYYY"
+                    style={{ width: '100%' }}
                   />
                 </Form.Item>
               </FormSection>
@@ -410,41 +347,23 @@ export const AddTreatment: React.FC = () => {
                     key={medicine.id}
                     medicine={medicine}
                     index={index}
-                    onMedicineChange={handleMedicineChange}
-                    onRemove={handleRemoveMedicine}
-                    onFieldTouch={handleFieldTouch}
                     mockMedicines={availableMedicines}
-                    validateMedicine={validateMedicine}
-                    isLoadingMedicines={isLoadingMedicines}
+                    onMedicineChange={(medicineId, field, value) => handleMedicineChange(medicineId, field, value)}
+                    onRemove={(medicineId) => handleRemoveMedicine(medicineId)}
+                    onFieldTouch={(medicineId, field) => handleFieldTouch(medicineId, field)}
+                    validateMedicine={(medicine, index, forceValidate) => validateMedicine(medicine, index, forceValidate)}
                     medicinesData={medicinesData}
                   />
                 ))}
-
+                
                 <AddMedicineButton
                   type="dashed"
                   icon={<PlusOutlined />}
                   onClick={handleAddMedicine}
+                  block
                 >
                   {t('treatment.addMedicine')}
                 </AddMedicineButton>
-
-                {medicines.length > 0 && (
-                  <PrescriptionSummary>
-                    <SummaryTitle>{t('treatment.summary')}:</SummaryTitle>
-                    {medicines.map((medicine, index) => {
-                      const dosageText = medicine.soLuong && medicine.lieuDung && medicine.tanSuat && medicine.thoiGianDung
-                        ? `${medicine.soLuong} ${medicine.lieuDung} ${medicine.tanSuat} ${t('common.of')} ${medicine.thoiGianDung}`
-                        : t('treatment.incompleteInfo')
-                      
-                      return (
-                        <SummaryItem key={medicine.id}>
-                          <SummaryMedicineName>{index + 1}. {medicine.name || t('treatment.selectMedicine')}:</SummaryMedicineName>
-                          <SummaryDosageText>{dosageText}</SummaryDosageText>
-                        </SummaryItem>
-                      )
-                    })}
-                  </PrescriptionSummary>
-                )}
               </FormSection>
 
               <FormSection>
@@ -486,107 +405,10 @@ export const AddTreatment: React.FC = () => {
 
         {/* Cột bên phải - Thông tin bệnh nhân */}
         <Col xs={24} lg={8}>
-          <Card 
-            title={
-              <Space>
-                <UserOutlined />
-                <span>{t('patient.patientInfo')}</span>
-              </Space>
-            }
-            style={{ height: 'fit-content' }}
-          >
-            {isLoadingPatient ? (
-              <div>{t('common.loading')}</div>
-            ) : patient ? (
-              <Space direction="vertical" style={{ width: '100%' }}>
-                {/* Thông tin cơ bản */}
-                <div>
-                  <Title level={5} style={{ marginBottom: '8px' }}>
-                    {t('patient.personalInfo')}
-                  </Title>
-                  
-                  <div style={{ marginBottom: '8px' }}>
-                    <Text strong>{t('patient.fullName')}:</Text>
-                    <br />
-                    <Text>{patient.hoTen || '---'}</Text>
-                  </div>
-
-                  <div style={{ marginBottom: '8px' }}>
-                    <Text strong>{t('patient.age')}:</Text>
-                    <br />
-                    <Text>{age ? `${age} ${t('common.years')}` : '---'}</Text>
-                  </div>
-
-                  <div style={{ marginBottom: '8px' }}>
-                    <Text strong>{t('patient.address')}:</Text>
-                    <br />
-                    <Text>{patient.diaChi || '---'}</Text>
-                  </div>
-                </div>
-
-                {/* Danh sách dị ứng thuốc */}
-                <div>
-                  <Title level={5} style={{ marginBottom: '8px' }}>
-                    <AlertOutlined style={{ marginRight: '8px', color: '#ff4d4f' }} />
-                    {t('patient.allergies')}
-                  </Title>
-                  
-                  {patient.danhSachDiUng && patient.danhSachDiUng.length > 0 ? (
-                    <Space direction="vertical" style={{ width: '100%' }}>
-                      {patient.danhSachDiUng.map((diUng) => (
-                        <Tag 
-                          key={diUng.id} 
-                          color="red" 
-                          style={{ 
-                            backgroundColor: '#fef2f2', 
-                            color: '#dc2626', 
-                            border: '1px solid #fecaca',
-                            marginBottom: '4px'
-                          }}
-                        >
-                          {diUng.thuoc.tenThuoc}
-                          {diUng.trieuChung && ` (${diUng.trieuChung})`}
-                        </Tag>
-                      ))}
-                    </Space>
-                  ) : (
-                    <Text type="secondary">{t('patient.noData')}</Text>
-                  )}
-                </div>
-
-                {/* Danh sách bệnh lý nền */}
-                <div>
-                  <Title level={5} style={{ marginBottom: '8px' }}>
-                    <FileTextOutlined style={{ marginRight: '8px', color: '#1890ff' }} />
-                    {t('patient.medicalHistory')}
-                  </Title>
-                  
-                  {patient.danhSachBenhLyNen && patient.danhSachBenhLyNen.length > 0 ? (
-                    <Space direction="vertical" style={{ width: '100%' }}>
-                      {patient.danhSachBenhLyNen.map((benhLy) => (
-                        <Tag 
-                          key={benhLy.id} 
-                          color="blue" 
-                          style={{ 
-                            backgroundColor: '#eff6ff', 
-                            color: '#1d4ed8', 
-                            border: '1px solid #dbeafe',
-                            marginBottom: '4px'
-                          }}
-                        >
-                          {benhLy.tenBenh}
-                        </Tag>
-                      ))}
-                    </Space>
-                  ) : (
-                    <Text type="secondary">{t('patient.noData')}</Text>
-                  )}
-                </div>
-              </Space>
-            ) : (
-              <div>{t('patient.notFound')}</div>
-            )}
-          </Card>
+          <PatientInfo
+            patient={patientInfo}
+            loading={isLoadingPatient}
+          />
         </Col>
       </Row>
     </div>

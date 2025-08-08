@@ -5,9 +5,10 @@ import {
   Pagination
 } from 'antd'
 import { useNavigate } from 'react-router-dom'
-import { MedicineForm, MedicineTable, MedicineHeader, DeleteMedicineModal } from './components'
+import { MedicineForm, MedicineTable } from './components'
 import { useMedicines } from '@/hooks/useMedicines'
 import { useLanguage } from '@/hooks/useLanguage'
+import { PageHeader, ConfirmModal } from '@/components'
 import type { ThuocResponse } from '@/types'
 import { MedicineListContainer } from './styled'
 
@@ -45,53 +46,6 @@ export const MedicineList: React.FC = () => {
 
   const medicines = medicinesData?.content || []
   const total = medicinesData?.totalElements || 0
-
-  const getNhomThuocText = (nhomThuoc?: string) => {
-    switch (nhomThuoc) {
-      case 'KHANG_SINH':
-        return t('medicine.groups.antibiotic')
-      case 'GIAM_DAU':
-        return t('medicine.groups.painkiller')
-      case 'CHONG_VIEM':
-        return t('medicine.groups.antiInflammatory')
-      case 'TIM_MACH':
-        return t('medicine.groups.cardiovascular')
-      case 'TIEU_HOA':
-        return t('medicine.groups.digestive')
-      case 'HOI_SUC':
-        return t('medicine.groups.respiratory')
-      case 'KHAC':
-        return t('medicine.groups.other')
-      default:
-        return t('medicine.noData')
-    }
-  }
-
-  const getNhomThuocColor = (nhomThuoc?: string) => {
-    switch (nhomThuoc) {
-      case 'KHANG_SINH':
-        return 'red'
-      case 'GIAM_DAU':
-        return 'orange'
-      case 'CHONG_VIEM':
-        return 'blue'
-      case 'TIM_MACH':
-        return 'purple'
-      case 'TIEU_HOA':
-        return 'green'
-      case 'HOI_SUC':
-        return 'cyan'
-      case 'KHAC':
-        return 'default'
-      default:
-        return 'default'
-    }
-  }
-
-  const handleSearch = (value: string) => {
-    setSearchText(value)
-    setCurrentPage(1) // Reset về trang đầu khi search
-  }
 
   const handleAdd = () => {
     setEditingMedicine(null)
@@ -171,13 +125,58 @@ export const MedicineList: React.FC = () => {
     }
   }
 
+  const getNhomThuocText = (nhomThuoc?: string) => {
+    switch (nhomThuoc) {
+      case 'KHANG_SINH':
+        return t('medicine.groups.antibiotic')
+      case 'GIAM_DAU':
+        return t('medicine.groups.painkiller')
+      case 'CHONG_VIEM':
+        return t('medicine.groups.antiInflammatory')
+      case 'TIM_MACH':
+        return t('medicine.groups.cardiovascular')
+      case 'TIEU_HOA':
+        return t('medicine.groups.digestive')
+      case 'HOI_SUC':
+        return t('medicine.groups.respiratory')
+      case 'KHAC':
+        return t('medicine.groups.other')
+      default:
+        return nhomThuoc || ''
+    }
+  }
+
+  const getNhomThuocColor = (nhomThuoc?: string) => {
+    switch (nhomThuoc) {
+      case 'KHANG_SINH':
+        return 'blue'
+      case 'GIAM_DAU':
+        return 'green'
+      case 'CHONG_VIEM':
+        return 'orange'
+      case 'TIM_MACH':
+        return 'red'
+      case 'TIEU_HOA':
+        return 'purple'
+      case 'HOI_SUC':
+        return 'cyan'
+      case 'KHAC':
+        return 'default'
+      default:
+        return 'default'
+    }
+  }
+
   return (
     <MedicineListContainer>
-      <MedicineHeader 
+      <PageHeader
+        title={t('medicine.medicineManagement')}
         onAdd={handleAdd}
-        onSearch={handleSearch}
+        onSearch={setSearchText}
+        addButtonText={t('medicine.addMedicine')}
+        searchPlaceholder={t('medicine.searchPlaceholder')}
       />
-      
+
       <MedicineTable
         medicines={medicines}
         loading={isLoadingMedicines}
@@ -188,16 +187,15 @@ export const MedicineList: React.FC = () => {
         getNhomThuocColor={getNhomThuocColor}
       />
 
-      <div style={{ textAlign: 'center', marginTop: '20px' }}>
+      <div style={{ textAlign: 'right', marginTop: 16 }}>
         <Pagination
           current={currentPage}
           pageSize={pageSize}
           total={total}
+          onChange={handlePageChange}
           showSizeChanger
           showQuickJumper
           showTotal={(total, range) => `${range[0]}-${range[1]} của ${total} thuốc`}
-          onChange={handlePageChange}
-          onShowSizeChange={handlePageChange}
         />
       </div>
 
@@ -209,12 +207,14 @@ export const MedicineList: React.FC = () => {
         form={form}
       />
 
-      <DeleteMedicineModal
+      <ConfirmModal
         visible={isDeleteModalVisible}
-        medicine={deletingMedicine}
-        onCancel={handleDeleteCancel}
+        title={t('medicine.deleteMedicine')}
+        content={t('medicine.deleteConfirm', { name: deletingMedicine?.tenThuoc })}
         onConfirm={handleDeleteConfirm}
-        loading={false}
+        onCancel={handleDeleteCancel}
+        confirmText={t('common.delete')}
+        cancelText={t('common.cancel')}
       />
     </MedicineListContainer>
   )

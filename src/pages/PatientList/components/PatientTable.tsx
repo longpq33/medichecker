@@ -1,8 +1,9 @@
 import React from 'react'
-import { Table, Tag, Button, Space } from 'antd'
+import { Tag } from 'antd'
 import { EditOutlined, DeleteOutlined, EyeOutlined } from '@ant-design/icons'
 import type { BenhNhanResponse } from '@/types'
 import { useLanguage } from '@/hooks/useLanguage'
+import { DataTable } from '@/components'
 
 interface PatientTableProps {
   patients: BenhNhanResponse[]
@@ -31,6 +32,7 @@ export const PatientTable: React.FC<PatientTableProps> = ({
       dataIndex: 'maBenhNhan',
       key: 'maBenhNhan',
       width: 140,
+      fixed: 'left' as const,
     },
     {
       title: t('patient.fullName'),
@@ -75,45 +77,36 @@ export const PatientTable: React.FC<PatientTableProps> = ({
       width: 140,
       render: (date: string) => new Date(date).toLocaleDateString('vi-VN'),
     },
+  ]
+
+  const actions = [
     {
-      title: t('common.actions'),
-      key: 'actions',
-      width: 140,
-      render: (_: unknown, record: BenhNhanResponse) => (
-        <Space>
-          <Button 
-            type="text" 
-            icon={<EyeOutlined />} 
-            size="small"
-            onClick={() => onView(record)}
-            style={{ color: '#1890ff' }}
-          />
-          <Button 
-            type="text" 
-            icon={<EditOutlined />} 
-            size="small"
-            onClick={() => onEdit(record)}
-            style={{ color: '#52c41a' }}
-          />
-          <Button 
-            type="text" 
-            icon={<DeleteOutlined />} 
-            size="small"
-            onClick={() => onDelete(record.id)}
-            style={{ color: '#ff4d4f' }}
-          />
-        </Space>
-      ),
+      key: 'view',
+      icon: <EyeOutlined />,
+      color: '#1890ff',
+      onClick: (record: BenhNhanResponse) => onView(record)
     },
+    {
+      key: 'edit',
+      icon: <EditOutlined />,
+      color: '#52c41a',
+      onClick: (record: BenhNhanResponse) => onEdit(record)
+    },
+    {
+      key: 'delete',
+      icon: <DeleteOutlined />,
+      color: '#ff4d4f',
+      onClick: (record: BenhNhanResponse) => onDelete(record.id)
+    }
   ]
 
   return (
-    <Table
-      columns={columns}
+    <DataTable<BenhNhanResponse>
       dataSource={patients}
-      rowKey="id"
       loading={loading}
-      pagination={false}
+      columns={columns}
+      actions={actions}
+      scroll={{ x: 1200 }}
     />
   )
 } 

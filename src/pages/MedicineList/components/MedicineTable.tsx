@@ -1,8 +1,9 @@
 import React from 'react'
-import { Table, Tag, Button, Space } from 'antd'
+import { Tag } from 'antd'
 import { EditOutlined, DeleteOutlined, EyeOutlined } from '@ant-design/icons'
 import type { ThuocResponse } from '@/types'
 import { useLanguage } from '@/hooks/useLanguage'
+import { DataTable } from '@/components'
 
 interface MedicineTableProps {
   medicines: ThuocResponse[]
@@ -97,64 +98,35 @@ export const MedicineTable: React.FC<MedicineTableProps> = ({
         </Tag>
       ),
     },
+  ]
+
+  const actions = [
     {
-      title: t('medicine.isActive'),
-      dataIndex: 'kichHoat',
-      key: 'kichHoat',
-      width: 100,
-      render: (kichHoat: boolean) => (
-        <Tag color={kichHoat ? 'green' : 'red'}>
-          {kichHoat ? 'Hoạt động' : 'Không hoạt động'}
-        </Tag>
-      ),
+      key: 'view',
+      icon: <EyeOutlined />,
+      color: '#1890ff',
+      onClick: (record: ThuocResponse) => onView(record)
     },
     {
-      title: t('medicine.createdAt'),
-      dataIndex: 'ngayTao',
-      key: 'ngayTao',
-      width: 120,
-      render: (date: string) => new Date(date).toLocaleDateString('vi-VN'),
+      key: 'edit',
+      icon: <EditOutlined />,
+      color: '#52c41a',
+      onClick: (record: ThuocResponse) => onEdit(record)
     },
     {
-      title: t('medicine.actions'),
-      key: 'actions',
-      width: 120,
-      fixed: 'right' as const,
-      render: (_: unknown, record: ThuocResponse) => (
-        <Space>
-          <Button 
-            type="text" 
-            icon={<EyeOutlined />} 
-            size="small"
-            onClick={() => onView(record)}
-            style={{ color: '#1890ff' }}
-          />
-          <Button 
-            type="text" 
-            icon={<EditOutlined />} 
-            size="small"
-            onClick={() => onEdit(record)}
-            style={{ color: '#52c41a' }}
-          />
-          <Button 
-            type="text" 
-            icon={<DeleteOutlined />} 
-            size="small"
-            onClick={() => onDelete(record.id)}
-            style={{ color: '#ff4d4f' }}
-          />
-        </Space>
-      ),
-    },
+      key: 'delete',
+      icon: <DeleteOutlined />,
+      color: '#ff4d4f',
+      onClick: (record: ThuocResponse) => onDelete(record.id)
+    }
   ]
 
   return (
-    <Table
-      columns={columns}
+    <DataTable<ThuocResponse>
       dataSource={medicines}
-      rowKey="id"
       loading={loading}
-      pagination={false}
+      columns={columns}
+      actions={actions}
       scroll={{ x: 1500 }}
     />
   )

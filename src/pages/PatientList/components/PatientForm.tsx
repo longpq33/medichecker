@@ -1,10 +1,9 @@
 import React from 'react'
-import { Modal, Form, Input, Select, DatePicker } from 'antd'
+import { Form } from 'antd'
 import type { FormInstance } from 'antd/es/form'
 import type { BenhNhanResponse } from '@/types'
 import { useLanguage } from '@/hooks/useLanguage'
-
-const { Option } = Select
+import { Modal, FormField } from '@/components'
 
 interface PatientFormProps {
   visible: boolean
@@ -23,88 +22,80 @@ export const PatientForm: React.FC<PatientFormProps> = ({
 }) => {
   const { t } = useLanguage()
 
+  const genderOptions = [
+    { value: 'NAM', label: t('common.male') },
+    { value: 'NU', label: t('common.female') },
+    { value: 'KHAC', label: t('common.other') }
+  ]
+
   return (
     <Modal
+      visible={visible}
       title={editingPatient ? t('patient.editPatient') : t('patient.addPatient')}
-      open={visible}
-      onOk={onOk}
       onCancel={onCancel}
-      width={600}
-      style={{ top: 20 }}
-      bodyStyle={{ 
-        maxHeight: '70vh', 
-        overflowY: 'auto',
-        paddingRight: '8px'
-      }}
+      onOk={onOk}
     >
       <Form
         form={form}
         layout="vertical"
       >
-        <Form.Item
+        <FormField
+          type="input"
           name="hoTen"
           label={t('patient.fullName')}
+          placeholder={t('patient.fullName')}
           rules={[{ required: true, message: t('patient.fullName') + ' ' + t('common.required') }]}
-        >
-          <Input />
-        </Form.Item>
+        />
         
-        <Form.Item
+        <FormField
+          type="date"
           name="ngaySinh"
           label={t('patient.dateOfBirth')}
-        >
-          <DatePicker 
-            style={{ width: '100%' }}
-            format="DD/MM/YYYY"
-            placeholder={t('patient.dateOfBirth')}
-          />
-        </Form.Item>
+          placeholder={t('patient.dateOfBirth')}
+        />
         
-        <Form.Item
+        <FormField
+          type="select"
           name="gioiTinh"
           label={t('common.gender')}
-        >
-          <Select placeholder={t('common.gender')}>
-            <Option value="NAM">{t('common.male')}</Option>
-            <Option value="NU">{t('common.female')}</Option>
-            <Option value="KHAC">{t('common.other')}</Option>
-          </Select>
-        </Form.Item>
+          placeholder={t('common.gender')}
+          options={genderOptions}
+        />
         
-        <Form.Item
+        <FormField
+          type="input"
           name="soDienThoai"
           label={t('common.phone')}
+          placeholder={t('common.phone')}
           rules={[
             { required: true, message: t('common.phone') + ' ' + t('common.required') },
             { pattern: /^[0-9]{10,11}$/, message: t('common.phone') + ' ' + t('common.invalid') }
           ]}
-        >
-          <Input />
-        </Form.Item>
+        />
         
-        <Form.Item
+        <FormField
+          type="input"
           name="email"
           label={t('common.email')}
+          placeholder={t('common.email')}
           rules={[
             { type: 'email', message: t('common.email') + ' ' + t('common.invalid') }
           ]}
-        >
-          <Input />
-        </Form.Item>
+        />
         
-        <Form.Item
+        <FormField
+          type="textarea"
           name="diaChi"
           label={t('common.address')}
-        >
-          <Input.TextArea rows={3} />
-        </Form.Item>
+          placeholder={t('common.address')}
+        />
         
-        <Form.Item
+        <FormField
+          type="input"
           name="soBaoHiem"
           label={t('patient.insurance')}
-        >
-          <Input />
-        </Form.Item>
+          placeholder={t('patient.insurance')}
+        />
       </Form>
     </Modal>
   )

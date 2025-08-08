@@ -50,7 +50,19 @@ export interface LichSuDieuTriResponse {
 export interface DonThuocDieuTri {
   id: number
   maDonThuoc: string
-  benhNhan?: any
+  benhNhan?: {
+    id: number
+    maBenhNhan: string
+    hoTen: string
+    ngaySinh?: string
+    gioiTinh?: string
+    soDienThoai?: string
+    email?: string
+    diaChi?: string
+    soBaoHiem?: string
+    ngayTao?: string
+    ngayCapNhat?: string
+  }
   bacSiKeDon: string
   ghiChu?: string
   trangThai: string
