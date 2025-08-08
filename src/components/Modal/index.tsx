@@ -36,6 +36,8 @@ export const Modal: React.FC<CommonModalProps> = ({
         paddingRight: '8px'
       }}
       confirmLoading={loading}
+      centered
+      destroyOnClose
       {...props}
     >
       {children}

@@ -19,6 +19,18 @@ const StyledCard = styled(Card)`
   border-radius: 8px;
   box-shadow: none;
   border: 1px solid #f0f0f0;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+`
+
+const StyledSpace = styled(Space)`
+  justify-content: flex-end;
+  width: 100%;
+  
+  @media (max-width: 768px) {
+    justify-content: flex-start;
+  }
 `
 
 export const PageHeader: React.FC<PageHeaderProps> = ({
@@ -31,17 +43,17 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
 }) => {
   return (
     <StyledCard>
-      <Row justify="space-between" align="middle">
-        <Col>
-          <h2 style={{ margin: 0 }}>{title}</h2>
+      <Row justify="space-between" align="middle" gutter={[16, 16]}>
+        <Col xs={24} sm={12} md={8}>
+          <h2 style={{ margin: 0, fontSize: '1.5rem' }}>{title}</h2>
         </Col>
-        <Col>
-          <Space>
+        <Col xs={24} sm={12} md={16}>
+          <StyledSpace wrap size="small">
             {onSearch && (
               <Search
                 placeholder={searchPlaceholder}
                 onSearch={onSearch}
-                style={{ width: 300 }}
+                style={{ width: '100%', maxWidth: 300 }}
                 allowClear
               />
             )}
@@ -55,7 +67,7 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
               </Button>
             )}
             {extra}
-          </Space>
+          </StyledSpace>
         </Col>
       </Row>
     </StyledCard>

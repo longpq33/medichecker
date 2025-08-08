@@ -127,9 +127,13 @@ export const PrescriptionDetail: React.FC = () => {
   
   // Mock data - trong thực tế sẽ fetch từ API dựa trên id
   const prescription = mockPrescriptionDetail
-  
-  // Log id để tránh lỗi unused variable
-  console.log('Prescription ID:', id)
+
+  // Sử dụng id để tránh lỗi unused variable
+  React.useEffect(() => {
+    if (id) {
+      // TODO: Fetch prescription data based on id
+    }
+  }, [id])
 
   const getStatusColor = (status: string) => {
     switch (status) {

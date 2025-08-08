@@ -2,6 +2,7 @@
 export * from './api'
 export * from './medicine'
 export * from './styles'
+export * from './theme'
 
 // App constants
 export const APP_NAME = 'MediChecker'

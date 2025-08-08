@@ -14,7 +14,7 @@ import {
 import { useUIStore } from '@/store'
 import { useAuth } from '@/hooks/useAuth'
 import { useLanguage } from '@/hooks/useLanguage'
-import { LanguageSwitcher } from '@/components'
+import { LanguageSwitcher, ThemeSwitcher } from '@/components'
 import {
   StyledLayout,
   StyledSider,
@@ -122,6 +122,7 @@ export const MainLayout: React.FC = () => {
           />
           
           <UserInfo>
+            <ThemeSwitcher />
             <LanguageSwitcher />
             <span>{user?.name || 'User'}</span>
             <Dropdown

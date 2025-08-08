@@ -96,7 +96,7 @@ export const PatientInfo: React.FC<PatientInfoProps> = ({
   if (loading) {
     return (
       <StyledCard>
-        <div>Đang tải...</div>
+        <div>{t('common.loading')}</div>
       </StyledCard>
     )
   }

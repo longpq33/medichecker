@@ -2,17 +2,13 @@ import React, { useState, useEffect } from 'react'
 import { 
   Modal,
   Form,
-  Card,
   message,
   Input,
   Select,
-  Table,
   Tag,
-  Space,
   Pagination
 } from 'antd'
 import { 
-  PlusOutlined, 
   EditOutlined, 
   DeleteOutlined,
   EyeOutlined 
@@ -20,8 +16,7 @@ import {
 import { useLanguage } from '@/hooks/useLanguage'
 import dayjs from 'dayjs'
 import { useNavigate } from 'react-router-dom'
-import { SPACING } from '@/constants'
-import { Button } from '@/components/Button'
+import { PageHeader, DataTable, ConfirmModal } from '@/components'
 import type { DonThuocResponse } from '@/types'
 
 const { Option } = Select
@@ -98,7 +93,7 @@ const mockPrescriptions: DonThuocResponse[] = [
     bacSiKeDon: 'BS. Lê Văn Cường',
     ghiChu: 'Uống trước ăn 30 phút',
     trangThai: 'MOI_TAO',
-    ngayKeDon: '2024-01-21T14:20:00',
+    ngayKeDon: '2024-01-21T14:30:00',
     danhSachThuoc: [
       {
         id: 2,
@@ -160,15 +155,15 @@ const mockPrescriptions: DonThuocResponse[] = [
           tenHoatChat: 'Amlodipine',
           nongDo: '5mg',
           dangBaoChe: 'Viên nén',
-          hangSanXuat: 'Công ty Dược phẩm E',
+          hangSanXuat: 'Công ty Dược phẩm C',
           nuocSanXuat: 'Việt Nam',
           giaBan: 25000,
           donViTinh: 'Viên',
           chiDinh: 'Điều trị tăng huyết áp',
-          chongChiDinh: 'Suy tim nặng',
+          chongChiDinh: 'Dị ứng với Amlodipine',
           nhomThuoc: 'TIM_MACH',
           kichHoat: true,
-          ngayTao: '2024-01-19T16:20:00'
+          ngayTao: '2024-01-17T09:15:00'
         },
         soLuong: 30,
         lieuDung: '1 viên/lần',
@@ -184,45 +179,54 @@ const mockPrescriptions: DonThuocResponse[] = [
 ]
 
 export const PrescriptionList: React.FC = () => {
-  const [prescriptions, setPrescriptions] = useState<DonThuocResponse[]>(mockPrescriptions)
+  const { t } = useLanguage()
+  const navigate = useNavigate()
+  const [prescriptions, setPrescriptions] = useState<DonThuocResponse[]>([])
   const [loading, setLoading] = useState(false)
+  const [currentPage, setCurrentPage] = useState(1)
+  const [pageSize, setPageSize] = useState(10)
+  const [total, setTotal] = useState(0)
+  const [searchText, setSearchText] = useState('')
+  
+  // Modal states
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [editingPrescription, setEditingPrescription] = useState<DonThuocResponse | null>(null)
   const [form] = Form.useForm()
-  const { t } = useLanguage()
-  const navigate = useNavigate()
   
-  // Pagination state
-  const [currentPage, setCurrentPage] = useState(1)
-  const [pageSize, setPageSize] = useState(10)
-  const [total, setTotal] = useState(mockPrescriptions.length)
-
-  // Fetch prescriptions (using mock data for now)
-  const fetchPrescriptions = async (page: number = 1, size: number = 10) => {
-    try {
-      setLoading(true)
-      // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 500))
-      
-      const startIndex = (page - 1) * size
-      const endIndex = startIndex + size
-      const paginatedData = mockPrescriptions.slice(startIndex, endIndex)
-      
-      setPrescriptions(paginatedData)
-      setTotal(mockPrescriptions.length)
-      setCurrentPage(page)
-      setPageSize(size)
-    } catch (error) {
-      message.error('Lỗi khi tải danh sách đơn thuốc')
-      console.error('Error fetching prescriptions:', error)
-    } finally {
-      setLoading(false)
-    }
-  }
+  // Delete modal state
+  const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false)
+  const [deletingPrescription, setDeletingPrescription] = useState<DonThuocResponse | null>(null)
 
   useEffect(() => {
     fetchPrescriptions()
   }, [])
+
+  const fetchPrescriptions = async (page: number = 1, size: number = 10) => {
+    setLoading(true)
+    try {
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 500))
+      
+      const filteredData = mockPrescriptions.filter(prescription => 
+        prescription.maDonThuoc.toLowerCase().includes(searchText.toLowerCase()) ||
+        prescription.benhNhan.hoTen.toLowerCase().includes(searchText.toLowerCase()) ||
+        prescription.bacSiKeDon.toLowerCase().includes(searchText.toLowerCase())
+      )
+      
+      const startIndex = (page - 1) * size
+      const endIndex = startIndex + size
+      const paginatedData = filteredData.slice(startIndex, endIndex)
+      
+      setPrescriptions(paginatedData)
+      setTotal(filteredData.length)
+      setCurrentPage(page)
+      setPageSize(size)
+    } catch {
+      message.error(t('common.errorLoading'))
+    } finally {
+      setLoading(false)
+    }
+  }
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -259,8 +263,8 @@ export const PrescriptionList: React.FC = () => {
   }
 
   const handleSearch = (value: string) => {
-    // TODO: Implement search functionality
-    console.log('Search:', value)
+    setSearchText(value)
+    fetchPrescriptions(1, pageSize)
   }
 
   const handleAdd = () => {
@@ -284,55 +288,74 @@ export const PrescriptionList: React.FC = () => {
   }
 
   const handleDelete = (id: number) => {
-    Modal.confirm({
-      title: 'Xác nhận xóa',
-      content: 'Bạn có chắc chắn muốn xóa đơn thuốc này?',
-      onOk: async () => {
-        try {
-          // Simulate API call
-          await new Promise(resolve => setTimeout(resolve, 500))
-          setPrescriptions(prescriptions.filter(p => p.id !== id))
-          message.success('Xóa đơn thuốc thành công')
-          fetchPrescriptions(currentPage, pageSize)
-        } catch (error) {
-          message.error('Lỗi khi xóa đơn thuốc')
-          console.error('Error deleting prescription:', error)
-        }
-      },
-    })
+    const prescriptionToDelete = prescriptions.find(p => p.id === id)
+    if (prescriptionToDelete) {
+      setDeletingPrescription(prescriptionToDelete)
+      setIsDeleteModalVisible(true)
+    }
+  }
+
+  const handleDeleteConfirm = async () => {
+    if (!deletingPrescription) return
+    
+    try {
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 500))
+      
+      setPrescriptions(prev => prev.filter(p => p.id !== deletingPrescription.id))
+      setTotal(prev => prev - 1)
+      message.success('Xóa đơn thuốc thành công')
+      setIsDeleteModalVisible(false)
+      setDeletingPrescription(null)
+    } catch {
+      message.error(t('common.errorDeleting'))
+    }
+  }
+
+  const handleDeleteCancel = () => {
+    setIsDeleteModalVisible(false)
+    setDeletingPrescription(null)
   }
 
   const handleModalOk = async () => {
     try {
       const values = await form.validateFields()
+      
       if (editingPrescription) {
         // Update existing prescription
-        await new Promise(resolve => setTimeout(resolve, 500))
-        const updatedPrescription = { ...editingPrescription, ...values }
-        setPrescriptions(prescriptions.map(p => p.id === editingPrescription.id ? updatedPrescription : p))
+        const updatedPrescription = {
+          ...editingPrescription,
+          benhNhan: mockPrescriptions.find(p => p.benhNhan.id === values.benhNhanId)?.benhNhan || editingPrescription.benhNhan,
+          bacSiKeDon: values.bacSiKeDon,
+          ghiChu: values.ghiChu,
+        }
+        
+        setPrescriptions(prev => 
+          prev.map(p => p.id === editingPrescription.id ? updatedPrescription : p)
+        )
         message.success('Cập nhật đơn thuốc thành công')
       } else {
         // Add new prescription
-        await new Promise(resolve => setTimeout(resolve, 500))
         const newPrescription: DonThuocResponse = {
           id: Date.now(),
-          maDonThuoc: `DT${String(Date.now()).slice(-3)}`,
-          benhNhan: mockPrescriptions[0].benhNhan, // Mock patient
+          maDonThuoc: `DT${Date.now()}`,
+          benhNhan: mockPrescriptions.find(p => p.benhNhan.id === values.benhNhanId)?.benhNhan || mockPrescriptions[0].benhNhan,
           bacSiKeDon: values.bacSiKeDon,
           ghiChu: values.ghiChu,
           trangThai: 'MOI_TAO',
           ngayKeDon: new Date().toISOString(),
           danhSachThuoc: []
         }
-        setPrescriptions([newPrescription, ...prescriptions])
+        
+        setPrescriptions(prev => [newPrescription, ...prev])
+        setTotal(prev => prev + 1)
         message.success('Thêm đơn thuốc thành công')
       }
+      
       setIsModalVisible(false)
       form.resetFields()
-      fetchPrescriptions(currentPage, pageSize)
-    } catch (error) {
-      message.error('Lỗi khi lưu đơn thuốc')
-      console.error('Error saving prescription:', error)
+    } catch {
+      message.error(t('common.errorSaving'))
     }
   }
 
@@ -342,25 +365,25 @@ export const PrescriptionList: React.FC = () => {
 
   const columns = [
     {
-      title: 'Mã đơn thuốc',
+      title: t('prescription.prescriptionCode'),
       dataIndex: 'maDonThuoc',
       key: 'maDonThuoc',
       width: 120,
     },
     {
-      title: 'Bệnh nhân',
+      title: t('prescription.patientName'),
       dataIndex: ['benhNhan', 'hoTen'],
       key: 'benhNhan',
       width: 150,
     },
     {
-      title: 'Bác sĩ kê đơn',
+      title: t('prescription.doctorName'),
       dataIndex: 'bacSiKeDon',
       key: 'bacSiKeDon',
       width: 150,
     },
     {
-      title: 'Trạng thái',
+      title: t('common.status'),
       dataIndex: 'trangThai',
       key: 'trangThai',
       width: 120,
@@ -371,110 +394,81 @@ export const PrescriptionList: React.FC = () => {
       ),
     },
     {
-      title: 'Ngày kê đơn',
+      title: t('prescription.prescriptionDate'),
       dataIndex: 'ngayKeDon',
       key: 'ngayKeDon',
       width: 120,
       render: (date: string) => dayjs(date).format('DD/MM/YYYY HH:mm'),
     },
     {
-      title: 'Số thuốc',
+      title: t('prescription.medicineCount'),
       dataIndex: 'danhSachThuoc',
       key: 'soThuoc',
       width: 100,
       render: (danhSachThuoc: DonThuocResponse['danhSachThuoc']) => danhSachThuoc?.length || 0,
     },
+  ]
+
+  const actions = [
     {
-      title: 'Thao tác',
-      key: 'actions',
-      width: 120,
-      render: (_: unknown, record: DonThuocResponse) => (
-        <Space>
-          <Button 
-            type="text" 
-            icon={<EyeOutlined />} 
-            size="small"
-            onClick={() => handleView(record)}
-            style={{ color: '#1890ff' }}
-          />
-          <Button 
-            type="text" 
-            icon={<EditOutlined />} 
-            size="small"
-            onClick={() => handleEdit(record)}
-            style={{ color: '#52c41a' }}
-          />
-          <Button 
-            type="text" 
-            icon={<DeleteOutlined />} 
-            size="small"
-            onClick={() => handleDelete(record.id)}
-            style={{ color: '#ff4d4f' }}
-          />
-        </Space>
-      ),
+      key: 'view',
+      icon: <EyeOutlined />,
+      color: '#1890ff',
+      onClick: (record: DonThuocResponse) => handleView(record)
     },
+    {
+      key: 'edit',
+      icon: <EditOutlined />,
+      color: '#52c41a',
+      onClick: (record: DonThuocResponse) => handleEdit(record)
+    },
+    {
+      key: 'delete',
+      icon: <DeleteOutlined />,
+      color: '#ff4d4f',
+      onClick: (record: DonThuocResponse) => handleDelete(record.id)
+    }
   ]
 
   return (
     <div>
-      <Card>
-        <div style={{ 
-          display: 'flex', 
-          justifyContent: 'space-between', 
-          alignItems: 'center', 
-          marginBottom: SPACING.MARGIN_MD 
-        }}>
-          <h2>{t('prescription.title')}</h2>
-          <Button
-            type="primary"
-            icon={<PlusOutlined />}
-            onClick={handleAdd}
-          >
-            {t('prescription.addPrescription')}
-          </Button>
-        </div>
+      <PageHeader
+        title={t('prescription.prescriptionManagement')}
+        onAdd={handleAdd}
+        onSearch={handleSearch}
+        addButtonText={t('prescription.addPrescription')}
+        searchPlaceholder={t('prescription.searchPrescription')}
+      />
 
-        <div style={{ marginBottom: SPACING.MARGIN_MD }}>
-          <Input.Search
-            placeholder={t('prescription.searchPrescription')}
-            allowClear
-            onSearch={handleSearch}
-            style={{ width: 300 }}
-          />
-        </div>
+      <DataTable<DonThuocResponse>
+        dataSource={prescriptions}
+        loading={loading}
+        columns={columns}
+        actions={actions}
+        scroll={{ x: 1200 }}
+      />
 
-        <Table
-          columns={columns}
-          dataSource={prescriptions}
-          rowKey="id"
-          loading={loading}
-          pagination={false}
+      <div style={{ textAlign: 'right', marginTop: 16 }}>
+        <Pagination
+          current={currentPage}
+          pageSize={pageSize}
+          total={total}
+          onChange={handlePageChange}
+          showSizeChanger
+          showQuickJumper
+          showTotal={(total, range) => `${range[0]}-${range[1]} ${t('common.of')} ${total} ${t('prescription.prescriptions')}`}
         />
-
-        <div style={{ textAlign: 'center', marginTop: '20px' }}>
-          <Pagination
-            current={currentPage}
-            pageSize={pageSize}
-            total={total}
-            showSizeChanger
-            showQuickJumper
-            showTotal={(total, range) => `${range[0]}-${range[1]} của ${total} đơn thuốc`}
-            onChange={handlePageChange}
-            onShowSizeChange={handlePageChange}
-          />
-        </div>
-      </Card>
+      </div>
 
       {/* Modal thêm/sửa đơn thuốc */}
       <Modal
-        title={editingPrescription ? 'Chỉnh sửa đơn thuốc' : 'Thêm đơn thuốc mới'}
+        title={editingPrescription ? t('prescription.editPrescription') : t('prescription.addPrescription')}
         open={isModalVisible}
         onOk={handleModalOk}
         onCancel={() => setIsModalVisible(false)}
         width={600}
-        okText="Lưu"
-        cancelText="Hủy"
+        okText={t('common.save')}
+        cancelText={t('common.cancel')}
       >
         <Form
           form={form}
@@ -482,10 +476,10 @@ export const PrescriptionList: React.FC = () => {
         >
           <Form.Item
             name="benhNhanId"
-            label="Bệnh nhân"
-            rules={[{ required: true, message: 'Vui lòng chọn bệnh nhân' }]}
+            label={t('prescription.patientName')}
+            rules={[{ required: true, message: t('prescription.patientName') + ' ' + t('common.required') }]}
           >
-            <Select placeholder="Chọn bệnh nhân">
+            <Select placeholder={t('prescription.selectPatient')}>
               {mockPrescriptions.map(prescription => (
                 <Option key={prescription.benhNhan.id} value={prescription.benhNhan.id}>
                   {prescription.benhNhan.hoTen} - {prescription.benhNhan.maBenhNhan}
@@ -496,20 +490,30 @@ export const PrescriptionList: React.FC = () => {
           
           <Form.Item
             name="bacSiKeDon"
-            label="Bác sĩ kê đơn"
-            rules={[{ required: true, message: 'Vui lòng nhập tên bác sĩ' }]}
+            label={t('prescription.doctorName')}
+            rules={[{ required: true, message: t('prescription.doctorName') + ' ' + t('common.required') }]}
           >
-            <Input placeholder="Nhập tên bác sĩ kê đơn" />
+            <Input placeholder={t('prescription.enterDoctorName')} />
           </Form.Item>
           
           <Form.Item
             name="ghiChu"
-            label="Ghi chú"
+            label={t('prescription.prescriptionNotes')}
           >
-            <Input.TextArea rows={3} placeholder="Nhập ghi chú cho đơn thuốc" />
+            <Input.TextArea rows={3} placeholder={t('prescription.enterNotes')} />
           </Form.Item>
         </Form>
       </Modal>
+
+      <ConfirmModal
+        visible={isDeleteModalVisible}
+        title={t('prescription.confirmDelete')}
+        content={`${t('prescription.deleteConfirm')} "${deletingPrescription?.maDonThuoc}"?`}
+        onConfirm={handleDeleteConfirm}
+        onCancel={handleDeleteCancel}
+        confirmText={t('common.delete')}
+        cancelText={t('common.cancel')}
+      />
     </div>
   )
 } 

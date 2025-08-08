@@ -4,7 +4,9 @@ import { ConfigProvider, theme as antdTheme } from 'antd'
 import { router } from './routes'
 import './app.css'
 import '../i18n'
-import { COLORS } from '@/constants'
+import { useTheme } from '@/hooks/useTheme'
+import { ThemeProvider } from '@/providers/ThemeProvider'
+import { useEffect } from 'react'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -16,18 +18,38 @@ const queryClient = new QueryClient({
 })
 
 function App() {
+  const { theme, themeColors } = useTheme()
+
+  // Apply theme to document body on mount
+  useEffect(() => {
+    document.body.className = theme === 'dark' ? 'dark-theme' : 'light-theme'
+  }, [theme])
+
   return (
     <QueryClientProvider client={queryClient}>
       <ConfigProvider
         theme={{
           token: {
-            colorPrimary: COLORS.PRIMARY,
-            colorInfo: COLORS.PRIMARY,
+            colorPrimary: themeColors.primary,
+            colorInfo: themeColors.primary,
+            colorBgContainer: themeColors.bgPrimary,
+            colorBgElevated: themeColors.cardBg,
+            colorBorder: themeColors.borderPrimary,
+            colorText: themeColors.textPrimary,
+            colorTextSecondary: themeColors.textSecondary,
+            colorTextTertiary: themeColors.textTertiary,
+            colorBgLayout: themeColors.bgPrimary,
+            colorBgSpotlight: themeColors.bgSecondary,
+            colorBgMask: 'rgba(0, 0, 0, 0.45)',
+            borderRadius: 6,
+            wireframe: false,
           },
-          algorithm: antdTheme.defaultAlgorithm,
+          algorithm: theme === 'dark' ? antdTheme.darkAlgorithm : antdTheme.defaultAlgorithm,
         }}
       >
-        <RouterProvider router={router} />
+        <ThemeProvider>
+          <RouterProvider router={router} />
+        </ThemeProvider>
       </ConfigProvider>
     </QueryClientProvider>
   )

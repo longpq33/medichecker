@@ -17,6 +17,11 @@ const { Title: AntTitle } = Typography
 export const StyledTitle = styled(AntTitle)`
   margin-bottom: ${SPACING.MARGIN_XL};
   text-align: center;
+  
+  @media (max-width: 768px) {
+    margin-bottom: ${SPACING.MARGIN_LG};
+    font-size: ${FONT_SIZE.XL};
+  }
 `
 
 export const StyledCard = styled(Card)`
@@ -24,11 +29,24 @@ export const StyledCard = styled(Card)`
   box-shadow: none;
   padding: ${SPACING.PADDING_XL};
   border: 1px solid ${COLORS.BORDER_PRIMARY};
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  
+  @media (max-width: 768px) {
+    padding: ${SPACING.PADDING_MD};
+  }
+  
+  @media (max-width: 480px) {
+    padding: ${SPACING.PADDING_SM};
+  }
 `
 
 export const FormContainer = styled.div`
   margin: 0 auto;
   width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
 `
 
 export const FormSection = styled.div`
@@ -41,6 +59,15 @@ export const FormSection = styled.div`
     margin-bottom: ${SPACING.MARGIN_LG};
     padding-bottom: ${SPACING.PADDING_MD};
     border-bottom: 2px solid ${COLORS.BORDER_SECONDARY};
+  }
+  
+  @media (max-width: 768px) {
+    margin-bottom: ${SPACING.MARGIN_LG};
+    
+    .section-title {
+      font-size: ${FONT_SIZE.MD};
+      margin-bottom: ${SPACING.MARGIN_MD};
+    }
   }
 `
 
@@ -56,6 +83,9 @@ export const MedicineItem = styled.div`
   margin-bottom: ${SPACING.MARGIN_MD};
   position: relative;
   transition: ${TRANSITIONS.NORMAL};
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 
   &:hover {
     background: ${COLORS.BG_TERTIARY};
@@ -96,6 +126,7 @@ export const MedicineItem = styled.div`
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
     gap: ${SPACING.GAP_MD};
+    padding: ${SPACING.PADDING_MD};
 
     .medicine-select,
     .quantity-input,
@@ -104,12 +135,11 @@ export const MedicineItem = styled.div`
     .duration-select {
       grid-column: 1;
     }
-
-    .remove-button {
-      position: absolute;
-      top: ${SPACING.MARGIN_MD};
-      right: ${SPACING.MARGIN_MD};
-    }
+  }
+  
+  @media (max-width: 480px) {
+    padding: ${SPACING.PADDING_SM};
+    gap: ${SPACING.GAP_SM};
   }
 `
 

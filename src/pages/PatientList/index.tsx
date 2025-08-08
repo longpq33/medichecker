@@ -70,11 +70,8 @@ export const PatientList: React.FC = () => {
     window.location.href = `/patients/${patient.id}`
   }
 
-  const handleDelete = async (id: number) => {
-    console.log('PatientList: Starting delete for ID:', id)
+  const handleDelete = (id: number) => {
     const patientToDelete = patients.find(p => p.id === id)
-    console.log('PatientList: Found patient:', patientToDelete)
-    
     if (patientToDelete) {
       setDeletingPatient(patientToDelete)
       setIsDeleteModalVisible(true)
@@ -85,18 +82,15 @@ export const PatientList: React.FC = () => {
     if (!deletingPatient) return
     
     try {
-      console.log('PatientList: Calling deletePatient for ID:', deletingPatient.id)
       await deletePatient(deletingPatient.id)
-      console.log('PatientList: Delete completed for ID:', deletingPatient.id)
       setIsDeleteModalVisible(false)
       setDeletingPatient(null)
-    } catch (error) {
-      console.error('PatientList: Error deleting patient:', error)
+    } catch {
+      message.error(t('common.errorDeleting'))
     }
   }
 
   const handleDeleteCancel = () => {
-    console.log('PatientList: Delete cancelled for ID:', deletingPatient?.id)
     setIsDeleteModalVisible(false)
     setDeletingPatient(null)
   }
@@ -105,24 +99,18 @@ export const PatientList: React.FC = () => {
     try {
       const values = await form.validateFields()
       
-      // Xử lý format dữ liệu trước khi gửi lên API
-      const formattedValues = {
-        ...values,
-        ngaySinh: values.ngaySinh ? dayjs(values.ngaySinh).format('YYYY-MM-DD') : undefined
+      if (editingPatient) {
+        await updatePatient({ id: editingPatient.id, data: values })
+        message.success(t('patient.updateSuccess'))
+      } else {
+        await createPatient(values)
+        message.success(t('patient.createSuccess'))
       }
       
-      if (editingPatient) {
-        // Update existing patient
-        await updatePatient({ id: editingPatient.id, data: formattedValues })
-      } else {
-        // Add new patient
-        await createPatient(formattedValues)
-      }
       setIsModalVisible(false)
       form.resetFields()
-    } catch (error) {
-      message.error('Lỗi khi lưu bệnh nhân')
-      console.error('Error saving patient:', error)
+    } catch {
+      message.error(t('patient.createError'))
     }
   }
 

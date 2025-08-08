@@ -51,9 +51,7 @@ export const patientService = {
 
   // Xóa bệnh nhân
   xoaBenhNhan: async (id: number) => {
-    console.log('Deleting patient with ID:', id)
     const response = await api.delete(`/patients/${id}`)
-    console.log('Delete response:', response)
     return response.data
   },
 } 

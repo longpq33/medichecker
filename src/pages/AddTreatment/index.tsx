@@ -234,8 +234,7 @@ export const AddTreatment: React.FC = () => {
       await treatmentService.taoMoiLichSuDieuTri(treatmentData)
       message.success(t('treatment.createSuccess'))
       navigate(`/patients/${id}`)
-    } catch (error) {
-      console.error('Error creating treatment:', error)
+    } catch {
       message.error(t('treatment.createError'))
     } finally {
       setIsSubmitting(false)

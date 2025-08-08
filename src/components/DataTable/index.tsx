@@ -63,7 +63,7 @@ export const DataTable = <T,>({
     width: 140,
     fixed: 'right' as const,
     render: (_: unknown, record: T) => (
-      <Space>
+      <Space size="small">
         {actions.map((action) => (
           <Button
             key={action.key}
@@ -85,13 +85,17 @@ export const DataTable = <T,>({
   ]
 
   return (
-    <Table
-      {...tableProps}
-      columns={finalColumns}
-      dataSource={dataSource}
-      loading={loading}
-      pagination={false}
-      rowKey="id"
-    />
+    <div style={{ overflowX: 'auto', width: '100%' }}>
+      <Table
+        {...tableProps}
+        columns={finalColumns}
+        dataSource={dataSource}
+        loading={loading}
+        pagination={false}
+        rowKey="id"
+        scroll={{ x: 'max-content' }}
+        size="middle"
+      />
+    </div>
   )
 } 

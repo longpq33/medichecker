@@ -47,12 +47,10 @@ export const usePatients = (pageable: Pageable, keyword?: string) => {
   const deletePatientMutation = useMutation({
     mutationFn: patientService.xoaBenhNhan,
     onSuccess: () => {
-      console.log('Delete patient success')
       message.success('Xóa bệnh nhân thành công!')
       queryClient.invalidateQueries(['patients'])
     },
     onError: (error: Error) => {
-      console.error('Delete patient error:', error)
       message.error(error.message || 'Có lỗi xảy ra khi xóa bệnh nhân')
     },
   })

@@ -120,11 +120,11 @@ export const PatientDetail: React.FC = () => {
   }
 
   if (isLoadingPatient) {
-    return <div>Đang tải...</div>
+    return <div>{t('common.loading')}</div>
   }
 
   if (!patient) {
-    return <div>Không tìm thấy bệnh nhân</div>
+    return <div>{t('patient.notFound')}</div>
   }
 
   const tabItems = [

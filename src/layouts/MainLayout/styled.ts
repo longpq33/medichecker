@@ -1,21 +1,21 @@
-import { Layout } from 'antd'
 import styled from 'styled-components'
+import { Layout } from 'antd'
 import { 
   SPACING, 
-  FONT_SIZE,
-  FONT_WEIGHT,
+  FONT_SIZE, 
+  FONT_WEIGHT, 
   BORDER_RADIUS, 
-  COLORS, 
-  GRADIENTS, 
   TRANSITIONS 
 } from '@/constants'
+import type { ThemeColors } from '@/types'
 
 const { Sider, Header, Content } = Layout
 
-export const StyledLayout = styled(Layout)`
+export const StyledLayout = styled(Layout)<{ theme?: ThemeColors }>`
   min-height: 100vh;
-  background: ${COLORS.BG_PRIMARY};
-
+  background: ${({ theme }) => theme?.bgPrimary || '#ffffff'};
+  width: 100%;
+  overflow-x: hidden;
   header {
       button {
         margin-left: 250px;
@@ -29,10 +29,17 @@ export const StyledLayout = styled(Layout)`
       }
     }
   }
+
+  @media (max-width: 768px) {
+    .ant-layout-sider {
+      position: fixed !important;
+      z-index: 1000;
+    }
+  }
 `
 
-export const StyledSider = styled(Sider)`
-  background: ${GRADIENTS.WELLNEST};
+export const StyledSider = styled(Sider)<{ theme?: ThemeColors }>`
+  background: ${({ theme }) => theme?.sidebarBg || 'linear-gradient(135deg, #2C92B8 0%, #1e7a9a 100%)'};
   box-shadow: none;
   border-radius: 0 ${BORDER_RADIUS.LG} ${BORDER_RADIUS.LG} 0;
   overflow: hidden;
@@ -45,6 +52,7 @@ export const StyledSider = styled(Sider)`
   .ant-menu {
     background: transparent;
     border-right: none;
+    width: 100%;
     
     .ant-menu-item {
       margin: ${SPACING.MARGIN_XS} ${SPACING.MARGIN_MD};
@@ -54,14 +62,15 @@ export const StyledSider = styled(Sider)`
       justify-content: center;
       align-items: center;
       font-weight: 400;
+      width: calc(100% - ${SPACING.MARGIN_MD} * 2);
       
       &:hover {
-        background: rgba(255, 255, 255, 0.1) !important;
+        background: ${({ theme }) => theme?.sidebarHover || 'rgba(255, 255, 255, 0.1)'} !important;
         transform: translateX(4px);
       }
       
       &.ant-menu-item-selected {
-        background: rgba(255, 255, 255, 0.2) !important;
+        background: ${({ theme }) => theme?.sidebarActive || 'rgba(255, 255, 255, 0.2)'} !important;
         box-shadow: none;
         font-weight: 500;
         
@@ -72,92 +81,110 @@ export const StyledSider = styled(Sider)`
     }
     
     .ant-menu-item .anticon {
-      color: rgba(255, 255, 255, 0.8);
+      color: ${({ theme }) => theme?.sidebarText || 'rgba(255, 255, 255, 0.8)'};
     }
     
     .ant-menu-item-selected .anticon {
       color: white;
     }
   }
+
+  @media (max-width: 768px) {
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    
+    &.ant-layout-sider-collapsed {
+      transform: translateX(0);
+    }
+  }
 `
 
-export const StyledHeader = styled(Header)`
+export const StyledHeader = styled(Header)<{ theme?: ThemeColors }>`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: ${COLORS.BG_PRIMARY};
+  background: ${({ theme }) => theme?.headerBg || '#ffffff'};
   padding: 0 ${SPACING.PADDING_XL};
   box-shadow: none;
-  width: 100% !important;
+  width: 100%;
   min-width: 0;
   height: 72px;
   position: fixed;
   top: 0;
   right: 0;
   z-index: 999;
-  border-bottom: 1px solid ${COLORS.BORDER_PRIMARY};
-`
-
-export const StyledContent = styled(Content)`
-  padding: ${SPACING.PADDING_XL};
-  padding-top: calc(72px + ${SPACING.PADDING_XL});
-  background: ${COLORS.BG_PRIMARY};
-  min-height: calc(100vh - 72px);
-  width: 100% !important;
-  min-width: 0;
-  overflow-x: hidden;
-  max-width: 100%;
-  box-sizing: border-box;
-`
-
-export const Logo = styled.div`
-  font-size: ${FONT_SIZE.LG};
-  font-weight: ${FONT_WEIGHT.BOLD};
-  color: ${COLORS.BG_PRIMARY};
-  padding: ${SPACING.PADDING_LG} ${SPACING.PADDING_MD};
-  text-align: center;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(255, 255, 255, 0.1);
-  margin: ${SPACING.MARGIN_SM};
-  border-radius: ${BORDER_RADIUS.MD};
-  flex-shrink: 0;
-  backdrop-filter: blur(10px);
+  border-bottom: 1px solid ${({ theme }) => theme?.headerBorder || '#f0f0f0'};
   
-  img {
-    display: block;
-    height: 32px;
-    width: auto;
-  }
-  
-  span {
-    color: ${COLORS.BG_PRIMARY} !important;
-    font-weight: ${FONT_WEIGHT.BOLD} !important;
-    font-size: ${FONT_SIZE.MD} !important;
-    letter-spacing: 0.5px;
+  @media (max-width: 768px) {
+    padding: 0 ${SPACING.PADDING_MD};
   }
 `
 
-export const UserInfo = styled.div`
-  display: flex;
-  align-items: center;
-  gap: ${SPACING.GAP_SM};
-`
-
-export const MainContentLayout = styled(Layout)`
-  width: 100% !important;
-  min-width: 0;
-  overflow-x: hidden;
+export const MainContentLayout = styled.div`
   margin-left: 280px;
   transition: margin-left 0.25s ease;
+  width: calc(100% - 280px);
+  min-width: 0;
+  overflow-x: hidden;
   
   &.ant-layout-sider-collapsed {
     margin-left: 80px;
+    width: calc(100% - 80px);
   }
-  
+
   @media (max-width: 768px) {
     margin-left: 0;
+    width: 100%;
+    
+    &.ant-layout-sider-collapsed {
+      margin-left: 0;
+      width: 100%;
+    }
   }
-` ;
+`
+
+export const StyledContent = styled(Content)<{ theme?: ThemeColors }>`
+  margin-top: 72px;
+  padding: ${SPACING.PADDING_XL};
+  background: ${({ theme }) => theme?.bgPrimary || '#ffffff'};
+  min-height: calc(100vh - 72px);
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+  box-sizing: border-box;
+  
+  @media (max-width: 768px) {
+    padding: ${SPACING.PADDING_MD};
+  }
+`
+
+export const Logo = styled.div`
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: ${FONT_SIZE.LG};
+  font-weight: ${FONT_WEIGHT.SEMIBOLD};
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0 ${SPACING.PADDING_MD};
+  
+  @media (max-width: 768px) {
+    padding: 0 ${SPACING.PADDING_SM};
+  }
+`
+
+export const UserInfo = styled.div<{ theme?: ThemeColors }>`
+  display: flex;
+  align-items: center;
+  gap: ${SPACING.MARGIN_MD};
+  color: ${({ theme }) => theme?.headerText || '#262626'};
+  
+  @media (max-width: 768px) {
+    gap: ${SPACING.MARGIN_SM};
+    
+    span {
+      display: none;
+    }
+  }
+`

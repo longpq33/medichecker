@@ -1,5 +1,6 @@
 export { Button } from './Button'
 export { LanguageSwitcher } from './LanguageSwitcher'
+export { ThemeSwitcher } from './ThemeSwitcher'
 export { Modal } from './Modal'
 export { DataTable } from './DataTable'
 export { FormField } from './FormField'
