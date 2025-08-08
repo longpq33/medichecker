@@ -15,6 +15,20 @@ const { Sider, Header, Content } = Layout
 export const StyledLayout = styled(Layout)`
   min-height: 100vh;
   background: ${COLORS.BG_PRIMARY};
+
+  header {
+      button {
+        margin-left: 250px;
+      }
+    }
+
+  .ant-layout-sider-collapsed {
+    header {
+      button {
+        margin-left: 50px;
+      }
+    }
+  }
 `
 
 export const StyledSider = styled(Sider)`
@@ -137,6 +151,11 @@ export const MainContentLayout = styled(Layout)`
   min-width: 0;
   overflow-x: hidden;
   margin-left: 280px;
+  transition: margin-left 0.25s ease;
+  
+  &.ant-layout-sider-collapsed {
+    margin-left: 80px;
+  }
   
   @media (max-width: 768px) {
     margin-left: 0;

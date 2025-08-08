@@ -2,6 +2,7 @@ import React from 'react'
 import { Button as AntButton } from 'antd'
 import type { ButtonProps } from 'antd'
 import styled from 'styled-components'
+import { COLORS, GRADIENTS } from '@/constants'
 
 const StyledButton = styled(AntButton)`
   border-radius: 8px;
@@ -10,15 +11,15 @@ const StyledButton = styled(AntButton)`
   padding: 0 20px;
   
   &.ant-btn-primary {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    border: none;
+    background: ${GRADIENTS.PRIMARY};
+    border: 1px solid ${COLORS.PRIMARY};
     color: white;
     
     &:hover {
-      background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+      background: ${GRADIENTS.PRIMARY_HOVER};
       transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
-      color: #1890ff;
+      box-shadow: none;
+      color: #fff;
     }
   }
   
@@ -30,7 +31,7 @@ const StyledButton = styled(AntButton)`
     &:hover {
       background: rgba(255, 255, 255, 0.3);
       border-color: rgba(255, 255, 255, 0.4);
-      color: #1890ff;
+      color: #ffffff;
     }
   }
 `

@@ -8,7 +8,8 @@ import {
   FONT_WEIGHT, 
   TRANSITIONS,
   BUTTON_STYLES,
-  FORM_STYLES
+  FORM_STYLES,
+  GRADIENTS
 } from '@/constants'
 
 const { Title: AntTitle } = Typography
@@ -140,15 +141,16 @@ export const PrimaryButton = styled(Button)`
   padding: ${BUTTON_STYLES.PADDING};
   font-weight: ${BUTTON_STYLES.FONT_WEIGHT};
   border-radius: ${BUTTON_STYLES.BORDER_RADIUS};
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border: none;
+  background: ${GRADIENTS.PRIMARY};
+  border: 1px solid ${COLORS.PRIMARY};
   color: white;
   
   &:hover {
-    background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+    background: ${GRADIENTS.PRIMARY_HOVER};
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
-    color: #1890ff;
+    box-shadow: none;
+    color: #fff;
+    border-color: ${COLORS.PRIMARY_HOVER};
   }
 `
 
@@ -162,8 +164,8 @@ export const SecondaryButton = styled(Button)`
   background: ${COLORS.BG_PRIMARY};
   
   &:hover {
-    border-color: #1890ff;
-    color: #1890ff;
+    border-color: ${COLORS.PRIMARY};
+    color: ${COLORS.PRIMARY};
   }
 `
 

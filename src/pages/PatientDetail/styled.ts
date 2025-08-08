@@ -415,15 +415,16 @@ export const ActionButton = styled(Button)`
   padding: 0 20px;
   
   &.ant-btn-primary {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    border: none;
+    background: ${GRADIENTS.PRIMARY};
+    border: 1px solid ${COLORS.PRIMARY};
     color: white;
     
     &:hover {
-      background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+      background: ${GRADIENTS.PRIMARY_HOVER};
       transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
-      color: #1890ff;
+      box-shadow: none;
+      color: #fff;
+      border-color: ${COLORS.PRIMARY_HOVER};
     }
   }
   
@@ -435,7 +436,7 @@ export const ActionButton = styled(Button)`
     &:hover {
       background: rgba(255, 255, 255, 0.3);
       border-color: rgba(255, 255, 255, 0.4);
-      color: #1890ff;
+      color: #ffffff;
     }
   }
 `
@@ -460,14 +461,15 @@ export const AddTreatmentButton = styled(Button)`
   font-weight: 500;
   height: 40px;
   padding: 0 20px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border: none;
+  background: ${GRADIENTS.PRIMARY};
+  border: 1px solid ${COLORS.PRIMARY};
   color: white;
   
   &:hover {
-    background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+    background: ${GRADIENTS.PRIMARY_HOVER};
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
-    color: #1890ff;
+    box-shadow: none;
+    color: #fff;
+    border-color: ${COLORS.PRIMARY_HOVER};
   }
 ` 

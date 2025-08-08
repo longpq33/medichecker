@@ -59,10 +59,10 @@ export const SHADOWS = {
 } as const
 
 export const COLORS = {
-  PRIMARY: '#6366f1', // Indigo primary (WellNest theme)
-  PRIMARY_HOVER: '#4f46e5',
-  PRIMARY_ACTIVE: '#4338ca',
-  SECONDARY: '#8b5cf6', // Purple secondary
+  PRIMARY: '#2C92B8', // Brand primary blue-green
+  PRIMARY_HOVER: '#257fa0',
+  PRIMARY_ACTIVE: '#1f6c88',
+  SECONDARY: '#8b5cf6', // Secondary remains for accents
   SUCCESS: '#10b981', // Emerald green
   WARNING: '#f59e0b', // Amber
   ERROR: '#ef4444', // Red
@@ -70,9 +70,9 @@ export const COLORS = {
   TEXT_PRIMARY: '#1f2937', // Gray-800
   TEXT_SECONDARY: '#6b7280', // Gray-500
   TEXT_TERTIARY: '#9ca3af', // Gray-400
-  BG_PRIMARY: '#ffffff', // White
-  BG_SECONDARY: '#ffffff', // White (thay vì gray-50)
-  BG_TERTIARY: '#f8fafc', // Gray-50 (rất nhạt)
+  BG_PRIMARY: '#ffffff', // White background as requested
+  BG_SECONDARY: '#ffffff', // White (secondary surfaces)
+  BG_TERTIARY: '#f8fafc', // Gray-50 (very light)
   BORDER_PRIMARY: '#e5e7eb', // Gray-200
   BORDER_SECONDARY: '#f3f4f6', // Gray-100
   WELLNEST_BLUE: '#3b82f6',
@@ -81,13 +81,13 @@ export const COLORS = {
 } as const
 
 export const GRADIENTS = {
-  PRIMARY: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)',
-  PRIMARY_HOVER: 'linear-gradient(135deg, #4f46e5 0%, #4338ca 100%)',
+  PRIMARY: 'linear-gradient(135deg, #2C92B8 0%, #257fa0 100%)',
+  PRIMARY_HOVER: 'linear-gradient(135deg, #257fa0 0%, #1f6c88 100%)',
   SUCCESS: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
   WARNING: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
   ERROR: 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)',
-  WELLNEST: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
-  WELLNEST_HOVER: 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)',
+  WELLNEST: 'linear-gradient(135deg, #2C92B8 0%, #257fa0 100%)',
+  WELLNEST_HOVER: 'linear-gradient(135deg, #257fa0 0%, #1f6c88 100%)',
 } as const
 
 export const TRANSITIONS = {

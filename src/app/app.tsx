@@ -1,9 +1,10 @@
 import { RouterProvider } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from 'react-query'
-import { ConfigProvider } from 'antd'
+import { ConfigProvider, theme as antdTheme } from 'antd'
 import { router } from './routes'
 import './app.css'
 import '../i18n'
+import { COLORS } from '@/constants'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -17,7 +18,15 @@ const queryClient = new QueryClient({
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <ConfigProvider>
+      <ConfigProvider
+        theme={{
+          token: {
+            colorPrimary: COLORS.PRIMARY,
+            colorInfo: COLORS.PRIMARY,
+          },
+          algorithm: antdTheme.defaultAlgorithm,
+        }}
+      >
         <RouterProvider router={router} />
       </ConfigProvider>
     </QueryClientProvider>
