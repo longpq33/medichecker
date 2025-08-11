@@ -153,7 +153,7 @@ export const MedicineInfo: React.FC<MedicineInfoProps> = ({
           </div>
           
           <Space direction="vertical" style={{ width: '100%' }}>
-            {routeMedicines.map((medicine, index) => (
+            {routeMedicines.map((medicine) => (
               <div key={medicine.id} style={{ 
                 padding: 12, 
                 border: `1px solid ${COLORS.BORDER_SECONDARY}`, 
@@ -211,7 +211,7 @@ export const MedicineInfo: React.FC<MedicineInfoProps> = ({
           <div>
             {medicines
               .filter(med => med.huongDanSuDung)
-              .map((medicine, index) => (
+              .map((medicine) => (
                 <div key={medicine.id} style={{ marginBottom: 8 }}>
                   <Text strong style={{ fontSize: 12 }}>
                     {medicine.name}:

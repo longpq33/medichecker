@@ -96,6 +96,11 @@ const InfoCard = styled(Card)`
         flex: 1;
         text-align: right;
         font-size: ${FONT_SIZE.SM};
+
+        .ant-alert-message,
+        .ant-alert-description {
+          text-align: left;
+        }
       }
     }
   }
