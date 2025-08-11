@@ -3,7 +3,7 @@ import { message } from 'antd'
 
 // Cấu hình axios
 const api = axios.create({
-  baseURL: 'http://10.136.83.51:8080',
+  baseURL: 'https://medi-checker.onrender.com',
   timeout: 20000,
   headers: {
     'Content-Type': 'application/json',
