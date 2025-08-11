@@ -63,16 +63,19 @@ export const StyledSider = styled(Sider)<{ theme?: ThemeColors }>`
       align-items: center;
       font-weight: 400;
       width: calc(100% - ${SPACING.MARGIN_MD} * 2);
+      color: white !important;
       
       &:hover {
         background: ${({ theme }) => theme?.sidebarHover || 'rgba(255, 255, 255, 0.1)'} !important;
         transform: translateX(4px);
+        color: white !important;
       }
       
       &.ant-menu-item-selected {
         background: ${({ theme }) => theme?.sidebarActive || 'rgba(255, 255, 255, 0.2)'} !important;
         box-shadow: none;
         font-weight: 500;
+        color: white !important;
         
         &::before {
           display: none;
@@ -81,11 +84,11 @@ export const StyledSider = styled(Sider)<{ theme?: ThemeColors }>`
     }
     
     .ant-menu-item .anticon {
-      color: ${({ theme }) => theme?.sidebarText || 'rgba(255, 255, 255, 0.8)'};
+      color: white !important;
     }
     
     .ant-menu-item-selected .anticon {
-      color: white;
+      color: white !important;
     }
   }
 

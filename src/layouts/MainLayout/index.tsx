@@ -96,12 +96,12 @@ export const MainLayout: React.FC = () => {
         <Logo>
           {!sidebarCollapsed && (
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <img src="/logo.svg" alt="MediChecker" style={{ width: '24px', height: '24px' }} />
+              <img src="/medichecker-favicon.svg" alt="MediChecker" style={{ width: '24px', height: '24px' }} />
               <span>MediChecker</span>
             </div>
           )}
           {sidebarCollapsed && (
-            <img src="/logo.svg" alt="MediChecker" style={{ width: '24px', height: '24px' }} />
+            <img src="/medichecker-favicon.svg" alt="MediChecker" style={{ width: '24px', height: '24px' }} />
           )}
         </Logo>
         <Menu
