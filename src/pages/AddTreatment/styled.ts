@@ -12,6 +12,19 @@ import {
   GRADIENTS
 } from '@/constants'
 
+// Theme type definition
+interface ThemeColors {
+  bgPrimary?: string
+  bgSecondary?: string
+  bgTertiary?: string
+  textPrimary?: string
+  textSecondary?: string
+  borderPrimary?: string
+  borderSecondary?: string
+  cardBg?: string
+  cardBorder?: string
+}
+
 const { Title: AntTitle } = Typography
 
 export const StyledTitle = styled(AntTitle)`
@@ -24,14 +37,15 @@ export const StyledTitle = styled(AntTitle)`
   }
 `
 
-export const StyledCard = styled(Card)`
+export const StyledCard = styled(Card)<{ theme?: ThemeColors }>`
   border-radius: ${BORDER_RADIUS.LG};
   box-shadow: none;
   padding: ${SPACING.PADDING_XL};
-  border: 1px solid ${COLORS.BORDER_PRIMARY};
+  border: 1px solid ${props => props.theme?.borderPrimary || COLORS.BORDER_PRIMARY};
   width: 100%;
   max-width: 100%;
   box-sizing: border-box;
+  background: ${props => props.theme?.cardBg || 'transparent'};
   
   @media (max-width: 768px) {
     padding: ${SPACING.PADDING_MD};
@@ -49,7 +63,7 @@ export const FormContainer = styled.div`
   overflow-x: hidden;
 `
 
-export const FormSection = styled.div`
+export const FormSection = styled.div<{ theme?: ThemeColors }>`
   margin-bottom: ${SPACING.MARGIN_XXL};
 
   .section-title {
@@ -58,7 +72,7 @@ export const FormSection = styled.div`
     color: ${COLORS.PRIMARY};
     margin-bottom: ${SPACING.MARGIN_LG};
     padding-bottom: ${SPACING.PADDING_MD};
-    border-bottom: 2px solid ${COLORS.BORDER_SECONDARY};
+    border-bottom: 2px solid ${props => props.theme?.borderSecondary || COLORS.BORDER_SECONDARY};
   }
   
   @media (max-width: 768px) {
@@ -71,15 +85,15 @@ export const FormSection = styled.div`
   }
 `
 
-export const MedicineItem = styled.div`
+export const MedicineItem = styled.div<{ theme?: ThemeColors }>`
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: ${SPACING.GAP_SM};
   align-items: end;
   padding: ${SPACING.PADDING_LG};
-  background: ${COLORS.BG_PRIMARY};
+  background: ${props => props.theme?.bgPrimary || COLORS.BG_PRIMARY};
   border-radius: ${BORDER_RADIUS.MD};
-  border: 1px solid ${COLORS.BORDER_SECONDARY};
+  border: 1px solid ${props => props.theme?.borderSecondary || COLORS.BORDER_SECONDARY};
   margin-bottom: ${SPACING.MARGIN_MD};
   position: relative;
   transition: ${TRANSITIONS.NORMAL};
@@ -88,7 +102,7 @@ export const MedicineItem = styled.div`
   box-sizing: border-box;
 
   &:hover {
-    background: ${COLORS.BG_TERTIARY};
+    background: ${props => props.theme?.bgTertiary || COLORS.BG_TERTIARY};
     border-color: ${COLORS.PRIMARY};
   }
 
@@ -110,6 +124,26 @@ export const MedicineItem = styled.div`
 
   .duration-select {
     grid-column: 2;
+  }
+
+  .unit-price-input {
+    grid-column: 1;
+    
+    .ant-input {
+      height: 28px;
+      padding: 0;
+      font-size: ${FORM_STYLES.INPUT_FONT_SIZE};
+    }
+  }
+
+  .total-price-input {
+    grid-column: 2;
+    
+    .ant-input {
+      padding: 0;
+      height: 28px;
+      font-size: ${FORM_STYLES.INPUT_FONT_SIZE};
+    }
   }
 
   .remove-button {
@@ -157,13 +191,13 @@ export const AddMedicineButton = styled(Button)`
   }
 `
 
-export const ActionButtons = styled.div`
+export const ActionButtons = styled.div<{ theme?: ThemeColors }>`
   display: flex;
   justify-content: flex-end;
   gap: ${SPACING.GAP_MD};
   margin-top: ${SPACING.MARGIN_XXL};
   padding-top: ${SPACING.PADDING_XL};
-  border-top: 1px solid ${COLORS.BORDER_SECONDARY};
+  border-top: 1px solid ${props => props.theme?.borderSecondary || COLORS.BORDER_SECONDARY};
 `
 
 export const PrimaryButton = styled(Button)`
@@ -184,14 +218,14 @@ export const PrimaryButton = styled(Button)`
   }
 `
 
-export const SecondaryButton = styled(Button)`
+export const SecondaryButton = styled(Button)<{ theme?: ThemeColors }>`
   height: ${BUTTON_STYLES.HEIGHT};
   padding: ${BUTTON_STYLES.PADDING};
   font-weight: ${BUTTON_STYLES.FONT_WEIGHT};
   border-radius: ${BUTTON_STYLES.BORDER_RADIUS};
   border: 1px solid ${COLORS.BORDER_PRIMARY};
-  color: ${COLORS.TEXT_PRIMARY};
-  background: ${COLORS.BG_PRIMARY};
+  color: ${props => props.theme?.textPrimary || COLORS.TEXT_PRIMARY};
+  background: ${props => props.theme?.bgPrimary || COLORS.BG_PRIMARY};
   
   &:hover {
     border-color: ${COLORS.PRIMARY};
@@ -199,15 +233,15 @@ export const SecondaryButton = styled(Button)`
   }
 `
 
-export const BackButton = styled(Button)`
+export const BackButton = styled(Button)<{ theme?: ThemeColors }>`
   margin-bottom: ${SPACING.MARGIN_MD};
   height: ${BUTTON_STYLES.HEIGHT};
   padding: ${BUTTON_STYLES.PADDING};
   font-weight: ${BUTTON_STYLES.FONT_WEIGHT};
   border-radius: ${BUTTON_STYLES.BORDER_RADIUS};
   border: 1px solid ${COLORS.BORDER_PRIMARY};
-  color: ${COLORS.TEXT_PRIMARY};
-  background: ${COLORS.BG_PRIMARY};
+  color: ${props => props.theme?.textPrimary || COLORS.TEXT_PRIMARY};
+  background: ${props => props.theme?.bgPrimary || COLORS.BG_PRIMARY};
   box-shadow: none;
   
   &:hover {
@@ -218,14 +252,14 @@ export const BackButton = styled(Button)`
   }
 `
 
-export const StyledForm = styled(Form)`
+export const StyledForm = styled(Form)<{ theme?: ThemeColors }>`
   .ant-form-item {
     margin-bottom: ${SPACING.MARGIN_SM};
   }
 
   .ant-form-item-label > label {
     font-weight: ${FONT_WEIGHT.MEDIUM};
-    color: ${COLORS.TEXT_PRIMARY};
+    color: ${props => props.theme?.textPrimary || COLORS.TEXT_PRIMARY};
   }
 
   .ant-input,
@@ -263,30 +297,32 @@ export const DatePickerStyled = styled(DatePicker)`
   width: 100%;
 `
 
-export const PrescriptionSummary = styled.div`
+export const PrescriptionSummary = styled.div<{ theme?: ThemeColors }>`
   margin-top: ${SPACING.MARGIN_MD};
   padding: ${SPACING.PADDING_MD};
-  background: #f6ffed;
-  border: 1px solid #b7eb8f;
+  background: ${props => props.theme?.bgPrimary || '#f6ffed'};
+  border: 1px solid ${props => props.theme?.borderPrimary || '#b7eb8f'};
   border-radius: ${BORDER_RADIUS.SM};
   font-size: ${FONT_SIZE.SM};
 `
 
-export const SummaryTitle = styled.div`
+export const SummaryTitle = styled.div<{ theme?: ThemeColors }>`
   font-weight: ${FONT_WEIGHT.SEMIBOLD};
   margin-bottom: ${SPACING.MARGIN_SM};
-  color: ${COLORS.SUCCESS};
+  color: ${props => props.theme?.textPrimary || COLORS.SUCCESS};
 `
 
-export const SummaryItem = styled.div`
+export const SummaryItem = styled.div<{ theme?: ThemeColors }>`
   margin-bottom: ${SPACING.MARGIN_XS};
+  color: ${props => props.theme?.textPrimary || 'inherit'};
 `
 
-export const SummaryMedicineName = styled.span`
+export const SummaryMedicineName = styled.span<{ theme?: ThemeColors }>`
   font-weight: ${FONT_WEIGHT.MEDIUM};
+  color: ${props => props.theme?.textPrimary || 'inherit'};
 `
 
-export const SummaryDosageText = styled.span`
+export const SummaryDosageText = styled.span<{ theme?: ThemeColors }>`
   margin-left: ${SPACING.MARGIN_SM};
-  color: ${COLORS.TEXT_SECONDARY};
+  color: ${props => props.theme?.textSecondary || COLORS.TEXT_SECONDARY};
 ` 

@@ -184,7 +184,11 @@
     "loading": "Loading...",
     "error": "An error occurred",
     "createdAt": "Created Date",
-    "actions": "Actions"
+    "actions": "Actions",
+    "basicInfo": "Basic Information",
+    "medicalInfo": "Medical Information",
+    "editMedicine": "Edit Medicine",
+    "deleteMedicine": "Delete Medicine"
   },
   "treatment": {
     "title": "Add New Treatment",
@@ -284,7 +288,15 @@
       "threeMonths": "3 months",
       "sixMonths": "6 months",
       "oneYear": "1 year"
-    }
+    },
+    "medicineInfo": "Medicine Information",
+    "noMedicineSelected": "No medicine selected",
+    "totalMedicines": "Total Medicines",
+    "totalQuantity": "Total Quantity",
+    "totalCost": "Total Cost",
+    "medicines": "medicines",
+    "units": "units",
+    "prescriptionSummary": "Prescription Summary"
   },
   "prescription": {
     "title": "Prescription Management",

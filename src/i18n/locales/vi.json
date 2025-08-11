@@ -184,7 +184,11 @@
     "loading": "Đang tải...",
     "error": "Có lỗi xảy ra",
     "createdAt": "Ngày tạo",
-    "actions": "Thao tác"
+    "actions": "Thao tác",
+    "basicInfo": "Thông tin cơ bản",
+    "medicalInfo": "Thông tin y tế",
+    "editMedicine": "Chỉnh sửa thuốc",
+    "deleteMedicine": "Xóa thuốc"
   },
   "treatment": {
     "title": "Thêm Điều Trị Mới",
@@ -284,7 +288,15 @@
       "threeMonths": "3 tháng",
       "sixMonths": "6 tháng",
       "oneYear": "1 năm"
-    }
+    },
+    "medicineInfo": "Thông tin thuốc",
+    "noMedicineSelected": "Chưa chọn thuốc nào",
+    "totalMedicines": "Tổng số thuốc",
+    "totalQuantity": "Tổng số lượng",
+    "totalCost": "Tổng chi phí",
+    "medicines": "thuốc",
+    "units": "đơn vị",
+    "prescriptionSummary": "Tóm tắt đơn thuốc"
   },
   "prescription": {
     "title": "Quản lý đơn thuốc",
