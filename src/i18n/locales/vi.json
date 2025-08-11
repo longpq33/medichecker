@@ -360,6 +360,39 @@
     "recentActivitiesPlaceholder": "Danh sách các hoạt động gần đây sẽ được hiển thị ở đây...",
     "statisticsPlaceholder": "Biểu đồ thống kê sẽ được hiển thị ở đây..."
   },
+  "analysis": {
+    "title": "Phân tích đơn thuốc",
+    "prescriptionAnalysis": "Phân tích đơn thuốc",
+    "interactionAnalysis": "Phân tích tương tác thuốc",
+    "inappropriateDrugAnalysis": "Phân tích thuốc không hợp lý",
+    "duplicateIndicationAnalysis": "Phân tích trùng chỉ định",
+    "contraindicationAnalysis": "Phân tích chống chỉ định",
+    "analyzePrescription": "Phân tích đơn thuốc",
+    "analysisResults": "Kết quả phân tích",
+    "safetyScore": "Điểm an toàn",
+    "safetyLevel": {
+      "AN_TOAN": "An toàn",
+      "CAN_THAN_TRONG": "Cần thận trọng",
+      "NGUY_HIEM": "Nguy hiểm"
+    },
+    "overview": "Tổng quan",
+    "totalMedicines": "Tổng số thuốc",
+    "totalCost": "Tổng chi phí",
+    "safetyLevel": "Mức độ an toàn",
+    "recommendations": "Khuyến nghị",
+    "compatible": "Tương thích",
+    "necessary": "Cần thiết",
+    "unnecessary": "Không cần thiết",
+    "detailedReport": "Báo cáo chi tiết",
+    "analysisDate": "Ngày phân tích",
+    "analyzer": "Người phân tích",
+    "notes": "Ghi chú",
+    "noAnalysisData": "Không có dữ liệu phân tích",
+    "startAnalysis": "Bắt đầu phân tích",
+    "analysisInProgress": "Đang phân tích...",
+    "analysisComplete": "Phân tích hoàn tất",
+    "analysisError": "Lỗi khi phân tích"
+  },
   "validation": {
     "required": "Vui lòng nhập {{field}}!",
     "email": "Email không hợp lệ!"

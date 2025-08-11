@@ -13,6 +13,13 @@ export const API_ENDPOINTS = {
   USERS: '/users',
   USER_PROFILE: '/users/profile',
   
+  // Analysis
+  ANALYSIS_PRESCRIPTION: '/analysis/prescription',
+  ANALYSIS_INTERACTIONS: '/analysis/interactions',
+  ANALYSIS_INAPPROPRIATE_DRUGS: '/analysis/inappropriate-drugs',
+  ANALYSIS_DUPLICATE_INDICATIONS: '/analysis/duplicate-indications',
+  ANALYSIS_CONTRAINDICATIONS: '/analysis/contraindications',
+  
   // Common
   UPLOAD: '/upload',
   HEALTH_CHECK: '/health',

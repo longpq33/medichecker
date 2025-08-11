@@ -360,6 +360,39 @@
     "recentActivitiesPlaceholder": "List of recent activities will be displayed here...",
     "statisticsPlaceholder": "Statistical charts will be displayed here..."
   },
+  "analysis": {
+    "title": "Prescription Analysis",
+    "prescriptionAnalysis": "Prescription Analysis",
+    "interactionAnalysis": "Drug Interaction Analysis",
+    "inappropriateDrugAnalysis": "Inappropriate Drug Analysis",
+    "duplicateIndicationAnalysis": "Duplicate Indication Analysis",
+    "contraindicationAnalysis": "Contraindication Analysis",
+    "analyzePrescription": "Analyze Prescription",
+    "analysisResults": "Analysis Results",
+    "safetyScore": "Safety Score",
+    "safetyLevel": {
+      "AN_TOAN": "Safe",
+      "CAN_THAN_TRONG": "Caution Required",
+      "NGUY_HIEM": "Dangerous"
+    },
+    "overview": "Overview",
+    "totalMedicines": "Total Medicines",
+    "totalCost": "Total Cost",
+    "safetyLevel": "Safety Level",
+    "recommendations": "Recommendations",
+    "compatible": "Compatible",
+    "necessary": "Necessary",
+    "unnecessary": "Unnecessary",
+    "detailedReport": "Detailed Report",
+    "analysisDate": "Analysis Date",
+    "analyzer": "Analyzer",
+    "notes": "Notes",
+    "noAnalysisData": "No analysis data available",
+    "startAnalysis": "Start Analysis",
+    "analysisInProgress": "Analysis in progress...",
+    "analysisComplete": "Analysis complete",
+    "analysisError": "Analysis error occurred"
+  },
   "validation": {
     "required": "Please enter {{field}}!",
     "email": "Invalid email!"
