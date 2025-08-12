@@ -13,6 +13,8 @@ import {
 import {
   SafetyOutlined,
   InfoCircleOutlined,
+  CheckCircleOutlined,
+  ClockCircleOutlined,
 } from "@ant-design/icons";
 import { useLanguage } from "@/hooks/useLanguage";
 import { useAnalysis } from "@/hooks/useAnalysis";
@@ -30,67 +32,227 @@ const { Text } = Typography;
 
 const AnalysisCard = styled(Card)`
   margin-bottom: 16px;
-  border-radius: 12px;
-  background: white;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+  border: 1px solid #e2e8f0;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
 
   &:hover {
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    border-color: #cbd5e1;
   }
 
   .ant-card-head {
-    color: #1f2937;
+    /* background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); */
+    border-bottom: 1px solid#f3f4f6;
+    padding: 20px 24px;
+    margin: 0;
 
     .ant-card-head-title {
       color: #1f2937;
       font-weight: 600;
+      font-size: 16px;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
     }
+
+    .anticon {
+      color: white;
+      font-size: 20px;
+      margin-right: 12px;
+    }
+  }
+
+  .ant-card-body {
+    padding: 32px 24px;
   }
 
   .analysis-status {
     text-align: center;
-    margin: 16px 0;
+    margin: 24px 0;
+    padding: 32px 24px;
+    background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
 
     .status-icon {
-      font-size: 48px;
-      margin-bottom: 8px;
+      font-size: 64px;
+      margin-bottom: 16px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
     }
 
     .status-text {
-      font-size: 16px;
+      font-size: 18px;
       font-weight: 600;
+      color: #1e293b;
+      margin-bottom: 8px;
+    }
+
+    .status-subtitle {
+      color: #64748b;
+      font-size: 14px;
     }
   }
 
   .quick-stats {
-    margin-bottom: 16px;
-  }
-
-  .recommendations {
-    .recommendation-item {
-      margin-bottom: 8px;
-      padding: 8px;
-      border-radius: 6px;
-
-      &.compatible {
-        background-color: #f6ffed;
-        border: 1px solid #b7eb8f;
+    margin-bottom: 24px;
+    
+    .ant-statistic {
+      .ant-statistic-title {
+        color: #64748b;
+        font-size: 14px;
+        font-weight: 500;
       }
-
-      &.necessary {
-        background-color: #e6f7ff;
-        border: 1px solid #91d5ff;
-      }
-
-      &.unnecessary {
-        background-color: #fff2e8;
-        border: 1px solid #ffbb96;
+      
+      .ant-statistic-content {
+        color: #1e293b;
+        font-weight: 600;
       }
     }
   }
 
+  .recommendations {
+    .recommendation-item {
+      margin-bottom: 12px;
+      padding: 16px;
+      border-radius: 8px;
+      border-left: 4px solid;
+      transition: all 0.2s ease;
 
+      &:hover {
+        transform: translateX(4px);
+      }
+
+      &.compatible {
+        background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+        border-left-color: #22c55e;
+        border: 1px solid #bbf7d0;
+      }
+
+      &.necessary {
+        background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+        border-left-color: #3b82f6;
+        border: 1px solid #bfdbfe;
+      }
+
+      &.unnecessary {
+        background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+        border-left-color: #ef4444;
+        border: 1px solid #fecaca;
+      }
+    }
+  }
+
+  .placeholder-content {
+    text-align: center;
+    padding: 48px 24px;
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    border-radius: 12px;
+    border: 2px dashed #cbd5e1;
+    margin: 16px 0;
+
+    .placeholder-icon {
+      font-size: 72px;
+      margin-bottom: 24px;
+      background: linear-gradient(135deg, #94a3b8 0%, #64748b 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      opacity: 0.7;
+    }
+
+    .placeholder-title {
+      font-size: 20px;
+      font-weight: 600;
+      color: #475569;
+      margin-bottom: 16px;
+      line-height: 1.4;
+    }
+
+    .placeholder-description {
+      color: #64748b;
+      font-size: 14px;
+      line-height: 1.6;
+      max-width: 400px;
+      margin: 0 auto 24px;
+    }
+
+    .placeholder-features {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      max-width: 450px;
+      margin: 0 auto;
+
+      .feature-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 16px;
+        background: white;
+        border-radius: 8px;
+        border: 1px solid #e2e8f0;
+        transition: all 0.2s ease;
+
+        &:hover {
+          background: #f8fafc;
+          border-color: #cbd5e1;
+          transform: translateX(4px);
+        }
+
+        .feature-icon {
+          width: 32px;
+          height: 32px;
+          border-radius: 50%;
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: white;
+          font-size: 16px;
+        }
+
+        .feature-text {
+          color: #475569;
+          font-size: 13px;
+          font-weight: 500;
+        }
+      }
+    }
+  }
+
+  .monitoring-status {
+    text-align: center;
+    padding: 24px;
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+    border-radius: 12px;
+    border: 1px solid #bae6fd;
+    margin: 16px 0;
+
+    .monitoring-icon {
+      font-size: 48px;
+      color: #0ea5e9;
+      margin-bottom: 16px;
+    }
+
+    .monitoring-text {
+      color: #0c4a6e;
+      font-size: 16px;
+      font-weight: 500;
+      margin-bottom: 12px;
+    }
+
+    .monitoring-details {
+      color: #0369a1;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+  }
 `;
 
 interface Medicine {
@@ -208,29 +370,44 @@ export const TreatmentAnalysis: React.FC<TreatmentAnalysisProps> = ({
           <Space>
             <SafetyOutlined />
             {t("analysis.prescriptionAnalysis")}
-            {hasValidData && (
-              <Tag color="success" style={{ marginLeft: 8 }}>
-                ✓ Đang theo dõi thay đổi
-              </Tag>
-            )}
           </Space>
         }
       >
-        <div style={{ textAlign: "center", padding: "24px 0" }}>
-          <InfoCircleOutlined
-            style={{ fontSize: 48, color: "#d9d9d9", marginBottom: 16 }}
-          />
-          <Text type="secondary">
+        <div className="placeholder-content">
+          <div className="placeholder-icon">
+            <InfoCircleOutlined />
+          </div>
+          <div className="placeholder-title">
             Vui lòng chọn thuốc từ form đơn thuốc để bắt đầu phân tích tự động
-          </Text>
-          <div style={{ marginTop: 8 }}>
-            <Text type="secondary" style={{ fontSize: 12 }}>
-              • Chọn thuốc từ danh sách để kích hoạt phân tích tự động
-              <br />
-              • Thông tin allergies và medical_history từ PatientInfo
-              <br />• Phân tích tương tác thuốc và chống chỉ định sẽ được thực
-              hiện tự động
-            </Text>
+          </div>
+          <div className="placeholder-description">
+            Hệ thống sẽ tự động phân tích tương tác thuốc và chống chỉ định dựa trên thông tin bệnh nhân
+          </div>
+          <div className="placeholder-features">
+            <div className="feature-item">
+              <div className="feature-icon">
+                <CheckCircleOutlined />
+              </div>
+              <div className="feature-text">
+                Chọn thuốc từ danh sách để kích hoạt phân tích tự động
+              </div>
+            </div>
+            <div className="feature-item">
+              <div className="feature-icon">
+                <ClockCircleOutlined />
+              </div>
+              <div className="feature-text">
+                Thông tin allergies và medical_history từ PatientInfo
+              </div>
+            </div>
+            <div className="feature-item">
+              <div className="feature-icon">
+                <SafetyOutlined />
+              </div>
+              <div className="feature-text">
+                Phân tích tương tác thuốc và chống chỉ định sẽ được thực hiện tự động
+              </div>
+            </div>
           </div>
         </div>
       </AnalysisCard>
@@ -247,27 +424,21 @@ export const TreatmentAnalysis: React.FC<TreatmentAnalysisProps> = ({
       }
     >
       {!analysisResult && (
-        <div style={{ textAlign: "center", padding: "24px 0" }}>
-          <div style={{ marginBottom: 16 }}>
-            <div style={{ textAlign: "center", marginBottom: 8 }}>
-              <Text type="secondary" style={{ fontSize: 12 }}>
-                Đang theo dõi tự động:{" "}
-                {medicines.filter((m) => m.thuocId > 0).length} thuốc
-                {patientMedicalHistory && patientMedicalHistory.length > 0 && (
-                  <>, medical_history: {patientMedicalHistory.length} bệnh lý</>
-                )}
-                {patientAllergies && patientAllergies.length > 0 && (
-                  <>, allergies: {patientAllergies.length} dị ứng</>
-                )}
-              </Text>
-            </div>
+        <div className="monitoring-status">
+          <div className="monitoring-icon">
+            <ClockCircleOutlined />
           </div>
-
-          <div style={{ marginTop: 16 }}>
-            <Text type="secondary">
-              Phân tích tự động sẽ được thực hiện khi chọn thuốc từ form đơn
-              thuốc
-            </Text>
+          <div className="monitoring-text">
+            Đang theo dõi tự động: {medicines.filter((m) => m.thuocId > 0).length} thuốc
+            {patientMedicalHistory && patientMedicalHistory.length > 0 && (
+              <>, medical_history: {patientMedicalHistory.length} bệnh lý</>
+            )}
+            {patientAllergies && patientAllergies.length > 0 && (
+              <>, allergies: {patientAllergies.length} dị ứng</>
+            )}
+          </div>
+          <div className="monitoring-details">
+            Phân tích tự động sẽ được thực hiện khi chọn thuốc từ form đơn thuốc
           </div>
         </div>
       )}
