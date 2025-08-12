@@ -29,7 +29,7 @@ const { Title: AntTitle } = Typography
 
 export const StyledTitle = styled(AntTitle)`
   margin-bottom: ${SPACING.MARGIN_XL};
-  text-align: center;
+  text-align: left;
   
   @media (max-width: 768px) {
     margin-bottom: ${SPACING.MARGIN_LG};
@@ -46,6 +46,7 @@ export const StyledCard = styled(Card)<{ theme?: ThemeColors }>`
   max-width: 100%;
   box-sizing: border-box;
   background: ${props => props.theme?.cardBg || 'transparent'};
+  overflow-x: hidden;
   
   @media (max-width: 768px) {
     padding: ${SPACING.PADDING_MD};
@@ -61,10 +62,15 @@ export const FormContainer = styled.div`
   width: 100%;
   max-width: 100%;
   overflow-x: hidden;
+  box-sizing: border-box;
 `
 
 export const FormSection = styled.div<{ theme?: ThemeColors }>`
   margin-bottom: ${SPACING.MARGIN_XXL};
+  width: 100%;
+  max-width: 100%;
+  /* overflow-x: hidden; */
+  box-sizing: border-box;
 
   .section-title {
     font-size: ${FONT_SIZE.LG};
@@ -98,84 +104,15 @@ export const MedicineItem = styled.div<{ theme?: ThemeColors }>`
   border: 1px solid ${props => props.theme?.borderSecondary || COLORS.BORDER_SECONDARY};
   margin-bottom: ${SPACING.MARGIN_MD};
   position: relative;
-  transition: ${TRANSITIONS.NORMAL};
   width: 100%;
   max-width: 100%;
+  overflow-x: hidden;
   box-sizing: border-box;
-
-  &:hover {
-    background: ${props => props.theme?.bgTertiary || COLORS.BG_TERTIARY};
-    border-color: ${COLORS.PRIMARY};
-  }
-
-  .medicine-select {
-    grid-column: 1 / -1;
-  }
-
-  .quantity-input {
-    grid-column: 1;
-  }
-
-  .unit-select {
-    grid-column: 2;
-  }
-
-  .frequency-select {
-    grid-column: 1;
-  }
-
-  .duration-select {
-    grid-column: 2;
-  }
-
-  .unit-price-input {
-    grid-column: 1;
-    
-    .ant-input {
-      height: 28px;
-      padding: 0;
-      font-size: ${FORM_STYLES.INPUT_FONT_SIZE};
-    }
-  }
-
-  .total-price-input {
-    grid-column: 2;
-    
-    .ant-input {
-      padding: 0;
-      height: 28px;
-      font-size: ${FORM_STYLES.INPUT_FONT_SIZE};
-    }
-  }
-
-  .remove-button {
-    position: absolute;
-    top: ${SPACING.MARGIN_MD};
-    right: ${SPACING.MARGIN_MD};
-    color: ${COLORS.ERROR};
-
-    &:hover {
-      color: ${COLORS.ERROR_HOVER};
-    }
-  }
-
+  
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
-    gap: ${SPACING.GAP_MD};
+    gap: ${SPACING.GAP_XS};
     padding: ${SPACING.PADDING_MD};
-
-    .medicine-select,
-    .quantity-input,
-    .unit-select,
-    .frequency-select,
-    .duration-select {
-      grid-column: 1;
-    }
-  }
-  
-  @media (max-width: 480px) {
-    padding: ${SPACING.PADDING_SM};
-    gap: ${SPACING.GAP_SM};
   }
 `
 
@@ -327,4 +264,15 @@ export const SummaryMedicineName = styled.span<{ theme?: ThemeColors }>`
 export const SummaryDosageText = styled.span<{ theme?: ThemeColors }>`
   margin-left: ${SPACING.MARGIN_SM};
   color: ${props => props.theme?.textSecondary || COLORS.TEXT_SECONDARY};
-` 
+` ;
+
+export const TreatmentAnalysisContainer = styled.div<{ $isFixed?: boolean }>`
+  position: ${props => props.$isFixed ? 'sticky' : 'static'};
+  top: ${props => props.$isFixed ? '80px' : 'auto'};
+  right: ${props => props.$isFixed ? '20px' : 'auto'};
+  width: ${props => props.$isFixed ? 'auto' : '100%'};
+  z-index: ${props => props.$isFixed ? '1000' : 'auto'};
+  max-height: ${props => props.$isFixed ? 'calc(100vh - 40px)' : 'none'};
+  overflow-y: ${props => props.$isFixed ? 'auto' : 'visible'};
+  transition: all 0.3s ease;
+`

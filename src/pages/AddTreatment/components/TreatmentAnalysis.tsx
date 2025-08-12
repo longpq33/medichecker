@@ -159,7 +159,6 @@ export const TreatmentAnalysis: React.FC<TreatmentAnalysisProps> = ({
 
   // Kiểm tra xem có đủ dữ liệu để phân tích không
   useEffect(() => {
-    console.log("medicines", medicines);
     const hasMedicines =
       medicines.length > 0 && medicines.some((m) => m.thuocId > 0);
     setHasValidData(hasMedicines);

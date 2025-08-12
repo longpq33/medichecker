@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
-import { 
-  Typography, 
-  Tag, 
+import React, { useState } from "react";
+import {
+  Typography,
+  Tag,
   Avatar,
   Badge,
   Card,
@@ -9,9 +9,9 @@ import {
   Col,
   Statistic,
   Space,
-  Alert
-} from 'antd'
-import { 
+  Alert,
+} from "antd";
+import {
   ArrowLeftOutlined,
   UserOutlined,
   MedicineBoxOutlined,
@@ -24,116 +24,112 @@ import {
   FileTextOutlined,
   TeamOutlined,
   AlertOutlined,
-  EditOutlined
-} from '@ant-design/icons'
-import { useParams, useNavigate } from 'react-router-dom'
-import dayjs from 'dayjs'
-import { 
+} from "@ant-design/icons";
+import { useParams, useNavigate } from "react-router-dom";
+import dayjs from "dayjs";
+import {
   PatientHeader,
   BackButton,
   PatientStats,
   InfoCard,
   StyledTabs,
-  AddTreatmentButton
-} from './styled'
-import { usePatient } from '@/hooks/usePatients'
-import { useLanguage } from '@/hooks/useLanguage'
-import { EditTreatmentModal } from './components/EditTreatmentModal'
-import type { LichSuDieuTriResponse } from '@/types'
+  AddTreatmentButton,
+} from "./styled";
+import { usePatient } from "@/hooks/usePatients";
+import { useLanguage } from "@/hooks/useLanguage";
+import { EditTreatmentModal } from "./components/EditTreatmentModal";
+import type { LichSuDieuTriResponse } from "@/types";
 
-const { Text, Title } = Typography
-
+const { Text, Title } = Typography;
 
 export const PatientDetail: React.FC = () => {
-  const { id } = useParams<{ id: string }>()
-  const navigate = useNavigate()
-  const { t } = useLanguage()
-  
+  const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
+  const { t } = useLanguage();
+
   // State cho edit modal
-  const [editModalVisible, setEditModalVisible] = useState(false)
-  const [selectedTreatment, setSelectedTreatment] = useState<LichSuDieuTriResponse | null>(null)
-  
+  const [editModalVisible, setEditModalVisible] = useState(false);
+  const [selectedTreatment, setSelectedTreatment] =
+    useState<LichSuDieuTriResponse | null>(null);
+
   // Sử dụng hook
-  const { patient, isLoadingPatient, refetchPatient } = usePatient(parseInt(id || '0'))
+  const { patient, isLoadingPatient, refetchPatient } = usePatient(
+    parseInt(id || "0")
+  );
 
   const getGenderText = (gender?: string) => {
     switch (gender) {
-      case 'NAM':
-        return t('common.male')
-      case 'NU':
-        return t('common.female')
-      case 'KHAC':
-        return t('common.other')
+      case "NAM":
+        return t("common.male");
+      case "NU":
+        return t("common.female");
+      case "KHAC":
+        return t("common.other");
       default:
-        return t('patient.noData')
+        return t("patient.noData");
     }
-  }
+  };
 
   const getGenderColor = (gender?: string) => {
     switch (gender) {
-      case 'NAM':
-        return 'blue'
-      case 'NU':
-        return 'pink'
-      case 'KHAC':
-        return 'orange'
+      case "NAM":
+        return "blue";
+      case "NU":
+        return "pink";
+      case "KHAC":
+        return "orange";
       default:
-        return 'default'
+        return "default";
     }
-  }
+  };
 
   const getTreatmentStatusText = (status: string) => {
     switch (status) {
-      case 'MOI_TAO':
-        return t('patient.treatmentStatus')
-      case 'DA_DUYET':
-        return t('patient.treatmentStatus')
-      case 'DANG_DIEU_TRI':
-        return t('patient.treatmentStatus')
-      case 'HOAN_THANH':
-        return t('patient.treatmentStatus')
-      case 'HUY_BO':
-        return t('patient.treatmentStatus')
+      case "MOI_TAO":
+        return t("patient.treatmentStatus");
+      case "DA_DUYET":
+        return t("patient.treatmentStatus");
+      case "DANG_DIEU_TRI":
+        return t("patient.treatmentStatus");
+      case "HOAN_THANH":
+        return t("patient.treatmentStatus");
+      case "HUY_BO":
+        return t("patient.treatmentStatus");
       default:
-        return t('patient.noData')
+        return t("patient.noData");
     }
-  }
+  };
 
   const handleAddTreatment = () => {
-    navigate(`/patients/${id}/add-treatment`)
-  }
-
-  const handleEditTreatment = (treatment: LichSuDieuTriResponse) => {
-    setSelectedTreatment(treatment)
-    setEditModalVisible(true)
-  }
+    navigate(`/patients/${id}/add-treatment`);
+  };
 
   const handleEditSuccess = () => {
-    setEditModalVisible(false)
-    setSelectedTreatment(null)
-    refetchPatient()
-  }
+    setEditModalVisible(false);
+    setSelectedTreatment(null);
+    refetchPatient();
+  };
 
   const handleEditCancel = () => {
-    setEditModalVisible(false)
-    setSelectedTreatment(null)
-  }
+    setEditModalVisible(false);
+    setSelectedTreatment(null);
+  };
 
   if (isLoadingPatient) {
-    return <div>{t('common.loading')}</div>
+    return <div>{t("common.loading")}</div>;
   }
 
   if (!patient) {
-    return <div>{t('patient.notFound')}</div>
+    return <div>{t("patient.notFound")}</div>;
   }
 
   const tabItems = [
     {
-      key: 'overview',
+      key: "overview",
       label: (
         <Space>
           <UserOutlined />
-          {t('patient.overview')}
+          {t("patient.overview")}
         </Space>
       ),
       children: (
@@ -145,31 +141,35 @@ export const PatientDetail: React.FC = () => {
                 title={
                   <Space>
                     <UserOutlined />
-                    {t('patient.personalInfo')}
+                    {t("patient.personalInfo")}
                   </Space>
                 }
               >
                 <div className="info-grid">
                   <div className="info-item">
                     <span className="info-label">
-                      <UserOutlined style={{ marginRight: '8px' }} />
-                      {t('patient.fullName')}:
+                      <UserOutlined style={{ marginRight: "8px" }} />
+                      {t("patient.fullName")}:
                     </span>
-                    <span className="info-value">{patient.hoTen || '---'}</span>
+                    <span className="info-value">{patient.hoTen || "---"}</span>
                   </div>
                   <div className="info-item">
                     <span className="info-label">
-                      <CalendarOutlined style={{ marginRight: '8px' }} />
-                      {t('common.age')}:
+                      <CalendarOutlined style={{ marginRight: "8px" }} />
+                      {t("common.age")}:
                     </span>
                     <span className="info-value">
-                      {patient.ngaySinh ? `${dayjs().diff(dayjs(patient.ngaySinh), 'year')} ${t('common.age')}` : '---'}
+                      {patient.ngaySinh
+                        ? `${dayjs().diff(dayjs(patient.ngaySinh), "year")} ${t(
+                            "common.age"
+                          )}`
+                        : "---"}
                     </span>
                   </div>
                   <div className="info-item">
                     <span className="info-label">
-                      <UserOutlined style={{ marginRight: '8px' }} />
-                      {t('common.gender')}:
+                      <UserOutlined style={{ marginRight: "8px" }} />
+                      {t("common.gender")}:
                     </span>
                     <span className="info-value">
                       <Tag color={getGenderColor(patient.gioiTinh)}>
@@ -179,24 +179,28 @@ export const PatientDetail: React.FC = () => {
                   </div>
                   <div className="info-item">
                     <span className="info-label">
-                      <PhoneOutlined style={{ marginRight: '8px' }} />
-                      {t('common.phone')}:
+                      <PhoneOutlined style={{ marginRight: "8px" }} />
+                      {t("common.phone")}:
                     </span>
-                    <span className="info-value">{patient.soDienThoai || '---'}</span>
+                    <span className="info-value">
+                      {patient.soDienThoai || "---"}
+                    </span>
                   </div>
                   <div className="info-item">
                     <span className="info-label">
-                      <MailOutlined style={{ marginRight: '8px' }} />
-                      {t('common.email')}:
+                      <MailOutlined style={{ marginRight: "8px" }} />
+                      {t("common.email")}:
                     </span>
-                    <span className="info-value">{patient.email || '---'}</span>
+                    <span className="info-value">{patient.email || "---"}</span>
                   </div>
                   <div className="info-item">
                     <span className="info-label">
-                      <HomeOutlined style={{ marginRight: '8px' }} />
-                      {t('common.address')}:
+                      <HomeOutlined style={{ marginRight: "8px" }} />
+                      {t("common.address")}:
                     </span>
-                    <span className="info-value">{patient.diaChi || '---'}</span>
+                    <span className="info-value">
+                      {patient.diaChi || "---"}
+                    </span>
                   </div>
                 </div>
               </InfoCard>
@@ -207,69 +211,96 @@ export const PatientDetail: React.FC = () => {
                 title={
                   <Space>
                     <MedicineBoxOutlined />
-                    {t('patient.medicalInfo')}
+                    {t("patient.medicalInfo")}
                   </Space>
                 }
               >
                 <div className="info-grid">
                   <div className="info-item">
                     <span className="info-label">
-                      <MedicineBoxOutlined style={{ marginRight: '8px' }} />
-                      {t('patient.bloodType')}:
+                      <MedicineBoxOutlined style={{ marginRight: "8px" }} />
+                      {t("patient.bloodType")}:
                     </span>
                     <span className="info-value">
                       {patient.nhomMau ? (
-                        <Tag color="red" style={{ backgroundColor: '#fef2f2', color: '#dc2626', border: '1px solid #fecaca' }}>
+                        <Tag
+                          color="red"
+                          style={{
+                            backgroundColor: "#fef2f2",
+                            color: "#dc2626",
+                            border: "1px solid #fecaca",
+                          }}
+                        >
                           {patient.nhomMau}
                         </Tag>
                       ) : (
-                        '---'
+                        "---"
                       )}
                     </span>
                   </div>
                   <div className="info-item">
                     <span className="info-label">
-                      <PhoneOutlined style={{ marginRight: '8px' }} />
-                      {t('patient.emergencyContact')}:
+                      <PhoneOutlined style={{ marginRight: "8px" }} />
+                      {t("patient.emergencyContact")}:
                     </span>
-                    <span className="info-value">{patient.lienHeKhanCap || '---'}</span>
+                    <span className="info-value">
+                      {patient.lienHeKhanCap || "---"}
+                    </span>
                   </div>
                   <div className="info-item">
                     <span className="info-label">
-                      <FileTextOutlined style={{ marginRight: '8px' }} />
-                      {t('patient.medicalHistory')}:
+                      <FileTextOutlined style={{ marginRight: "8px" }} />
+                      {t("patient.medicalHistory")}:
                     </span>
                     <span className="info-value">
-                      {patient.danhSachBenhLyNen && patient.danhSachBenhLyNen.length > 0 ? (
+                      {patient.danhSachBenhLyNen &&
+                      patient.danhSachBenhLyNen.length > 0 ? (
                         <Space wrap>
                           {patient.danhSachBenhLyNen.map((benhLy) => (
-                            <Tag key={benhLy.id} color="blue" style={{ backgroundColor: '#eff6ff', color: '#1d4ed8', border: '1px solid #dbeafe' }}>
+                            <Tag
+                              key={benhLy.id}
+                              color="blue"
+                              style={{
+                                backgroundColor: "#eff6ff",
+                                color: "#1d4ed8",
+                                border: "1px solid #dbeafe",
+                              }}
+                            >
                               {benhLy.tenBenh}
                             </Tag>
                           ))}
                         </Space>
                       ) : (
-                        '---'
+                        "---"
                       )}
                     </span>
                   </div>
                   <div className="info-item">
                     <span className="info-label">
-                      <AlertOutlined style={{ marginRight: '8px' }} />
-                      {t('patient.allergies')}:
+                      <AlertOutlined style={{ marginRight: "8px" }} />
+                      {t("patient.allergies")}:
                     </span>
                     <span className="info-value">
-                      {patient.danhSachDiUng && patient.danhSachDiUng.length > 0 ? (
+                      {patient.danhSachDiUng &&
+                      patient.danhSachDiUng.length > 0 ? (
                         <Space wrap>
                           {patient.danhSachDiUng.map((diUng) => (
-                            <Tag key={diUng.id} color="red" style={{ backgroundColor: '#fef2f2', color: '#dc2626', border: '1px solid #fecaca' }}>
+                            <Tag
+                              key={diUng.id}
+                              color="red"
+                              style={{
+                                backgroundColor: "#fef2f2",
+                                color: "#dc2626",
+                                border: "1px solid #fecaca",
+                              }}
+                            >
                               {diUng.thuoc.tenThuoc}
                               {diUng.trieuChung && ` (${diUng.trieuChung})`}
                             </Tag>
                           ))}
                         </Space>
                       ) : (
-                        '---'
+                        "---"
                       )}
                     </span>
                   </div>
@@ -278,85 +309,146 @@ export const PatientDetail: React.FC = () => {
             </Col>
           </Row>
         </div>
-      )
+      ),
     },
     {
-      key: 'treatment-history',
+      key: "treatment-history",
       label: (
         <Space>
           <MedicineBoxOutlined />
-          {t('patient.treatmentHistory')}
+          {t("patient.treatmentHistory")}
         </Space>
       ),
       children: (
         <div>
-          <div style={{ 
-            display: 'flex', 
-            justifyContent: 'space-between', 
-            alignItems: 'center', 
-            marginBottom: '24px' 
-          }}>
-            <Title level={4}>{t('patient.treatmentHistory')}</Title>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginBottom: "24px",
+            }}
+          >
+            <Title level={4}>{t("patient.treatmentHistory")}</Title>
           </div>
 
           {patient.danhSachDieuTri && patient.danhSachDieuTri.length > 0 ? (
             <div>
               {patient.danhSachDieuTri.map((treatment) => (
-                <Card 
-                  key={treatment.id} 
-                  style={{ 
-                    marginBottom: '16px',
-                    borderRadius: '12px',
-                    border: '1px solid #e5e7eb'
+                <Card
+                  key={treatment.id}
+                  style={{
+                    marginBottom: "16px",
+                    borderRadius: "12px",
+                    border: "1px solid #e5e7eb",
                   }}
                 >
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "flex-start",
+                    }}
+                  >
                     <div style={{ flex: 1 }}>
                       {/* Date and Status */}
-                      <div style={{ display: 'flex', alignItems: 'center', marginBottom: '16px' }}>
-                        <div style={{ fontWeight: 'bold', fontSize: '16px', marginRight: '12px' }}>
-                          {treatment.donThuocDieuTri ? dayjs(treatment.donThuocDieuTri.ngayKeDon).format('DD/MM/YYYY') : t('patient.noData')}
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          marginBottom: "16px",
+                        }}
+                      >
+                        <div
+                          style={{
+                            fontWeight: "bold",
+                            fontSize: "16px",
+                            marginRight: "12px",
+                          }}
+                        >
+                          {treatment.donThuocDieuTri
+                            ? dayjs(treatment.donThuocDieuTri.ngayKeDon).format(
+                                "DD/MM/YYYY"
+                              )
+                            : t("patient.noData")}
                         </div>
                         <Badge
-                          status={treatment.trangThai === 'HOAN_THANH' ? 'success' : 
-                                 treatment.trangThai === 'DANG_DIEU_TRI' ? 'processing' : 
-                                 treatment.trangThai === 'DA_DUYET' ? 'default' : 'warning'}
+                          status={
+                            treatment.trangThai === "HOAN_THANH"
+                              ? "success"
+                              : treatment.trangThai === "DANG_DIEU_TRI"
+                              ? "processing"
+                              : treatment.trangThai === "DA_DUYET"
+                              ? "default"
+                              : "warning"
+                          }
                           text={getTreatmentStatusText(treatment.trangThai)}
                         />
                       </div>
 
                       {/* Diagnosis */}
-                      <div style={{ marginBottom: '16px' }}>
-                        <div style={{ fontWeight: 'bold', marginBottom: '8px', color: '#374151' }}>
-                          {t('patient.diagnosis')}
+                      <div style={{ marginBottom: "16px" }}>
+                        <div
+                          style={{
+                            fontWeight: "bold",
+                            marginBottom: "8px",
+                            color: "#374151",
+                          }}
+                        >
+                          {t("patient.diagnosis")}
                         </div>
-                        <div style={{ color: '#6b7280' }}>
+                        <div style={{ color: "#6b7280" }}>
                           {treatment.chanDoanChinh}
-                          {treatment.chanDoanPhu && ` - ${treatment.chanDoanPhu}`}
+                          {treatment.chanDoanPhu &&
+                            ` - ${treatment.chanDoanPhu}`}
                         </div>
                       </div>
 
                       {/* Symptoms */}
                       {treatment.trieuChung && (
-                        <div style={{ marginBottom: '16px' }}>
-                          <div style={{ fontWeight: 'bold', marginBottom: '8px', color: '#374151' }}>
-                            {t('patient.symptoms')}
+                        <div style={{ marginBottom: "16px" }}>
+                          <div
+                            style={{
+                              fontWeight: "bold",
+                              marginBottom: "8px",
+                              color: "#374151",
+                            }}
+                          >
+                            {t("patient.symptoms")}
                           </div>
-                          <div style={{ color: '#6b7280' }}>
+                          <div style={{ color: "#6b7280" }}>
                             {treatment.trieuChung}
                           </div>
                         </div>
                       )}
 
                       {/* Doctor and Prescription in a row */}
-                      <div style={{ display: 'flex', gap: '24px', marginBottom: '16px' }}>
+                      <div
+                        style={{
+                          display: "flex",
+                          gap: "24px",
+                          marginBottom: "16px",
+                        }}
+                      >
                         {/* Doctor */}
                         <div style={{ flex: 1 }}>
-                          <div style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
-                            <UserOutlined style={{ marginRight: '8px', color: '#6b7280' }} />
-                            <span style={{ fontWeight: 'bold', color: '#374151' }}>{t('patient.doctor')}</span>
+                          <div
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              marginBottom: "8px",
+                            }}
+                          >
+                            <UserOutlined
+                              style={{ marginRight: "8px", color: "#6b7280" }}
+                            />
+                            <span
+                              style={{ fontWeight: "bold", color: "#374151" }}
+                            >
+                              {t("patient.doctor")}
+                            </span>
                           </div>
-                          <div style={{ color: '#6b7280' }}>
+                          <div style={{ color: "#6b7280" }}>
                             {treatment.bacSiDieuTri}
                           </div>
                         </div>
@@ -364,61 +456,71 @@ export const PatientDetail: React.FC = () => {
 
                       {/* Notes */}
                       {treatment.donThuocDieuTri?.ghiChu && (
-                        <div style={{ marginBottom: '16px' }}>
-                          <div style={{ fontWeight: 'bold', marginBottom: '8px', color: '#374151' }}>
-                            {t('patient.notes')}
+                        <div style={{ marginBottom: "16px" }}>
+                          <div
+                            style={{
+                              fontWeight: "bold",
+                              marginBottom: "8px",
+                              color: "#374151",
+                            }}
+                          >
+                            {t("patient.notes")}
                           </div>
-                          <div style={{ color: '#6b7280' }}>
+                          <div style={{ color: "#6b7280" }}>
                             {treatment.donThuocDieuTri.ghiChu}
                           </div>
                         </div>
                       )}
 
                       {/* Medicine List */}
-                      {treatment.donThuocDieuTri?.danhSachThuoc && treatment.donThuocDieuTri.danhSachThuoc.length > 0 && (
-                        <div>
-                          <div style={{ fontWeight: 'bold', marginBottom: '8px', color: '#374151' }}>
-                            {t('patient.medicineList')}
+                      {treatment.donThuocDieuTri?.danhSachThuoc &&
+                        treatment.donThuocDieuTri.danhSachThuoc.length > 0 && (
+                          <div>
+                            <div
+                              style={{
+                                fontWeight: "bold",
+                                marginBottom: "8px",
+                                color: "#374151",
+                              }}
+                            >
+                              {t("patient.medicineList")}
+                            </div>
+                            <div
+                              style={{ color: "#6b7280", marginBottom: "8px" }}
+                            >
+                              {treatment.donThuocDieuTri.danhSachThuoc
+                                .map(
+                                  (med) =>
+                                    `${med.thuoc.tenThuoc} x ${med.lieuDung}`
+                                )
+                                .join(", ")}
+                            </div>
+                            <div
+                              style={{
+                                display: "flex",
+                                gap: "8px",
+                                flexWrap: "wrap",
+                              }}
+                            >
+                              {treatment.donThuocDieuTri.danhSachThuoc.map(
+                                (med, index) => (
+                                  <Tag
+                                    key={index}
+                                    style={{
+                                      backgroundColor: "#eff6ff",
+                                      color: "#1d4ed8",
+                                      border: "1px solid #dbeafe",
+                                      borderRadius: "16px",
+                                      padding: "4px 12px",
+                                    }}
+                                  >
+                                    {med.thuoc.tenThuoc}
+                                  </Tag>
+                                )
+                              )}
+                            </div>
                           </div>
-                          <div style={{ color: '#6b7280', marginBottom: '8px' }}>
-                            {treatment.donThuocDieuTri.danhSachThuoc.map(med => `${med.thuoc.tenThuoc} x ${med.lieuDung}`).join(', ')}
-                          </div>
-                          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-                            {treatment.donThuocDieuTri.danhSachThuoc.map((med, index) => (
-                              <Tag 
-                                key={index}
-                                style={{ 
-                                  backgroundColor: '#eff6ff', 
-                                  color: '#1d4ed8', 
-                                  border: '1px solid #dbeafe',
-                                  borderRadius: '16px',
-                                  padding: '4px 12px'
-                                }}
-                              >
-                                {med.thuoc.tenThuoc}
-                              </Tag>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                    
-                    {/* Edit Button */}
-                    <div style={{ marginLeft: '16px' }}>
-                      <Tag
-                        style={{ 
-                          cursor: 'pointer',
-                          backgroundColor: '#f0f9ff',
-                          color: '#0369a1',
-                          border: '1px solid #0ea5e9',
-                          borderRadius: '6px',
-                          padding: '4px 8px'
-                        }}
-                        onClick={() => handleEditTreatment(treatment)}
-                      >
-                        <EditOutlined style={{ marginRight: '4px' }} />
-                        {t('common.edit')}
-                      </Tag>
+                        )}
                     </div>
                   </div>
                 </Card>
@@ -426,21 +528,21 @@ export const PatientDetail: React.FC = () => {
             </div>
           ) : (
             <Alert
-              message={t('patient.noTreatmentHistory')}
-              description={t('patient.noTreatmentHistoryDesc')}
+              message={t("patient.noTreatmentHistory")}
+              description={t("patient.noTreatmentHistoryDesc")}
               type="info"
               showIcon
             />
           )}
         </div>
-      )
-    }
-  ]
+      ),
+    },
+  ];
 
   return (
     <div>
-      <BackButton onClick={() => navigate('/patients')}>
-        <ArrowLeftOutlined /> {t('patient.back')}
+      <BackButton onClick={() => navigate("/patients")}>
+        <ArrowLeftOutlined /> {t("patient.back")}
       </BackButton>
 
       <PatientHeader>
@@ -450,11 +552,13 @@ export const PatientDetail: React.FC = () => {
             <Badge status="success" />
           </div>
         </div>
-        
+
         <div className="patient-info">
           <h1 className="patient-name">{patient.hoTen}</h1>
           <div className="patient-meta">
-            <Tag className="status-tag">{t('patient.patientId')}: {patient.maBenhNhan}</Tag>
+            <Tag className="status-tag">
+              {t("patient.patientId")}: {patient.maBenhNhan}
+            </Tag>
             <Tag color={getGenderColor(patient.gioiTinh)}>
               {getGenderText(patient.gioiTinh)}
             </Tag>
@@ -482,50 +586,56 @@ export const PatientDetail: React.FC = () => {
       <PatientStats>
         <Card>
           <Statistic
-            title={t('patient.totalAppointments')}
+            title={t("patient.totalAppointments")}
             value={patient.danhSachDieuTri ? patient.danhSachDieuTri.length : 0}
             prefix={<TeamOutlined />}
-            valueStyle={{ color: '#10b981' }}
+            valueStyle={{ color: "#10b981" }}
           />
         </Card>
         <Card>
           <Statistic
-            title={t('patient.lastAppointment')}
-            value={patient.danhSachDieuTri && patient.danhSachDieuTri.length > 0 ? dayjs(patient.danhSachDieuTri[0]?.donThuocDieuTri?.ngayKeDon).format('DD/MM/YYYY') : t('patient.noData')}
+            title={t("patient.lastAppointment")}
+            value={
+              patient.danhSachDieuTri && patient.danhSachDieuTri.length > 0
+                ? dayjs(
+                    patient.danhSachDieuTri[0]?.donThuocDieuTri?.ngayKeDon
+                  ).format("DD/MM/YYYY")
+                : t("patient.noData")
+            }
             prefix={<CalendarOutlined />}
-            valueStyle={{ color: '#1f2937' }}
+            valueStyle={{ color: "#1f2937" }}
           />
         </Card>
         <Card>
           <Statistic
-            title={t('patient.nextAppointment')}
-            value={t('patient.noData')}
+            title={t("patient.nextAppointment")}
+            value={t("patient.noData")}
             prefix={<ClockCircleOutlined />}
-            valueStyle={{ color: '#8b5cf6' }}
+            valueStyle={{ color: "#8b5cf6" }}
           />
         </Card>
       </PatientStats>
 
-      <div style={{ 
-        position: 'relative',
-        marginBottom: '24px' 
-      }}>
-        <StyledTabs
-          defaultActiveKey="overview"
-          items={tabItems}
-          size="large"
-        />
-        <div style={{ 
-          position: 'absolute',
-          top: '8px',
-          right: '0',
-          zIndex: 1
-        }}>
+      <div
+        style={{
+          position: "relative",
+          marginBottom: "24px",
+        }}
+      >
+        <StyledTabs defaultActiveKey="overview" items={tabItems} size="large" />
+        <div
+          style={{
+            position: "absolute",
+            top: "8px",
+            right: "0",
+            zIndex: 1,
+          }}
+        >
           <AddTreatmentButton
             icon={<PlusOutlined />}
             onClick={handleAddTreatment}
           >
-            {t('patient.addTreatment')}
+            {t("patient.addTreatment")}
           </AddTreatmentButton>
         </div>
       </div>
@@ -533,10 +643,10 @@ export const PatientDetail: React.FC = () => {
       <EditTreatmentModal
         visible={editModalVisible}
         treatment={selectedTreatment}
-        patientId={parseInt(id || '0')}
+        patientId={parseInt(id || "0")}
         onSuccess={handleEditSuccess}
         onCancel={handleEditCancel}
       />
     </div>
-  )
-} 
+  );
+};

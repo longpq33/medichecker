@@ -1,11 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Form, Input, message, Row, Col } from "antd";
 import {
   ArrowLeftOutlined,
   PlusOutlined,
   SaveOutlined,
-  CloseOutlined,
 } from "@ant-design/icons";
 import { useLanguage } from "@/hooks/useLanguage";
 import { useMedicines } from "@/hooks/useMedicines";
@@ -19,11 +18,11 @@ import {
   AddMedicineButton,
   ActionButtons,
   PrimaryButton,
-  SecondaryButton,
   BackButton,
   StyledForm,
   DatePickerStyled,
   StyledTitle,
+  TreatmentAnalysisContainer,
 } from "./styled";
 
 const { TextArea } = Input;
@@ -75,10 +74,34 @@ export const AddTreatment: React.FC = () => {
   ]);
   const [touchedFields, setTouchedFields] = useState<TouchedFields>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isAnalysisFixed, setIsAnalysisFixed] = useState(false);
 
   // Sử dụng hooks
   const { medicinesData } = useMedicines({ page: 0, size: 1000 });
   const { patient, isLoadingPatient } = usePatient(parseInt(id || "0"));
+  const analysisRef = useRef<HTMLDivElement>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = scrollContainerRef.current?.scrollTop ?? 0;
+      console.log("scrollTop:", scrollTop);
+      const offsetTop = analysisRef.current?.offsetTop || 0;
+
+      const shouldBeFixed = scrollTop > offsetTop - 100;
+
+      if (shouldBeFixed !== isAnalysisFixed) {
+        setIsAnalysisFixed(shouldBeFixed);
+      }
+    };
+
+    const container = scrollContainerRef.current;
+    container?.addEventListener("scroll", handleScroll);
+
+    return () => {
+      container?.removeEventListener("scroll", handleScroll);
+    };
+  }, [isAnalysisFixed]);
 
   // Chuyển đổi dữ liệu từ API thành format cần thiết
   const availableMedicines =
@@ -271,7 +294,16 @@ export const AddTreatment: React.FC = () => {
     : {};
 
   return (
-    <div>
+    <div
+      ref={scrollContainerRef}
+      style={{ 
+        height: "100vh", 
+        overflowY: "auto",
+        overflowX: "hidden",
+        maxWidth: "100vw",
+        boxSizing: "border-box"
+      }}
+    >
       <BackButton icon={<ArrowLeftOutlined />} onClick={handleCancel}>
         {t("common.back")}
       </BackButton>
@@ -428,13 +460,6 @@ export const AddTreatment: React.FC = () => {
               </FormSection>
 
               <ActionButtons>
-                <SecondaryButton
-                  icon={<CloseOutlined />}
-                  onClick={handleCancel}
-                >
-                  {t("treatment.cancelTreatment")}
-                </SecondaryButton>
-
                 <PrimaryButton
                   type="primary"
                   icon={<SaveOutlined />}
@@ -451,6 +476,11 @@ export const AddTreatment: React.FC = () => {
         {/* Cột bên phải - Thông tin bệnh nhân */}
         <Col xs={24} lg={8}>
           <PatientInfo patient={patientInfo} loading={isLoadingPatient} />
+
+          <TreatmentAnalysisContainer
+            ref={analysisRef}
+            $isFixed={isAnalysisFixed}
+          >
             <TreatmentAnalysis
               medicines={medicines}
               patientAllergies={
@@ -462,6 +492,7 @@ export const AddTreatment: React.FC = () => {
                 []
               }
             />
+          </TreatmentAnalysisContainer>
         </Col>
       </Row>
     </div>
