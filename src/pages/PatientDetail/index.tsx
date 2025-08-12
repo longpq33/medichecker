@@ -45,6 +45,8 @@ import { useBenhLyNen } from "@/hooks/useBenhLyNen";
 import { useLanguage } from "@/hooks/useLanguage";
 import { EditTreatmentModal } from "./components/EditTreatmentModal";
 import { Breadcrumb } from "@/components";
+import { useDiUng } from "@/hooks/useDiUng";
+import { DiUngTab, DeleteDiUngModal } from "./components";
 import type { LichSuDieuTriResponse } from "@/types";
 
 
@@ -82,12 +84,29 @@ export const PatientDetail: React.FC = () => {
     confirmDelete
   } = useBenhLyNen();
 
+  // Hook cho dị ứng thuốc
+  const {
+    diUngList,
+    isLoading: isLoadingDiUng,
+    modalVisible: diUngModalVisible,
+    deleteModalVisible: diUngDeleteModalVisible,
+    deletingDiUng,
+    getDiUngByBenhNhan: getDiUngByBenhNhanHook,
+    createDiUng,
+    showModal: showDiUngModal,
+    hideModal: hideDiUngModal,
+    showDeleteModal: showDiUngDeleteModal,
+    hideDeleteModal: hideDiUngDeleteModal,
+    confirmDelete: confirmDiUngDelete
+  } = useDiUng();
+
   // Load danh sách bệnh nền khi component mount
   useEffect(() => {
     if (patient?.id) {
       getBenhLyNenByBenhNhan(patient.id);
+      getDiUngByBenhNhanHook(patient.id);
     }
-  }, [patient?.id, getBenhLyNenByBenhNhan]);
+  }, [patient?.id, getBenhLyNenByBenhNhan, getDiUngByBenhNhanHook]);
 
   const getGenderText = (gender?: string) => {
     switch (gender) {
@@ -711,6 +730,29 @@ export const PatientDetail: React.FC = () => {
         </div>
       ),
     },
+    {
+      key: "di-ung",
+      label: (
+        <Space>
+          <AlertOutlined />
+          {t("diUng.title")}
+        </Space>
+      ),
+      children: (
+        <DiUngTab
+          patient={patient}
+          diUngList={diUngList}
+          isLoadingDiUng={isLoadingDiUng}
+          modalVisible={diUngModalVisible}
+          setModalVisible={hideDiUngModal}
+          showModal={showDiUngModal}
+          createDiUng={createDiUng}
+          getDiUngByBenhNhan={getDiUngByBenhNhanHook}
+          refetchPatient={refetchPatient}
+          showDeleteModal={showDiUngDeleteModal}
+        />
+      ),
+    },
   ];
 
   return (
@@ -958,6 +1000,18 @@ export const PatientDetail: React.FC = () => {
         )}
         <p>{t("benhLyNen.deleteWarning")}</p>
       </Modal>
+
+      <DeleteDiUngModal
+        visible={diUngDeleteModalVisible}
+        deletingDiUng={deletingDiUng}
+        onCancel={hideDiUngDeleteModal}
+        onOk={async () => {
+          const success = await confirmDiUngDelete();
+          if (success) {
+            refetchPatient();
+          }
+        }}
+      />
     </div>
   );
 };
