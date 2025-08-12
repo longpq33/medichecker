@@ -353,11 +353,6 @@ export const AddTreatment: React.FC = () => {
                   {t("treatment.prescription")}
                 </div>
 
-                <MedicineList
-                  medicines={medicines}
-                  onRemove={handleRemoveMedicine}
-                />
-
                 <AddMedicineButton
                   type="dashed"
                   icon={<PlusOutlined />}
@@ -366,6 +361,13 @@ export const AddTreatment: React.FC = () => {
                 >
                   {t("treatment.addMedicine")}
                 </AddMedicineButton>
+
+                <MedicineList
+                  medicines={medicines}
+                  onRemove={handleRemoveMedicine}
+                />
+
+                
               </FormSection>
 
               <FormSection>

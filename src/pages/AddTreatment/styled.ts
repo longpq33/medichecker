@@ -135,6 +135,7 @@ export const AddMedicineButton = styled(Button)`
   border-radius: ${BORDER_RADIUS.SM};
   color: ${COLORS.TEXT_SECONDARY};
   font-weight: ${FONT_WEIGHT.MEDIUM};
+  margin-bottom: ${SPACING.MARGIN_MD};
 
   &:hover {
     border-color: ${COLORS.PRIMARY};
