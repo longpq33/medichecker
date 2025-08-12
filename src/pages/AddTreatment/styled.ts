@@ -114,6 +114,18 @@ export const MedicineItem = styled.div<{ theme?: ThemeColors }>`
     gap: ${SPACING.GAP_XS};
     padding: ${SPACING.PADDING_MD};
   }
+
+  .unit-price-input, .total-price-input {
+    .ant-input-outlined {
+      padding: 0 10px;
+      
+    }
+   
+  }
+
+  .ant-input {
+      height: 40px !important;
+    }
 `
 
 export const AddMedicineButton = styled(Button)`

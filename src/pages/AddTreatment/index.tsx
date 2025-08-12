@@ -85,7 +85,6 @@ export const AddTreatment: React.FC = () => {
   useEffect(() => {
     const handleScroll = () => {
       const scrollTop = scrollContainerRef.current?.scrollTop ?? 0;
-      console.log("scrollTop:", scrollTop);
       const offsetTop = analysisRef.current?.offsetTop || 0;
 
       const shouldBeFixed = scrollTop > offsetTop - 100;
