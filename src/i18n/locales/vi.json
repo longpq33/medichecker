@@ -40,7 +40,9 @@
     "error": "Lỗi",
     "success": "Thành công",
     "warning": "Cảnh báo",
-    "info": "Thông tin"
+    "info": "Thông tin",
+    "yes": "Có",
+    "no": "Không"
   },
   "navigation": {
     "dashboard": "Dashboard",
@@ -325,7 +327,24 @@
     "totalCost": "Tổng chi phí",
     "medicines": "thuốc",
     "units": "đơn vị",
-    "prescriptionSummary": "Tóm tắt đơn thuốc"
+    "prescriptionSummary": "Tóm tắt đơn thuốc",
+    "medicineName": "Tên thuốc",
+    "medicineNamePlaceholder": "Tên thuốc sẽ tự động điền",
+    "selectMedicine": "Chọn thuốc",
+    "unitPricePlaceholder": "Nhập giá đơn vị",
+    "usageInstructions": "Hướng dẫn sử dụng",
+    "usageInstructionsPlaceholder": "Nhập hướng dẫn sử dụng thuốc",
+    "confirmDeleteMedicine": "Xác nhận xóa thuốc",
+    "deleteMedicineWarning": "Bạn có chắc chắn muốn xóa thuốc này khỏi đơn thuốc?",
+    "noMedicinesAdded": "Chưa có thuốc nào được thêm vào đơn thuốc",
+    "totalQuantity": "Tổng số lượng",
+    "totalAmount": "Tổng tiền",
+    "medicinePlaceholder": "Chọn thuốc...",
+    "routePlaceholder": "Chọn đường dùng...",
+    "frequencyPlaceholder": "Chọn tần suất...",
+    "durationPlaceholder": "Chọn thời gian...",
+    "instructionsPlaceholder": "Nhập hướng dẫn sử dụng...",
+    "medicineList": "Danh sách thuốc"
   },
   "prescription": {
     "title": "Quản lý đơn thuốc",

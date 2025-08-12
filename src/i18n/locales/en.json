@@ -40,7 +40,9 @@
     "error": "Error",
     "success": "Success",
     "warning": "Warning",
-    "info": "Info"
+    "info": "Info",
+    "yes": "Yes",
+    "no": "No"
   },
   "navigation": {
     "dashboard": "Dashboard",
@@ -325,7 +327,24 @@
     "totalCost": "Total Cost",
     "medicines": "medicines",
     "units": "units",
-    "prescriptionSummary": "Prescription Summary"
+    "prescriptionSummary": "Prescription Summary",
+    "medicineName": "Medicine Name",
+    "medicineNamePlaceholder": "Medicine name will be auto-filled",
+    "selectMedicine": "Select Medicine",
+    "unitPricePlaceholder": "Enter unit price",
+    "usageInstructions": "Usage Instructions",
+    "usageInstructionsPlaceholder": "Enter medicine usage instructions",
+    "confirmDeleteMedicine": "Confirm Delete Medicine",
+    "deleteMedicineWarning": "Are you sure you want to remove this medicine from the prescription?",
+    "noMedicinesAdded": "No medicines have been added to the prescription yet",
+    "totalQuantity": "Total Quantity",
+    "totalAmount": "Total Amount",
+    "medicinePlaceholder": "Select medicine...",
+    "routePlaceholder": "Select route...",
+    "frequencyPlaceholder": "Select frequency...",
+    "durationPlaceholder": "Select duration...",
+    "instructionsPlaceholder": "Enter usage instructions...",
+    "medicineList": "Medicine List"
   },
   "prescription": {
     "title": "Prescription Management",

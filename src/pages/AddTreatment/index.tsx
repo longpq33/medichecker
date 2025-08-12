@@ -11,7 +11,7 @@ import { useMedicines } from "@/hooks/useMedicines";
 import { usePatient } from "@/hooks/usePatients";
 import { treatmentService } from "@/services/treatmentService";
 import { PatientInfo, Breadcrumb } from "@/components";
-import { MedicineItem, TreatmentAnalysis } from "./components";
+import { TreatmentAnalysis, AddMedicineModal, MedicineList } from "./components";
 import {
   StyledCard,
   FormSection,
@@ -40,40 +40,19 @@ interface Medicine {
   thanhTien: number;
 }
 
-interface TouchedFields {
-  [medicineId: string]: {
-    thuocId?: boolean;
-    soLuong?: boolean;
-    lieuDung?: boolean;
-    duongDung?: boolean;
-    tanSuat?: boolean;
-    thoiGianDung?: boolean;
-  };
-}
+// Interface này không còn sử dụng sau khi chuyển sang modal
+// interface TouchedFields { ... }
 
 export const AddTreatment: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { t } = useLanguage();
   const [form] = Form.useForm();
-  const [medicines, setMedicines] = useState<Medicine[]>([
-    {
-      id: `medicine-${Date.now()}`,
-      thuocId: 0,
-      name: "",
-      soLuong: 0,
-      lieuDung: "",
-      duongDung: "",
-      tanSuat: "",
-      thoiGianDung: "",
-      huongDanSuDung: "",
-      giaDonVi: 0,
-      thanhTien: 0,
-    },
-  ]);
-  const [touchedFields, setTouchedFields] = useState<TouchedFields>({});
+  const [medicines, setMedicines] = useState<Medicine[]>([]);
+  // const [touchedFields, setTouchedFields] = useState<TouchedFields>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isAnalysisFixed, setIsAnalysisFixed] = useState(false);
+  const [isAddMedicineModalVisible, setIsAddMedicineModalVisible] = useState(false);
 
   // Sử dụng hooks
   const { medicinesData } = useMedicines({ page: 0, size: 1000 });
@@ -101,29 +80,16 @@ export const AddTreatment: React.FC = () => {
     };
   }, [isAnalysisFixed]);
 
-  // Chuyển đổi dữ liệu từ API thành format cần thiết
-  const availableMedicines =
-    medicinesData?.content?.map((medicine) => ({
-      id: medicine.id.toString(),
-      name: medicine.tenThuoc,
-      dosage: `${medicine.nongDo || ""} ${medicine.dangBaoChe || ""}`.trim(),
-    })) || [];
+  // Chuyển đổi dữ liệu từ API thành format cần thiết (không còn sử dụng)
+  // const availableMedicines = ...
 
   const handleAddMedicine = () => {
-    const newMedicine: Medicine = {
-      id: `medicine-${Date.now()}`,
-      thuocId: 0,
-      name: "",
-      soLuong: 0,
-      lieuDung: "",
-      duongDung: "",
-      tanSuat: "",
-      thoiGianDung: "",
-      huongDanSuDung: "",
-      giaDonVi: 0,
-      thanhTien: 0,
-    };
+    setIsAddMedicineModalVisible(true);
+  };
+
+  const handleAddMedicineFromModal = (newMedicine: Medicine) => {
     setMedicines((prev) => [...prev, newMedicine]);
+    setIsAddMedicineModalVisible(false);
   };
 
   const handleRemoveMedicine = (medicineId: string) => {
@@ -132,76 +98,12 @@ export const AddTreatment: React.FC = () => {
     );
   };
 
-  const handleMedicineChange = (
-    medicineId: string,
-    field: keyof Medicine,
-    value: string | number
-  ) => {
-    setMedicines((prev) =>
-      prev.map((medicine) =>
-        medicine.id === medicineId ? { ...medicine, [field]: value } : medicine
-      )
-    );
-  };
+  // Các hàm này không còn sử dụng sau khi chuyển sang modal
+  // const handleMedicineChange = ...
+  // const handleFieldTouch = ...
 
-  const handleFieldTouch = (medicineId: string, field: keyof Medicine) => {
-    setTouchedFields((prev) => ({
-      ...prev,
-      [medicineId]: {
-        ...prev[medicineId],
-        [field]: true,
-      },
-    }));
-  };
-
-  const validateMedicine = (
-    medicine: Medicine,
-    index: number,
-    forceValidate = false
-  ): string[] => {
-    const errors: string[] = [];
-    const medicineTouched = touchedFields[medicine.id] || {};
-
-    if (!medicine.thuocId || medicine.thuocId === 0) {
-      if (forceValidate || medicineTouched.thuocId) {
-        errors.push(
-          `${index + 1}: ${t("treatment.validation.selectMedicine")}`
-        );
-      }
-    }
-
-    if (!medicine.soLuong || medicine.soLuong <= 0) {
-      if (forceValidate || medicineTouched.soLuong) {
-        errors.push(`${index + 1}: ${t("treatment.validation.quantity")}`);
-      }
-    }
-
-    if (!medicine.lieuDung) {
-      if (forceValidate || medicineTouched.lieuDung) {
-        errors.push(`${index + 1}: ${t("treatment.validation.dosage")}`);
-      }
-    }
-
-    if (!medicine.duongDung) {
-      if (forceValidate || medicineTouched.duongDung) {
-        errors.push(`${index + 1}: ${t("treatment.validation.route")}`);
-      }
-    }
-
-    if (!medicine.tanSuat) {
-      if (forceValidate || medicineTouched.tanSuat) {
-        errors.push(`${index + 1}: ${t("treatment.validation.frequency")}`);
-      }
-    }
-
-    if (!medicine.thoiGianDung) {
-      if (forceValidate || medicineTouched.thoiGianDung) {
-        errors.push(`${index + 1}: ${t("treatment.validation.duration")}`);
-      }
-    }
-
-    return errors;
-  };
+  // Hàm validate này không còn cần thiết vì validation đã được xử lý trong modal
+  // const validateMedicine = ...
 
   const handleSubmit = async (values: unknown) => {
     try {
@@ -217,11 +119,33 @@ export const AddTreatment: React.FC = () => {
         notes?: string;
       };
 
-      // Validate medicines
+      // Validate medicines - kiểm tra có thuốc nào được thêm không
+      if (medicines.length === 0 || medicines.every(medicine => medicine.thuocId === 0)) {
+        message.error(t("treatment.validation.noMedicines"));
+        return;
+      }
+
+      // Kiểm tra thông tin thuốc có đầy đủ không
       const medicineErrors: string[] = [];
       medicines.forEach((medicine, index) => {
-        const errors = validateMedicine(medicine, index, true);
-        medicineErrors.push(...errors);
+        if (medicine.thuocId === 0) {
+          medicineErrors.push(`${index + 1}: ${t("treatment.validation.selectMedicine")}`);
+        }
+        if (!medicine.soLuong || medicine.soLuong <= 0) {
+          medicineErrors.push(`${index + 1}: ${t("treatment.validation.enterQuantity")}`);
+        }
+        if (!medicine.lieuDung) {
+          medicineErrors.push(`${index + 1}: ${t("treatment.validation.enterDosage")}`);
+        }
+        if (!medicine.duongDung) {
+          medicineErrors.push(`${index + 1}: ${t("treatment.validation.selectRoute")}`);
+        }
+        if (!medicine.tanSuat) {
+          medicineErrors.push(`${index + 1}: ${t("treatment.validation.selectFrequency")}`);
+        }
+        if (!medicine.thoiGianDung) {
+          medicineErrors.push(`${index + 1}: ${t("treatment.validation.selectDuration")}`);
+        }
       });
 
       if (medicineErrors.length > 0) {
@@ -429,25 +353,10 @@ export const AddTreatment: React.FC = () => {
                   {t("treatment.prescription")}
                 </div>
 
-                {medicines.map((medicine, index) => (
-                  <MedicineItem
-                    key={medicine.id}
-                    medicine={medicine}
-                    index={index}
-                    mockMedicines={availableMedicines}
-                    onMedicineChange={(medicineId, field, value) =>
-                      handleMedicineChange(medicineId, field, value)
-                    }
-                    onRemove={(medicineId) => handleRemoveMedicine(medicineId)}
-                    onFieldTouch={(medicineId, field) =>
-                      handleFieldTouch(medicineId, field)
-                    }
-                    validateMedicine={(medicine, index, forceValidate) =>
-                      validateMedicine(medicine, index, forceValidate)
-                    }
-                    medicinesData={medicinesData}
-                  />
-                ))}
+                <MedicineList
+                  medicines={medicines}
+                  onRemove={handleRemoveMedicine}
+                />
 
                 <AddMedicineButton
                   type="dashed"
@@ -508,6 +417,14 @@ export const AddTreatment: React.FC = () => {
           </TreatmentAnalysisContainer>
         </Col>
       </Row>
+
+      {/* Add Medicine Modal */}
+      <AddMedicineModal
+        visible={isAddMedicineModalVisible}
+        onCancel={() => setIsAddMedicineModalVisible(false)}
+        onAdd={handleAddMedicineFromModal}
+        medicinesData={medicinesData}
+      />
     </div>
   );
 };
