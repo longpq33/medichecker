@@ -429,6 +429,38 @@
     "highRisk": "High Risk",
     "criticalRisk": "Critical Risk"
   },
+  "benhLyNen": {
+    "title": "Medical History Management",
+    "addBenhLyNen": "Add Medical History",
+    "editBenhLyNen": "Edit Medical History",
+    "deleteBenhLyNen": "Delete Medical History",
+    "benhLyNenInfo": "Medical History Information",
+    "maBenh": "Disease Code",
+    "tenBenh": "Disease Name",
+    "moTa": "Description",
+    "ngayChanDoan": "Diagnosis Date",
+    "mucDoNghiemTrong": "Severity Level",
+    "mucDoNghiemTrongOptions": {
+      "NHE": "Mild",
+      "VUA": "Moderate",
+      "NANG": "Severe",
+      "RAT_NANG": "Very Severe"
+    },
+    "createSuccess": "Medical history added successfully!",
+    "createError": "An error occurred while adding medical history",
+    "updateSuccess": "Medical history updated successfully!",
+    "updateError": "An error occurred while updating medical history",
+    "deleteSuccess": "Medical history deleted successfully!",
+    "deleteError": "An error occurred while deleting medical history",
+    "confirmDelete": "Confirm Delete Medical History",
+    "deleteConfirm": "Are you sure you want to delete this medical history?",
+    "deleteWarning": "This action cannot be undone.",
+    "noData": "No medical history data available",
+    "loading": "Loading medical history list...",
+    "error": "An error occurred while loading medical history list",
+    "maBenhMaxLength": "Disease code cannot exceed 10 characters",
+    "maBenhDuplicate": "Disease code already exists, please choose another code"
+  },
   "validation": {
     "required": "Please enter {{field}}!",
     "email": "Invalid email!"

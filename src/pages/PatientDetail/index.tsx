@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Typography,
   Tag,
@@ -10,6 +10,12 @@ import {
   Statistic,
   Space,
   Alert,
+  Button,
+  Modal,
+  Form,
+  Input,
+  Select,
+  DatePicker,
 } from "antd";
 import {
   ArrowLeftOutlined,
@@ -24,6 +30,7 @@ import {
   FileTextOutlined,
   TeamOutlined,
   AlertOutlined,
+  DeleteOutlined,
 } from "@ant-design/icons";
 import { useParams, useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
@@ -36,11 +43,13 @@ import {
   AddTreatmentButton,
 } from "./styled";
 import { usePatient } from "@/hooks/usePatients";
+import { useBenhLyNen } from "@/hooks/useBenhLyNen";
 import { useLanguage } from "@/hooks/useLanguage";
 import { EditTreatmentModal } from "./components/EditTreatmentModal";
 import type { LichSuDieuTriResponse } from "@/types";
 
-const { Text, Title } = Typography;
+
+const { Text } = Typography;
 
 export const PatientDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -52,10 +61,34 @@ export const PatientDetail: React.FC = () => {
   const [selectedTreatment, setSelectedTreatment] =
     useState<LichSuDieuTriResponse | null>(null);
 
+  // State cho modal bệnh nền
+  const [benhLyNenModalVisible, setBenhLyNenModalVisible] = useState(false);
+  const [benhLyNenForm] = Form.useForm();
+
   // Sử dụng hook
   const { patient, isLoadingPatient, refetchPatient } = usePatient(
     parseInt(id || "0")
   );
+
+  // Hook cho bệnh nền
+  const { 
+    benhLyNenList, 
+    isLoading: isLoadingBenhLyNen, 
+    getBenhLyNenByBenhNhan,
+    createBenhLyNen,
+    deleteModalVisible,
+    deletingBenhLyNen,
+    showDeleteModal,
+    hideDeleteModal,
+    confirmDelete
+  } = useBenhLyNen();
+
+  // Load danh sách bệnh nền khi component mount
+  useEffect(() => {
+    if (patient?.id) {
+      getBenhLyNenByBenhNhan(patient.id);
+    }
+  }, [patient?.id, getBenhLyNenByBenhNhan]);
 
   const getGenderText = (gender?: string) => {
     switch (gender) {
@@ -329,7 +362,6 @@ export const PatientDetail: React.FC = () => {
               marginBottom: "24px",
             }}
           >
-            <Title level={4}>{t("patient.treatmentHistory")}</Title>
           </div>
 
           {patient.danhSachDieuTri && patient.danhSachDieuTri.length > 0 ? (
@@ -537,6 +569,149 @@ export const PatientDetail: React.FC = () => {
         </div>
       ),
     },
+    {
+      key: "benh-ly-nen",
+      label: (
+        <Space>
+          <FileTextOutlined />
+          {t("benhLyNen.title")}
+        </Space>
+      ),
+      children: (
+        <div>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginBottom: "24px",
+            }}
+          >
+            <Button
+              type="primary"
+              icon={<PlusOutlined />}
+              onClick={() => {
+                benhLyNenForm.resetFields();
+                setBenhLyNenModalVisible(true);
+              }}
+            >
+              {t("benhLyNen.addBenhLyNen")}
+            </Button>
+          </div>
+
+          {isLoadingBenhLyNen ? (
+            <div style={{ textAlign: "center", padding: "40px" }}>
+              {t("benhLyNen.loading")}
+            </div>
+          ) : benhLyNenList && benhLyNenList.length > 0 ? (
+            <div>
+              {benhLyNenList.map((benhLy) => (
+                <Card
+                  key={benhLy.id}
+                  style={{
+                    marginBottom: "16px",
+                    borderRadius: "12px",
+                    border: "1px solid #e5e7eb",
+                  }}
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "flex-start",
+                    }}
+                  >
+                    <div style={{ flex: 1 }}>
+                      {/* Mã bệnh và tên bệnh */}
+                      <div style={{ marginBottom: "16px" }}>
+                        <div
+                          style={{
+                            fontWeight: "bold",
+                            fontSize: "16px",
+                            marginBottom: "8px",
+                            color: "#374151",
+                          }}
+                        >
+                          {benhLy.maBenh} - {benhLy.tenBenh}
+                        </div>
+                        {benhLy.moTa && (
+                          <div style={{ color: "#6b7280" }}>
+                            {benhLy.moTa}
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Mức độ nghiêm trọng */}
+                      <div style={{ marginBottom: "16px" }}>
+                        <div
+                          style={{
+                            fontWeight: "bold",
+                            marginBottom: "8px",
+                            color: "#374151",
+                          }}
+                        >
+                          {t("benhLyNen.mucDoNghiemTrong")}:
+                        </div>
+                        <Tag
+                          color={
+                            benhLy.mucDoNghiemTrong === "NHE"
+                              ? "green"
+                              : benhLy.mucDoNghiemTrong === "VUA"
+                              ? "orange"
+                              : benhLy.mucDoNghiemTrong === "NANG"
+                              ? "red"
+                              : "volcano"
+                          }
+                        >
+                          {t(`benhLyNen.mucDoNghiemTrongOptions.${benhLy.mucDoNghiemTrong}`)}
+                        </Tag>
+                      </div>
+
+                      {/* Ngày chẩn đoán */}
+                      {benhLy.ngayChanDoan && (
+                        <div style={{ marginBottom: "16px" }}>
+                          <div
+                            style={{
+                              fontWeight: "bold",
+                              marginBottom: "8px",
+                              color: "#374151",
+                            }}
+                          >
+                            {t("benhLyNen.ngayChanDoan")}:
+                          </div>
+                          <div style={{ color: "#6b7280" }}>
+                            {dayjs(benhLy.ngayChanDoan).format("DD/MM/YYYY")}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Actions */}
+                    <div style={{ display: "flex", gap: "8px" }}>
+                      <Button
+                        size="small"
+                        type="text"
+                        danger
+                        icon={<DeleteOutlined />}
+                        onClick={() => showDeleteModal(benhLy)}
+                        title={t("common.delete")}
+                      />
+                    </div>
+                  </div>
+                </Card>
+              ))}
+            </div>
+          ) : (
+            <Alert
+              message={t("benhLyNen.noData")}
+              description={t("benhLyNen.noData")}
+              type="info"
+              showIcon
+            />
+          )}
+        </div>
+      ),
+    },
   ];
 
   return (
@@ -647,6 +822,133 @@ export const PatientDetail: React.FC = () => {
         onSuccess={handleEditSuccess}
         onCancel={handleEditCancel}
       />
+
+      {/* Modal bệnh nền */}
+      <Modal
+        title={t("benhLyNen.addBenhLyNen")}
+        open={benhLyNenModalVisible}
+        onCancel={() => {
+          setBenhLyNenModalVisible(false);
+          benhLyNenForm.resetFields();
+        }}
+        onOk={async () => {
+          try {
+            const values = await benhLyNenForm.validateFields();
+            const data = {
+              benhNhanId: patient.id,
+              maBenh: values.maBenh,
+              tenBenh: values.tenBenh,
+              moTa: values.moTa,
+              ngayChanDoan: values.ngayChanDoan?.toISOString(),
+              mucDoNghiemTrong: values.mucDoNghiemTrong,
+            };
+
+            const success = await createBenhLyNen(data);
+            if (success) {
+              getBenhLyNenByBenhNhan(patient.id);
+              refetchPatient(); // Refresh thông tin bệnh nhân
+              setBenhLyNenModalVisible(false);
+              benhLyNenForm.resetFields();
+            }
+          } catch (error) {
+            console.error("Error saving benh ly nen:", error);
+          }
+        }}
+        width={600}
+      >
+        <Form
+          form={benhLyNenForm}
+          layout="vertical"
+          initialValues={{
+            mucDoNghiemTrong: "NHE",
+          }}
+        >
+          <Form.Item
+            name="maBenh"
+            label={t("benhLyNen.maBenh")}
+            rules={[
+              { required: true, message: t("validation.required", { field: t("benhLyNen.maBenh") }) },
+              { max: 10, message: t("benhLyNen.maBenhMaxLength") },
+              {
+                validator: (_, value) => {
+                  if (value && benhLyNenList) {
+                    const existingMaBenh = benhLyNenList.map(item => item.maBenh);
+                    if (existingMaBenh.includes(value)) {
+                      return Promise.reject(new Error(t("benhLyNen.maBenhDuplicate")));
+                    }
+                  }
+                  return Promise.resolve();
+                }
+              }
+            ]}
+          >
+            <Input placeholder={t("benhLyNen.maBenh")} maxLength={10} />
+          </Form.Item>
+
+          <Form.Item
+            name="tenBenh"
+            label={t("benhLyNen.tenBenh")}
+            rules={[{ required: true, message: t("validation.required", { field: t("benhLyNen.tenBenh") }) }]}
+          >
+            <Input placeholder={t("benhLyNen.tenBenh")} />
+          </Form.Item>
+
+          <Form.Item
+            name="moTa"
+            label={t("benhLyNen.moTa")}
+          >
+            <Input.TextArea rows={3} placeholder={t("benhLyNen.moTa")} />
+          </Form.Item>
+
+          <Form.Item
+            name="ngayChanDoan"
+            label={t("benhLyNen.ngayChanDoan")}
+          >
+            <DatePicker
+              style={{ width: "100%" }}
+              format="DD/MM/YYYY"
+              placeholder={t("benhLyNen.ngayChanDoan")}
+            />
+          </Form.Item>
+
+          <Form.Item
+            name="mucDoNghiemTrong"
+            label={t("benhLyNen.mucDoNghiemTrong")}
+          >
+            <Select placeholder={t("benhLyNen.mucDoNghiemTrong")}>
+              <Select.Option value="NHE">{t("benhLyNen.mucDoNghiemTrongOptions.NHE")}</Select.Option>
+              <Select.Option value="VUA">{t("benhLyNen.mucDoNghiemTrongOptions.VUA")}</Select.Option>
+              <Select.Option value="NANG">{t("benhLyNen.mucDoNghiemTrongOptions.NANG")}</Select.Option>
+              <Select.Option value="RAT_NANG">{t("benhLyNen.mucDoNghiemTrongOptions.RAT_NANG")}</Select.Option>
+            </Select>
+          </Form.Item>
+        </Form>
+      </Modal>
+
+      {/* Modal xóa bệnh nền */}
+      <Modal
+        title={t("benhLyNen.confirmDelete")}
+        open={deleteModalVisible}
+        onCancel={hideDeleteModal}
+        onOk={async () => {
+          const success = await confirmDelete();
+          if (success) {
+            getBenhLyNenByBenhNhan(patient.id);
+            refetchPatient(); // Refresh thông tin bệnh nhân
+          }
+        }}
+        okText={t("common.delete")}
+        cancelText={t("common.cancel")}
+        okButtonProps={{ danger: true }}
+      >
+        <p>{t("benhLyNen.deleteConfirm")}</p>
+        {deletingBenhLyNen && (
+          <p>
+            <strong>{deletingBenhLyNen.tenBenh}</strong> ({deletingBenhLyNen.maBenh})
+          </p>
+        )}
+        <p>{t("benhLyNen.deleteWarning")}</p>
+      </Modal>
     </div>
   );
 };

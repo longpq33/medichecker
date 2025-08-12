@@ -1,7 +1,9 @@
 // Export all hooks
 export { useAuth } from './useAuth'
 export { useLanguage } from './useLanguage'
-export { usePatients, usePatient } from './usePatients'
-export { useMedicines, useMedicine } from './useMedicines'
-export { usePrescriptions, usePrescription } from './usePrescriptions'
-export { useAnalysis } from './useAnalysis' 
+export { useTheme } from './useTheme'
+export { usePatients } from './usePatients'
+export { useMedicines } from './useMedicines'
+export { usePrescriptions } from './usePrescriptions'
+export { useAnalysis } from './useAnalysis'
+export { useBenhLyNen } from './useBenhLyNen' 

@@ -429,6 +429,38 @@
     "highRisk": "Rủi ro cao",
     "criticalRisk": "Rủi ro nghiêm trọng"
   },
+  "benhLyNen": {
+    "title": "Quản lý bệnh nền",
+    "addBenhLyNen": "Thêm bệnh nền",
+    "editBenhLyNen": "Chỉnh sửa bệnh nền",
+    "deleteBenhLyNen": "Xóa bệnh nền",
+    "benhLyNenInfo": "Thông tin bệnh nền",
+    "maBenh": "Mã bệnh",
+    "tenBenh": "Tên bệnh",
+    "moTa": "Mô tả",
+    "ngayChanDoan": "Ngày chẩn đoán",
+    "mucDoNghiemTrong": "Mức độ nghiêm trọng",
+    "mucDoNghiemTrongOptions": {
+      "NHE": "Nhẹ",
+      "VUA": "Vừa",
+      "NANG": "Nặng",
+      "RAT_NANG": "Rất nặng"
+    },
+    "createSuccess": "Thêm bệnh nền thành công!",
+    "createError": "Có lỗi xảy ra khi thêm bệnh nền",
+    "updateSuccess": "Cập nhật bệnh nền thành công!",
+    "updateError": "Có lỗi xảy ra khi cập nhật bệnh nền",
+    "deleteSuccess": "Xóa bệnh nền thành công!",
+    "deleteError": "Có lỗi xảy ra khi xóa bệnh nền",
+    "confirmDelete": "Xác nhận xóa bệnh nền",
+    "deleteConfirm": "Bạn có chắc chắn muốn xóa bệnh nền này?",
+    "deleteWarning": "Hành động này không thể hoàn tác.",
+    "noData": "Không có dữ liệu bệnh nền",
+    "loading": "Đang tải danh sách bệnh nền...",
+    "error": "Có lỗi xảy ra khi tải danh sách bệnh nền",
+    "maBenhMaxLength": "Mã bệnh không được quá 10 ký tự",
+    "maBenhDuplicate": "Mã bệnh đã tồn tại, vui lòng chọn mã khác"
+  },
   "validation": {
     "required": "Vui lòng nhập {{field}}!",
     "email": "Email không hợp lệ!"
