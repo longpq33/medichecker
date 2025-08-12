@@ -2,15 +2,15 @@ import React, { useEffect, useRef, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Form, Input, message, Row, Col } from "antd";
 import {
-  ArrowLeftOutlined,
   PlusOutlined,
   SaveOutlined,
+  UserOutlined,
 } from "@ant-design/icons";
 import { useLanguage } from "@/hooks/useLanguage";
 import { useMedicines } from "@/hooks/useMedicines";
 import { usePatient } from "@/hooks/usePatients";
 import { treatmentService } from "@/services/treatmentService";
-import { PatientInfo } from "@/components";
+import { PatientInfo, Breadcrumb } from "@/components";
 import { MedicineItem, TreatmentAnalysis } from "./components";
 import {
   StyledCard,
@@ -18,7 +18,6 @@ import {
   AddMedicineButton,
   ActionButtons,
   PrimaryButton,
-  BackButton,
   StyledForm,
   DatePickerStyled,
   StyledTitle,
@@ -272,9 +271,7 @@ export const AddTreatment: React.FC = () => {
     }
   };
 
-  const handleCancel = () => {
-    navigate(`/patients/${id}`);
-  };
+
 
   // Chuyển đổi dữ liệu patient cho PatientInfo component
   const patientInfo = patient
@@ -303,9 +300,26 @@ export const AddTreatment: React.FC = () => {
         boxSizing: "border-box"
       }}
     >
-      <BackButton icon={<ArrowLeftOutlined />} onClick={handleCancel}>
-        {t("common.back")}
-      </BackButton>
+      <Breadcrumb
+        items={[
+          {
+            title: t("patient.title"),
+            path: "/patients",
+            icon: <UserOutlined />
+          },
+          {
+            title: patient?.hoTen || t("patient.loading"),
+            path: `/patients/${id}`,
+            icon: <UserOutlined />
+          },
+          {
+            title: t("treatment.addTreatment"),
+            icon: <PlusOutlined />
+          }
+        ]}
+      />
+      
+
 
       <StyledTitle level={2}>{t("treatment.addTreatment")}</StyledTitle>
 

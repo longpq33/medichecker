@@ -1,5 +1,5 @@
 import React from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { 
   Card, 
   Descriptions, 
@@ -14,13 +14,14 @@ import {
   Statistic
 } from 'antd'
 import { 
-  ArrowLeftOutlined, 
   EditOutlined, 
   DollarOutlined, 
   MedicineBoxOutlined, 
-  CalendarOutlined 
+  CalendarOutlined,
+  FileTextOutlined
 } from '@ant-design/icons'
 import { useLanguage } from '@/hooks/useLanguage'
+import { Breadcrumb } from '@/components'
 import dayjs from 'dayjs'
 
 const { Title, Text } = Typography
@@ -122,7 +123,7 @@ const mockPrescriptionDetail: PrescriptionDetail = {
 
 export const PrescriptionDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>()
-  const navigate = useNavigate()
+
   const { t } = useLanguage()
   
   // Mock data - trong thực tế sẽ fetch từ API dựa trên id
@@ -236,15 +237,23 @@ export const PrescriptionDetail: React.FC = () => {
 
   return (
     <div style={{ padding: '24px' }}>
+      <Breadcrumb
+        items={[
+          {
+            title: t("prescription.title"),
+            path: "/prescriptions",
+            icon: <FileTextOutlined />
+          },
+          {
+            title: prescription.maDonThuoc,
+            icon: <FileTextOutlined />
+          }
+        ]}
+      />
+      
       <Card>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
           <Space>
-            <Button 
-              icon={<ArrowLeftOutlined />} 
-              onClick={() => navigate('/prescriptions')}
-            >
-              Quay lại
-            </Button>
             <Title level={3} style={{ margin: 0 }}>
               {t('prescription.prescriptionInfo')} - {prescription.maDonThuoc}
             </Title>

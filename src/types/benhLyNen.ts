@@ -5,7 +5,7 @@ export interface BenhLyNenRequest {
   tenBenh: string
   moTa?: string
   ngayChanDoan?: string
-  mucDoNghiemTrong?: 'NHE' | 'VUA' | 'NANG' | 'RAT_NANG'
+  mucDoNghiemTrong?: MucDoNghiemTrongType
 }
 
 export interface BenhLyNenResponse {
@@ -15,16 +15,18 @@ export interface BenhLyNenResponse {
   tenBenh: string
   moTa?: string
   ngayChanDoan?: string
-  mucDoNghiemTrong?: 'NHE' | 'VUA' | 'NANG' | 'RAT_NANG'
+  mucDoNghiemTrong?: MucDoNghiemTrongType
 }
 
-// Enum cho mức độ nghiêm trọng
-export enum MucDoNghiemTrong {
-  NHE = 'NHE',
-  VUA = 'VUA',
-  NANG = 'NANG',
-  RAT_NANG = 'RAT_NANG'
-}
+// Const cho mức độ nghiêm trọng
+export const MucDoNghiemTrong = {
+  NHE: 'NHE',
+  VUA: 'VUA',
+  NANG: 'NANG',
+  RAT_NANG: 'RAT_NANG'
+} as const;
+
+export type MucDoNghiemTrongType = typeof MucDoNghiemTrong[keyof typeof MucDoNghiemTrong];
 
 // Mappings cho mức độ nghiêm trọng
 export const MUC_DO_NGHIEM_TRONG_LABELS = {

@@ -5,10 +5,11 @@ import {
   Pagination
 } from 'antd'
 import { useNavigate } from 'react-router-dom'
+import { MedicineBoxOutlined } from '@ant-design/icons'
 import { MedicineForm, MedicineTable } from './components'
 import { useMedicines } from '@/hooks/useMedicines'
 import { useLanguage } from '@/hooks/useLanguage'
-import { PageHeader, ConfirmModal } from '@/components'
+import { PageHeader, ConfirmModal, Breadcrumb } from '@/components'
 import type { ThuocResponse } from '@/types'
 import { MedicineListContainer } from './styled'
 
@@ -169,6 +170,16 @@ export const MedicineList: React.FC = () => {
 
   return (
     <MedicineListContainer>
+      <Breadcrumb
+        items={[
+          {
+            title: t("medicine.title"),
+            icon: <MedicineBoxOutlined />
+          }
+        ]}
+        showHome={true}
+      />
+      
       <PageHeader
         title={t('medicine.medicineManagement')}
         onAdd={handleAdd}

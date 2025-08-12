@@ -4,10 +4,11 @@ import {
   message,
   Pagination
 } from 'antd'
+import { UserOutlined } from '@ant-design/icons'
 import { PatientForm, PatientTable } from './components'
 import { usePatients } from '@/hooks/usePatients'
 import { useLanguage } from '@/hooks/useLanguage'
-import { PageHeader, ConfirmModal } from '@/components'
+import { PageHeader, ConfirmModal, Breadcrumb } from '@/components'
 import type { BenhNhanResponse } from '@/types'
 import dayjs from 'dayjs'
 import { PatientListContainer } from './styled'
@@ -149,6 +150,16 @@ export const PatientList: React.FC = () => {
 
   return (
     <PatientListContainer>
+      <Breadcrumb
+        items={[
+          {
+            title: t("patient.title"),
+            icon: <UserOutlined />
+          }
+        ]}
+        showHome={true}
+      />
+      
       <PageHeader
         title={t('patient.patientManagement')}
         onAdd={handleAdd}

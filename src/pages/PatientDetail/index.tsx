@@ -18,7 +18,6 @@ import {
   DatePicker,
 } from "antd";
 import {
-  ArrowLeftOutlined,
   UserOutlined,
   MedicineBoxOutlined,
   PhoneOutlined,
@@ -36,7 +35,6 @@ import { useParams, useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
 import {
   PatientHeader,
-  BackButton,
   PatientStats,
   InfoCard,
   StyledTabs,
@@ -46,6 +44,7 @@ import { usePatient } from "@/hooks/usePatients";
 import { useBenhLyNen } from "@/hooks/useBenhLyNen";
 import { useLanguage } from "@/hooks/useLanguage";
 import { EditTreatmentModal } from "./components/EditTreatmentModal";
+import { Breadcrumb } from "@/components";
 import type { LichSuDieuTriResponse } from "@/types";
 
 
@@ -716,9 +715,19 @@ export const PatientDetail: React.FC = () => {
 
   return (
     <div>
-      <BackButton onClick={() => navigate("/patients")}>
-        <ArrowLeftOutlined /> {t("patient.back")}
-      </BackButton>
+      <Breadcrumb
+        items={[
+          {
+            title: t("patient.title"),
+            path: "/patients",
+            icon: <UserOutlined />
+          },
+          {
+            title: patient?.hoTen || t("patient.loading"),
+            icon: <UserOutlined />
+          }
+        ]}
+      />
 
       <PatientHeader>
         <div className="patient-avatar">

@@ -12,7 +12,6 @@ import {
   Spin,
 } from "antd";
 import {
-  ArrowLeftOutlined,
   MedicineBoxOutlined,
   DollarOutlined,
   CalendarOutlined,
@@ -21,6 +20,7 @@ import {
 } from "@ant-design/icons";
 import { useLanguage } from "@/hooks/useLanguage";
 import { useMedicine } from "@/hooks/useMedicines";
+import { Breadcrumb } from "@/components";
 import dayjs from "dayjs";
 import styled from "styled-components";
 import {
@@ -252,16 +252,19 @@ export const MedicineDetail: React.FC = () => {
 
   return (
     <div>
-      {/* Nút quay lại */}
-      <div style={{ textAlign: "left", marginBottom: 30 }}>
-        <Button
-          icon={<ArrowLeftOutlined />}
-          onClick={() => navigate("/medicines")}
-          size="large"
-        >
-          {t("medicine.backToMedicines")}
-        </Button>
-      </div>
+      <Breadcrumb
+        items={[
+          {
+            title: t("medicine.title"),
+            path: "/medicines",
+            icon: <MedicineBoxOutlined />
+          },
+          {
+            title: medicine.tenThuoc,
+            icon: <MedicineBoxOutlined />
+          }
+        ]}
+      />
 
       {/* Header với thông tin cơ bản */}
       <MedicineHeader>
