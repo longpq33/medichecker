@@ -9,8 +9,6 @@ import {
 } from '@/constants';
 
 export const MedicineListContainer = styled.div`
-  padding: ${SPACING.PADDING_XL};
-  border: 1px solid ${COLORS.BORDER_PRIMARY};
   border-radius: ${BORDER_RADIUS.SM};
   width: 100%;
   max-width: 100%;

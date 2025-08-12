@@ -101,12 +101,19 @@ export const PatientTable: React.FC<PatientTableProps> = ({
   ]
 
   return (
-    <DataTable<BenhNhanResponse>
-      dataSource={patients}
-      loading={loading}
-      columns={columns}
-      actions={actions}
-      scroll={{ x: 1200 }}
-    />
+    <div style={{
+      border: '1px solid #e5e7eb',
+      borderRadius: '8px',
+      overflow: 'hidden',
+      boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)'
+    }}>
+      <DataTable<BenhNhanResponse>
+        dataSource={patients}
+        loading={loading}
+        columns={columns}
+        actions={actions}
+        scroll={{ x: 1200 }}
+      />
+    </div>
   )
 } 
