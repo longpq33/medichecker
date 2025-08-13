@@ -111,7 +111,9 @@
     "personalInformation": "Personal Information",
     "medicalInformation": "Medical Information",
     "contactInformation": "Contact Information",
-    "insuranceInformation": "Insurance Information"
+    "insuranceInformation": "Insurance Information",
+    "noTreatmentHistory": "No Treatment History",
+    "noTreatmentHistoryDesc": "This patient has no treatment history recorded yet."
   },
   "medicine": {
     "title": "Medicine Management",
@@ -344,7 +346,12 @@
     "frequencyPlaceholder": "Select frequency...",
     "durationPlaceholder": "Select duration...",
     "instructionsPlaceholder": "Enter usage instructions...",
-    "medicineList": "Medicine List"
+    "medicineList": "Medicine List",
+    "placeholderTitle": "Please select medicines from the prescription form to start automatic analysis",
+    "placeholderDescription": "The system will automatically analyze drug interactions and contraindications based on patient information",
+    "placeholderFeature1": "Select medicines from the list to activate automatic analysis",
+    "placeholderFeature2": "Allergies and medical_history information from PatientInfo",
+    "placeholderFeature3": "Drug interaction and contraindication analysis will be performed automatically"
   },
   "prescription": {
     "title": "Prescription Management",

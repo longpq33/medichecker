@@ -367,7 +367,6 @@ export const AddTreatment: React.FC = () => {
                   onRemove={handleRemoveMedicine}
                 />
 
-                
               </FormSection>
 
               <FormSection>

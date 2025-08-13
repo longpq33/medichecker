@@ -109,6 +109,8 @@ export const PatientHeader = styled.div`
     }
     
     .patient-contact {
+      gap: ${SPACING.GAP_SM};
+      display: flex;
       .ant-typography {
         color: rgba(255, 255, 255, 0.9);
         font-size: ${FONT_SIZE.SM};

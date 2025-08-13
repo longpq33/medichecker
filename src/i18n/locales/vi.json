@@ -111,7 +111,9 @@
     "personalInformation": "Thông tin cá nhân",
     "medicalInformation": "Thông tin y tế",
     "contactInformation": "Thông tin liên lạc",
-    "insuranceInformation": "Thông tin bảo hiểm"
+    "insuranceInformation": "Thông tin bảo hiểm",
+    "noTreatmentHistory": "Chưa có lịch sử điều trị",
+    "noTreatmentHistoryDesc": "Bệnh nhân này chưa có lịch sử điều trị nào được ghi nhận."
   },
   "medicine": {
     "title": "Quản lý thuốc",
@@ -344,7 +346,12 @@
     "frequencyPlaceholder": "Chọn tần suất...",
     "durationPlaceholder": "Chọn thời gian...",
     "instructionsPlaceholder": "Nhập hướng dẫn sử dụng...",
-    "medicineList": "Danh sách thuốc"
+    "medicineList": "Danh sách thuốc",
+    "placeholderTitle": "Vui lòng chọn thuốc từ form đơn thuốc để bắt đầu phân tích tự động",
+    "placeholderDescription": "Hệ thống sẽ tự động phân tích tương tác thuốc và chống chỉ định dựa trên thông tin bệnh nhân",
+    "placeholderFeature1": "Chọn thuốc từ danh sách để kích hoạt phân tích tự động",
+    "placeholderFeature2": "Thông tin allergies và medical_history từ PatientInfo",
+    "placeholderFeature3": "Phân tích tương tác thuốc và chống chỉ định sẽ được thực hiện tự động"
   },
   "prescription": {
     "title": "Quản lý đơn thuốc",

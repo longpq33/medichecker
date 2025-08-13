@@ -159,9 +159,9 @@ export const AddMedicineModal: React.FC<AddMedicineModalProps> = ({
         requiredMark={false}
         style={{ marginTop: 16 }}
       >
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '350px 350px', gap: 16, justifyContent: 'center' }}>
           {/* Cột trái */}
-          <div>
+          <div style={{ minWidth: '350px', maxWidth: '350px' }}>
             <Form.Item
               name="medicineName"
               label={t('treatment.medicine')}
@@ -229,7 +229,7 @@ export const AddMedicineModal: React.FC<AddMedicineModalProps> = ({
           </div>
 
           {/* Cột phải */}
-          <div>
+          <div style={{ minWidth: '350px', maxWidth: '350px' }}>
             <Form.Item
               name="tanSuat"
               label={t('treatment.frequency')}

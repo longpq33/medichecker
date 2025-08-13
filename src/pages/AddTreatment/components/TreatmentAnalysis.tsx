@@ -13,7 +13,6 @@ import {
 import {
   SafetyOutlined,
   InfoCircleOutlined,
-  CheckCircleOutlined,
   ClockCircleOutlined,
 } from "@ant-design/icons";
 import { useLanguage } from "@/hooks/useLanguage";
@@ -101,14 +100,14 @@ const AnalysisCard = styled(Card)`
 
   .quick-stats {
     margin-bottom: 24px;
-    
+
     .ant-statistic {
       .ant-statistic-title {
         color: #64748b;
         font-size: 14px;
         font-weight: 500;
       }
-      
+
       .ant-statistic-content {
         color: #1e293b;
         font-weight: 600;
@@ -349,7 +348,6 @@ export const TreatmentAnalysis: React.FC<TreatmentAnalysisProps> = ({
     }
   };
 
-
   const getSafetyLevelText = (level: string) => {
     switch (level) {
       case "AN_TOAN":
@@ -378,34 +376,25 @@ export const TreatmentAnalysis: React.FC<TreatmentAnalysisProps> = ({
             <InfoCircleOutlined />
           </div>
           <div className="placeholder-title">
-            Vui lòng chọn thuốc từ form đơn thuốc để bắt đầu phân tích tự động
+            {t('treatment.placeholderTitle')}
           </div>
           <div className="placeholder-description">
-            Hệ thống sẽ tự động phân tích tương tác thuốc và chống chỉ định dựa trên thông tin bệnh nhân
+            {t('treatment.placeholderDescription')}
           </div>
           <div className="placeholder-features">
             <div className="feature-item">
-              <div className="feature-icon">
-                <CheckCircleOutlined />
-              </div>
               <div className="feature-text">
-                Chọn thuốc từ danh sách để kích hoạt phân tích tự động
+                {t('treatment.placeholderFeature1')}
               </div>
             </div>
             <div className="feature-item">
-              <div className="feature-icon">
-                <ClockCircleOutlined />
-              </div>
               <div className="feature-text">
-                Thông tin allergies và medical_history từ PatientInfo
+                {t('treatment.placeholderFeature2')}
               </div>
             </div>
             <div className="feature-item">
-              <div className="feature-icon">
-                <SafetyOutlined />
-              </div>
               <div className="feature-text">
-                Phân tích tương tác thuốc và chống chỉ định sẽ được thực hiện tự động
+                {t('treatment.placeholderFeature3')}
               </div>
             </div>
           </div>
@@ -429,7 +418,8 @@ export const TreatmentAnalysis: React.FC<TreatmentAnalysisProps> = ({
             <ClockCircleOutlined />
           </div>
           <div className="monitoring-text">
-            Đang theo dõi tự động: {medicines.filter((m) => m.thuocId > 0).length} thuốc
+            Đang theo dõi tự động:{" "}
+            {medicines.filter((m) => m.thuocId > 0).length} thuốc
             {patientMedicalHistory && patientMedicalHistory.length > 0 && (
               <>, medical_history: {patientMedicalHistory.length} bệnh lý</>
             )}

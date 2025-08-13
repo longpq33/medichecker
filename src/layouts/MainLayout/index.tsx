@@ -108,7 +108,6 @@ export const MainLayout: React.FC = () => {
           mode="inline"
           selectedKeys={getSelectedKey()}
           items={menuItems}
-          style={{ flex: 1, background: 'transparent' }}
         />
       </StyledSider>
       

@@ -389,3 +389,8 @@ body.dark-theme .ant-pagination-item-active a {
 .h-full {
   height: 100%;
 } 
+
+.ant-tooltip-inner {
+  background-color: #1e7a9a !important;
+  color: #fff !important;
+}
