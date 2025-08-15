@@ -71,7 +71,7 @@ export const COLORS = {
   TEXT_SECONDARY: '#6b7280', // Gray-500
   TEXT_TERTIARY: '#9ca3af', // Gray-400
   BG_PRIMARY: '#ffffff', // White background as requested
-  BG_SECONDARY: '#ffffff', // White (secondary surfaces)
+  BG_SECONDARY: '#fafafa', // Light gray (secondary surfaces)
   BG_TERTIARY: '#f8fafc', // Gray-50 (very light)
   BORDER_PRIMARY: '#e5e7eb', // Gray-200
   BORDER_SECONDARY: '#f3f4f6', // Gray-100

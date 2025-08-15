@@ -1,6 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom'
 import { MainLayout, LoginLayout } from '@/layouts'
-import { HomePage, LoginPage, PatientList, MedicineList, PatientDetail, AddTreatment, PrescriptionList, PrescriptionDetail, MedicineDetail, ContactPage } from '@/pages'
+import { HomePage, LoginPage, PatientList, MedicineList, PatientDetail, AddTreatment, PrescriptionList, PrescriptionDetail, MedicineDetail, ContactPage, AboutPage } from '@/pages'
 
 export const router = createBrowserRouter([
   {
@@ -39,10 +39,14 @@ export const router = createBrowserRouter([
         path: 'prescriptions/:id',
         element: <PrescriptionDetail />,
       },
-      {
-        path: 'contact',
-        element: <ContactPage />,
-      },
+                  {
+              path: 'contact',
+              element: <ContactPage />,
+            },
+            {
+              path: 'about',
+              element: <AboutPage />,
+            },
     ],
   },
   {

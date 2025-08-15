@@ -11,6 +11,7 @@ import {
   MedicineBoxOutlined,
   FileTextOutlined,
   ContactsOutlined,
+  InfoCircleOutlined,
 } from '@ant-design/icons'
 import { useUIStore } from '@/store'
 import { useAuth } from '@/hooks/useAuth'
@@ -64,6 +65,12 @@ export const MainLayout: React.FC = () => {
       label: t('navigation.contact'),
       onClick: () => navigate('/contact'),
     },
+    {
+      key: '/about',
+      icon: <InfoCircleOutlined />,
+      label: t('navigation.about'),
+      onClick: () => navigate('/about'),
+    },
   ]
 
   const userMenuItems = [
@@ -89,6 +96,7 @@ export const MainLayout: React.FC = () => {
     if (pathname.startsWith('/medicines')) return ['/medicines']
     if (pathname.startsWith('/prescriptions')) return ['/prescriptions']
     if (pathname === '/contact') return ['/contact']
+    if (pathname === '/about') return ['/about']
     return ['/']
   }
 

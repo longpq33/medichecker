@@ -241,6 +241,64 @@ export const ContactPage: React.FC = () => {
           </Col>
         </Row>
       </ContactInfo>
+      {/* Mission & Vision */}
+      <Card 
+        style={{ marginBottom: '24px' }}
+        title={
+          <span>
+            <RocketOutlined style={{ marginRight: '8px', color: '#1890ff' }} />
+            {t('about.missionVision')}
+          </span>
+        }
+      >
+        <Row gutter={[24, 24]}>
+          <Col xs={24} md={12}>
+            <div style={{ textAlign: 'center', padding: '20px' }}>
+              <div style={{ 
+                width: '64px', 
+                height: '64px', 
+                borderRadius: '50%', 
+                backgroundColor: '#52c41a',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                margin: '0 auto 16px',
+                color: 'white',
+                fontSize: '24px'
+              }}>
+                <SafetyOutlined />
+              </div>
+              <Title level={4}>{t('about.mission')}</Title>
+              <Paragraph>
+                {t('about.missionDescription')}
+              </Paragraph>
+            </div>
+          </Col>
+          
+          <Col xs={24} md={12}>
+            <div style={{ textAlign: 'center', padding: '20px' }}>
+              <div style={{ 
+                width: '64px', 
+                height: '64px', 
+                borderRadius: '50%', 
+                backgroundColor: '#fa8c16',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                margin: '0 auto 16px',
+                color: 'white',
+                fontSize: '24px'
+              }}>
+                <RocketOutlined />
+              </div>
+              <Title level={4}>{t('about.vision')}</Title>
+              <Paragraph>
+                {t('about.visionDescription')}
+              </Paragraph>
+            </div>
+          </Col>
+        </Row>
+      </Card>
     </ContactContainer>
   )
 }

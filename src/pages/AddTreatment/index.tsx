@@ -80,6 +80,18 @@ export const AddTreatment: React.FC = () => {
     };
   }, [isAnalysisFixed]);
 
+  // Tự động generate mã chẩn đoán khi component mount
+  useEffect(() => {
+    if (patient && !form.getFieldValue('maChanDoan')) {
+      // Tạo mã 8 ký tự: CD + 6 số ngẫu nhiên
+      const randomNumbers = Math.floor(Math.random() * 900000) + 100000; // 6 số từ 100000-999999
+      const diagnosisCode = `CD${randomNumbers}`;
+      
+      // Tự động điền mã vào form
+      form.setFieldsValue({ maChanDoan: diagnosisCode });
+    }
+  }, [patient, id, form]);
+
   // Chuyển đổi dữ liệu từ API thành format cần thiết (không còn sử dụng)
   // const availableMedicines = ...
 
@@ -97,6 +109,8 @@ export const AddTreatment: React.FC = () => {
       prev.filter((medicine) => medicine.id !== medicineId)
     );
   };
+
+
 
   // Các hàm này không còn sử dụng sau khi chuyển sang modal
   // const handleMedicineChange = ...
