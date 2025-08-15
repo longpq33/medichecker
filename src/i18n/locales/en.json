@@ -100,6 +100,13 @@
     "medicineList": "Medicine List",
     "treatmentDate": "Treatment Date",
     "treatmentStatus": "Treatment Status",
+    "treatmentStatuses": {
+      "MOI_TAO": "New",
+      "DA_DUYET": "Approved",
+      "DANG_DIEU_TRI": "In Progress",
+      "HOAN_THANH": "Completed",
+      "HUY_BO": "Cancelled"
+    },
     "basicInfo": "Basic Information",
     "createSuccess": "Patient added successfully!",
     "createError": "An error occurred while adding patient",

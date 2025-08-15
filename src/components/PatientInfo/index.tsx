@@ -36,6 +36,13 @@ const StyledCard = styled(Card)`
   .ant-card-body {
     padding: ${SPACING.PADDING_LG};
   }
+
+  .allergy-tag {
+    overflow: hidden;
+    width: 100%;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 `
 
 interface PatientInfoProps {
@@ -160,7 +167,7 @@ export const PatientInfo: React.FC<PatientInfoProps> = ({
           </div>
           <div>
             {patient.danhSachDiUng.map((allergy, index) => (
-              <Tag key={index} color="orange" style={{ marginBottom: 4 }}>
+              <Tag key={index} color="orange" style={{ marginBottom: 4 }} className='allergy-tag'>
                 {allergy}
               </Tag>
             ))}

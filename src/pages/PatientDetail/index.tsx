@@ -134,23 +134,6 @@ export const PatientDetail: React.FC = () => {
     }
   };
 
-  const getTreatmentStatusText = (status: string) => {
-    switch (status) {
-      case "MOI_TAO":
-        return t("patient.treatmentStatus");
-      case "DA_DUYET":
-        return t("patient.treatmentStatus");
-      case "DANG_DIEU_TRI":
-        return t("patient.treatmentStatus");
-      case "HOAN_THANH":
-        return t("patient.treatmentStatus");
-      case "HUY_BO":
-        return t("patient.treatmentStatus");
-      default:
-        return t("patient.noData");
-    }
-  };
-
   const handleAddTreatment = () => {
     navigate(`/patients/${id}/add-treatment`);
   };
@@ -422,18 +405,6 @@ export const PatientDetail: React.FC = () => {
                               )
                             : t("patient.noData")}
                         </div>
-                        <Badge
-                          status={
-                            treatment.trangThai === "HOAN_THANH"
-                              ? "success"
-                              : treatment.trangThai === "DANG_DIEU_TRI"
-                              ? "processing"
-                              : treatment.trangThai === "DA_DUYET"
-                              ? "default"
-                              : "warning"
-                          }
-                          text={getTreatmentStatusText(treatment.trangThai)}
-                        />
                       </div>
 
                       {/* Diagnosis */}

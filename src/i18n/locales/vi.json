@@ -100,6 +100,13 @@
     "medicineList": "Danh sách thuốc",
     "treatmentDate": "Ngày điều trị",
     "treatmentStatus": "Trạng thái điều trị",
+    "treatmentStatuses": {
+      "MOI_TAO": "Mới tạo",
+      "DA_DUYET": "Đã duyệt",
+      "DANG_DIEU_TRI": "Đang điều trị",
+      "HOAN_THANH": "Hoàn thành",
+      "HUY_BO": "Hủy bỏ"
+    },
     "basicInfo": "Thông tin cơ bản",
     "createSuccess": "Thêm bệnh nhân thành công!",
     "createError": "Có lỗi xảy ra khi thêm bệnh nhân",
