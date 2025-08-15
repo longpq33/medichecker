@@ -48,7 +48,8 @@
     "dashboard": "Dashboard",
     "patientManagement": "Patient Management",
     "medicineManagement": "Medicine Management",
-    "prescriptionManagement": "Prescription Management"
+    "prescriptionManagement": "Prescription Management",
+    "contact": "Contact"
   },
   "patient": {
     "title": "Patient Management",
@@ -535,5 +536,60 @@
   },
   "messages": {
     "confirmDelete": "Are you sure you want to delete?"
+  },
+  "contact": {
+    "title": "Contact Us",
+    "subtitle": "Discover MediChecker and meet our development team",
+    "slide1": {
+      "title": "Smart Healthcare Management",
+      "description": "MediChecker is an advanced healthcare management system that helps healthcare facilities efficiently and safely manage patients, medicines, and prescriptions."
+    },
+    "slide2": {
+      "title": "Safe and Accurate",
+      "description": "Automatic drug interaction checking system, allergy warnings, and ensuring patient safety during treatment."
+    },
+    "slide3": {
+      "title": "Advanced Technology",
+      "description": "Using AI and machine learning to analyze prescriptions, optimize processes, and improve healthcare quality."
+    },
+    "slide4": {
+      "title": "Professional Team",
+      "description": "Developed by an experienced engineering team, committed to bringing the best healthcare solutions to the community."
+    },
+    "features": {
+      "feature1": {
+        "title": "Patient Management",
+        "description": "Comprehensive medical records, detailed treatment history, and securely protected personal information."
+      },
+      "feature2": {
+        "title": "Medicine Control",
+        "description": "Smart medicine inventory management, expiry date checking, and ensuring medicine quality."
+      },
+      "feature3": {
+        "title": "Prescription Analysis",
+        "description": "Automatic drug interaction checking, contraindication warnings, and providing safety recommendations."
+      },
+      "feature4": {
+        "title": "Statistical Reports",
+        "description": "Detailed reports on healthcare activities, helping with management and effective decision-making."
+      }
+    },
+    "team": {
+      "title": "Development Team",
+      "description": "Meet the talented engineers who created MediChecker",
+      "role1": "Team Lead",
+      "role2": "Frontend Developer",
+      "role3": "Backend Developer",
+      "member1Desc": "Team Lead with experience in leading development teams, project management and smart healthcare system architecture.",
+      "member2Desc": "Frontend engineer specializing in React, TypeScript and modern user interface design, ensuring the best user experience.",
+      "member3Desc": "Backend engineer specializing in database design, API development, and healthcare information security systems."
+    },
+    "contactInfo": {
+      "title": "Contact Information",
+      "description": "Contact us for support and consultation",
+      "email": "Email",
+      "github": "GitHub",
+      "linkedin": "LinkedIn"
+    }
   }
 } 

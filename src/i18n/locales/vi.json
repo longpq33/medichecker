@@ -48,7 +48,8 @@
     "dashboard": "Dashboard",
     "patientManagement": "Quản lý bệnh nhân",
     "medicineManagement": "Quản lý thuốc",
-    "prescriptionManagement": "Quản lý đơn thuốc"
+    "prescriptionManagement": "Quản lý đơn thuốc",
+    "contact": "Liên hệ"
   },
   "patient": {
     "title": "Quản lý bệnh nhân",
@@ -535,5 +536,60 @@
   },
   "messages": {
     "confirmDelete": "Bạn có chắc chắn muốn xóa?"
+  },
+  "contact": {
+    "title": "Liên hệ với chúng tôi",
+    "subtitle": "Khám phá về MediChecker và gặp gỡ đội ngũ phát triển",
+    "slide1": {
+      "title": "Chăm sóc sức khỏe thông minh",
+      "description": "MediChecker là hệ thống quản lý y tế tiên tiến, giúp các cơ sở y tế quản lý bệnh nhân, thuốc men và đơn thuốc một cách hiệu quả và an toàn."
+    },
+    "slide2": {
+      "title": "An toàn và chính xác",
+      "description": "Hệ thống kiểm tra tương tác thuốc tự động, cảnh báo dị ứng và đảm bảo an toàn cho bệnh nhân trong quá trình điều trị."
+    },
+    "slide3": {
+      "title": "Công nghệ tiên tiến",
+      "description": "Sử dụng AI và machine learning để phân tích đơn thuốc, tối ưu hóa quy trình và nâng cao chất lượng chăm sóc y tế."
+    },
+    "slide4": {
+      "title": "Đội ngũ chuyên nghiệp",
+      "description": "Được phát triển bởi đội ngũ kỹ sư giàu kinh nghiệm, cam kết mang đến giải pháp y tế tốt nhất cho cộng đồng."
+    },
+    "features": {
+      "feature1": {
+        "title": "Quản lý bệnh nhân",
+        "description": "Hồ sơ bệnh án đầy đủ, lịch sử điều trị chi tiết và thông tin cá nhân được bảo mật an toàn."
+      },
+      "feature2": {
+        "title": "Kiểm soát thuốc",
+        "description": "Quản lý kho thuốc thông minh, kiểm tra hạn sử dụng và đảm bảo chất lượng thuốc."
+      },
+      "feature3": {
+        "title": "Phân tích đơn thuốc",
+        "description": "Tự động kiểm tra tương tác thuốc, chống chỉ định và đưa ra khuyến nghị an toàn."
+      },
+      "feature4": {
+        "title": "Báo cáo thống kê",
+        "description": "Báo cáo chi tiết về hoạt động y tế, giúp quản lý và ra quyết định hiệu quả."
+      }
+    },
+    "team": {
+      "title": "Đội ngũ phát triển",
+      "description": "Gặp gỡ những kỹ sư tài năng đã tạo nên MediChecker",
+      "role1": "Team Lead",
+      "role2": "Frontend Developer",
+      "role3": "Backend Developer",
+      "member1Desc": "Team Lead với kinh nghiệm lãnh đạo nhóm phát triển, quản lý dự án và kiến trúc hệ thống y tế thông minh.",
+      "member2Desc": "Kỹ sư frontend chuyên về React, TypeScript và thiết kế giao diện người dùng hiện đại, đảm bảo trải nghiệm người dùng tốt nhất.",
+      "member3Desc": "Kỹ sư backend chuyên sâu về database design, API development và hệ thống bảo mật thông tin y tế."
+    },
+    "contactInfo": {
+      "title": "Thông tin liên hệ",
+      "description": "Liên hệ với chúng tôi để được hỗ trợ và tư vấn",
+      "email": "Email",
+      "github": "GitHub",
+      "linkedin": "LinkedIn"
+    }
   }
 } 

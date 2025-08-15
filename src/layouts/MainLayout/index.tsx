@@ -10,6 +10,7 @@ import {
   TeamOutlined,
   MedicineBoxOutlined,
   FileTextOutlined,
+  ContactsOutlined,
 } from '@ant-design/icons'
 import { useUIStore } from '@/store'
 import { useAuth } from '@/hooks/useAuth'
@@ -28,7 +29,7 @@ import {
 export const MainLayout: React.FC = () => {
   const navigate = useNavigate()
   const location = useLocation()
-  const { user, handleLogout } = useAuth()
+  const {  handleLogout } = useAuth()
   const { sidebarCollapsed, toggleSidebar } = useUIStore()
   const { t } = useLanguage()
 
@@ -57,6 +58,12 @@ export const MainLayout: React.FC = () => {
       label: t('navigation.prescriptionManagement'),
       onClick: () => navigate('/prescriptions'),
     },
+    {
+      key: '/contact',
+      icon: <ContactsOutlined />,
+      label: t('navigation.contact'),
+      onClick: () => navigate('/contact'),
+    },
   ]
 
   const userMenuItems = [
@@ -81,6 +88,7 @@ export const MainLayout: React.FC = () => {
     if (pathname.startsWith('/patients')) return ['/patients']
     if (pathname.startsWith('/medicines')) return ['/medicines']
     if (pathname.startsWith('/prescriptions')) return ['/prescriptions']
+    if (pathname === '/contact') return ['/contact']
     return ['/']
   }
 
@@ -123,7 +131,6 @@ export const MainLayout: React.FC = () => {
           <UserInfo>
             <ThemeSwitcher />
             <LanguageSwitcher />
-            <span>{user?.name || 'User'}</span>
             <Dropdown
               menu={{ items: userMenuItems }}
               placement="bottomRight"
