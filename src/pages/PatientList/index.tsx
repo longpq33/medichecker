@@ -57,7 +57,7 @@ export const PatientList: React.FC = () => {
     setEditingPatient(patient)
     form.setFieldsValue({
       hoTen: patient.hoTen,
-      ngaySinh: patient.ngaySinh ? dayjs(patient.ngaySinh) : undefined,
+      ngaySinh: patient.ngaySinh ? dayjs(patient.ngaySinh).startOf('day') : undefined,
       gioiTinh: patient.gioiTinh,
       soDienThoai: patient.soDienThoai,
       email: patient.email,
@@ -99,6 +99,12 @@ export const PatientList: React.FC = () => {
   const handleModalOk = async () => {
     try {
       const values = await form.validateFields()
+      
+      // Format ngày sinh nếu có - xử lý timezone đúng cách
+      if (values.ngaySinh) {
+        // Parse ngày với format rõ ràng để tránh vấn đề timezone
+        values.ngaySinh = dayjs(values.ngaySinh).format('YYYY-MM-DD')
+      }
       
       if (editingPatient) {
         await updatePatient({ id: editingPatient.id, data: values })

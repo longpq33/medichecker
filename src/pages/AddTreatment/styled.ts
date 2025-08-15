@@ -281,7 +281,7 @@ export const SummaryDosageText = styled.span<{ theme?: ThemeColors }>`
 
 export const TreatmentAnalysisContainer = styled.div<{ $isFixed?: boolean }>`
   position: ${props => props.$isFixed ? 'sticky' : 'static'};
-  top: ${props => props.$isFixed ? '80px' : 'auto'};
+  top: ${props => props.$isFixed ? '120px' : 'auto'};
   right: ${props => props.$isFixed ? '20px' : 'auto'};
   width: ${props => props.$isFixed ? 'auto' : '100%'};
   z-index: ${props => props.$isFixed ? '1000' : 'auto'};

@@ -190,6 +190,17 @@ export const PatientDetail: React.FC = () => {
                   <div className="info-item">
                     <span className="info-label">
                       <CalendarOutlined style={{ marginRight: "8px" }} />
+                      {t("patient.dateOfBirth")}:
+                    </span>
+                    <span className="info-value">
+                      {patient.ngaySinh
+                        ? dayjs(patient.ngaySinh).format("DD/MM/YYYY")
+                        : "---"}
+                    </span>
+                  </div>
+                  <div className="info-item">
+                    <span className="info-label">
+                      <CalendarOutlined style={{ marginRight: "8px" }} />
                       {t("common.age")}:
                     </span>
                     <span className="info-value">
